@@ -15,7 +15,7 @@ rightSpeed = 64
 rot_speed_right = 0
 rot_speed_left = 0
 sleep_rot_first = 5.9
-sleep_rot_sec = 6.1
+sleep_rot_sec = 6.3
 
 for i in range(0, 20):
 
@@ -37,6 +37,14 @@ for i in range(0, 20):
     # Wait a bit before next command
     sleep(0.041)
     
+    # turn right
+    print(arlo.go_diff(rot_speed_left,  rightSpeed, 1, 1))
+    
+    sleep(sleep_rot_sec)
+    
+    # Wait a bit before next command
+    sleep(0.041)
+    
     # send a go_diff command to drive forward
     #print(arlo.go_diff(leftSpeed, rightSpeed, 1, 1))
 
@@ -46,12 +54,6 @@ for i in range(0, 20):
     # Wait a bit before next command
     #sleep(0.041)
     
-    # turn right
-    print(arlo.go_diff(rot_speed_left,  rightSpeed, 1, 1))
 
     # Wait a bit before next command
-    sleep(sleep_rot_sec)
-    
-    # Wait a bit before next command
-    sleep(0.041)
 
