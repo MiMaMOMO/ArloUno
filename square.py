@@ -28,7 +28,7 @@ for i in range(0, 20):
     print(arlo.go_diff(leftSpeed, rightSpeed, 1, 0))
 
     # Wait a bit before next command
-    sleep(0.7)
+    sleep(0.72)
 
     # send a stop command
     print(arlo.stop())
