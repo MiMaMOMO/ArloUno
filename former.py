@@ -19,7 +19,7 @@ sleep(10)
 print(arlo.stop())
 
 # send a go_diff command to drive forward
-print(arlo.go_diff(leftSpeed, rightSpeed, 0, 0))
+print(arlo.go_diff(rightSpeed, leftSpeed, 0, 0))
 
 sleep(10)
 
