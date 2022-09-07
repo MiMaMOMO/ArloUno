@@ -1,3 +1,5 @@
+# A1.1) 5x Square exercise 
+
 from time import sleep
 
 import robot
