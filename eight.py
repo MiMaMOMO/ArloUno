@@ -15,7 +15,7 @@ rightSpeed = 64
 rot_speed_right = 32
 rot_speed_left = 32
 sleep_rot_first = 10.53
-sleep_rot_sec = 12.5
+sleep_rot_sec = 12.2
 
 for i in range(0, 20):
 
