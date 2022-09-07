@@ -12,8 +12,8 @@ print("Running ...")
 # Speed 
 leftSpeed = 60
 rightSpeed = 64
-rot_speed_right = 32 
-rot_speed_left = 32 
+rot_speed_right = 40 
+rot_speed_left = 40
 
 for i in range(0, 20):
 
@@ -30,7 +30,7 @@ for i in range(0, 20):
     print(arlo.go_diff(leftSpeed, rot_speed_right, 1, 1))
 
     # Wait a bit before next command
-    sleep(7.5)
+    sleep(8)
     
     # Wait a bit before next command
     sleep(0.041)
@@ -48,7 +48,7 @@ for i in range(0, 20):
     print(arlo.go_diff(rot_speed_left,  rightSpeed, 1, 1))
 
     # Wait a bit before next command
-    sleep(7.5)
+    sleep(8)
     
     # Wait a bit before next command
     sleep(0.041)
