@@ -12,8 +12,8 @@ print("Running ...")
 # Speed 
 leftSpeed = 64
 rightSpeed = 64
-rot_speed_right = 0
-rot_speed_left = 0
+rot_speed_right = 32
+rot_speed_left = 32
 sleep_rot_first = 5.9
 sleep_rot_sec = 6.3
 
