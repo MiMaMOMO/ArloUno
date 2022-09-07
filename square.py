@@ -26,7 +26,8 @@ sleep(0.041)
 print(arlo.go_diff(leftSpeed, rightSpeed, 1, 0))
 
 # Wait a bit before next command
-sleep(0.8)
+sleep(0.75)
 
 # send a stop command
 print(arlo.stop())
+
