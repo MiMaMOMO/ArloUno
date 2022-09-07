@@ -10,7 +10,7 @@ arlo = robot.Robot()
 print("Running ...")
 
 # Speed 
-leftSpeed = 60
+leftSpeed = 64
 rightSpeed = 64
 rot_speed_right = 0
 rot_speed_left = 0
