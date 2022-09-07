@@ -29,7 +29,7 @@ for i in range(0, 20):
     print(arlo.go_diff(left_speed_rot, rightSpeed, 1, 0))
 
     # Wait a bit before next command
-    sleep(0.728)
+    sleep(0.65)
 
     # send a stop command
     print(arlo.stop())
