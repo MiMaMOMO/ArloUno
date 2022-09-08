@@ -1,34 +1,36 @@
 # A1.1) 5x Square exercise 
 
-from time import sleep
-
 import robot
+
+from time import sleep
 
 # Create a robot object and initialize
 arlo = robot.Robot()
 
 print("Running ...")
 
-# Speed 
+# Arlo speed. Different speeds
 leftSpeed = 60
 rightSpeed = 64
-left_speed_rot = 64
+rot_speed = 64
 
+# Start the sequence for completing a square five times 
 for i in range(0, 20):
-    # send a go_diff command to drive forward
+    
+    # Send a go_diff command to drive forward
     print(arlo.go_diff(leftSpeed, rightSpeed, 1, 1))
 
-    # Wait a bit while robot moves forward
+    # Approximatly one meter of sleep 
     sleep(2.52)
 
-    # send a stop command
+    # Stop Arlo 
     print(arlo.stop())
 
     # Wait a bit before next command
     sleep(0.041)
 
-    # turn right
-    print(arlo.go_diff(left_speed_rot, rightSpeed, 1, 0))
+    # Turn 90 deegres to the right
+    print(arlo.go_diff(rot_speed, rightSpeed, 1, 0))
 
     # Wait a bit before next command
     sleep(0.69)

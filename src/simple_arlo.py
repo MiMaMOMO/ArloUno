@@ -1,12 +1,11 @@
-from time import sleep
-
 import robot
+
+from time import sleep
 
 # Create a robot object and initialize
 arlo = robot.Robot()
 
 print("Running ...")
-
 
 # send a go_diff command to drive forward
 leftSpeed = 64
@@ -34,12 +33,9 @@ print(arlo.stop())
 # Wait a bit before next command
 sleep(0.041)
 
-
-
 # request to read Front sonar ping sensor
 print("Front sensor = ", arlo.read_front_ping_sensor())
 sleep(0.041)
-
 
 # request to read Back sonar ping sensor
 print("Back sensor = ", arlo.read_back_ping_sensor())
@@ -52,8 +48,6 @@ sleep(0.041)
 # request to read Left sonar ping sensor
 print("Left sensor = ", arlo.read_left_ping_sensor())
 sleep(0.041)
-
-
 
 # send a go_diff command to drive forward in a curve turning right
 leftSpeed = 64
@@ -77,7 +71,4 @@ sleep(3)
 
 # send a stop command
 print(arlo.stop())
-
-
-
 print("Finished")

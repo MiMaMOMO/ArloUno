@@ -1,9 +1,6 @@
-# Arlo Robot Controller
-
-from time import sleep
 import serial
 
-
+from time import sleep
 
 class Robot(object):
     """Defines the Arlo robot API
@@ -22,8 +19,9 @@ class Robot(object):
            pi). The value of port should point to the USB port on which the robot Arduino is connected."""
         self.port = port
         
-        #self.serialRead = serial.Serial(self.port,9600, timeout=1) # 1 sec. timeout, wait until data is received or until timeout
-        self.serialRead = serial.Serial(self.port,9600, timeout=None) # No timeout, wait forever or until data is received
+        # self.serialRead = serial.Serial(self.port,9600, timeout=1) # 1 sec. timeout, wait until data is received or until timeout.
+        # No timeout, wait forever or until data is received
+        self.serialRead = serial.Serial(self.port, 9600, timeout = None) 
 
         # Wait if serial port is not open yet
         while not self.serialRead.isOpen():
@@ -45,14 +43,12 @@ class Robot(object):
         print((self.send_command(cmd)))
         self.serialRead.close()
         
-        
-    def send_command(self, cmd, sleep_ms=0.0):
+    def send_command(self, cmd, sleep_ms = 0.0):
         """Sends a command to the Arduino robot controller"""
         self.serialRead.write(cmd.encode('ascii'))
         sleep(sleep_ms)
         str_val=self.serialRead.readline()
         return str_val
-
 
     def _power_checker(self, power):
         """Checks if a power value is in the set {0, [30;127]}.
@@ -76,7 +72,6 @@ class Robot(object):
             cmd = 'd' + str(int(powerLeft)) + ',' + str(int(powerRight)) + ',' + str(int(dirLeft)) + ',' + str(int(dirRight)) + '\n'
             return self.send_command(cmd)
 
-
     def stop(self):
         """Send a stop command to stop motors. Sets the motor power on both wheels to zero.
         
@@ -84,8 +79,6 @@ class Robot(object):
         cmd='s\n'
         return self.send_command(cmd)
 
-
-    
     def read_sensor(self, sensorid):
         """Send a read sensor command with sensorid and return sensor value. 
            Will return -1, if error occurs."""
@@ -112,7 +105,6 @@ class Robot(object):
         """Read the right sonar ping sensor and return the measured range in milimeters [mm]"""
         return self.read_sensor(3)
 
-    
     def read_left_wheel_encoder(self):
         """Reads the left wheel encoder counts since last reset_encoder_counts command.
            The encoder has 144 counts for one complete wheel revolution."""
@@ -131,7 +123,7 @@ class Robot(object):
         return self.send_command(cmd)
     
     
-    ### OBSOLETE STUFF
+    ### OBSOLETE STUFF ### 
         
     def go(self):
         """OBSOLETE: Send a go command for continuous forward driving using the wheel encoders"""
@@ -142,7 +134,6 @@ class Robot(object):
         """OBSOLETE: Send a backward command for continuous reverse driving using the wheel encoders"""
         cmd='v\n'
         return self.send_command(cmd)
-        
 
     def left(self):
         """OBSOLETE: Send a rotate left command for continuous rotating left using the wheel encoders"""
@@ -177,7 +168,6 @@ class Robot(object):
            a predefined amount of time"""
         cmd='r\n'
         return self.send_command(cmd)
-            
         
     def set_speed(self, speed):
         """OBSOLETE: Speed must be a value in the range [0; 255]. This speed is used in commands based on 
@@ -203,4 +193,3 @@ class Robot(object):
         cmd='y' + str(turntime) + '\n'
         return self.send_command(cmd)
         
-
