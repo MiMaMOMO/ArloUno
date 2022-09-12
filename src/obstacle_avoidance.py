@@ -14,7 +14,7 @@ leftSpeed = 60
 rightSpeed = 64
 
 
-for i in range(0, 100):
+for i in range(0, 10000):
     
     front_distance = arlo.read_front_ping_sensor() / 1000
     
@@ -25,7 +25,7 @@ for i in range(0, 100):
         # Rotate right by only driving with the left wheel
         print(arlo.go_diff(leftSpeed, rightSpeed, 1, 0))
         
-        sleep(3)
+        sleep(0.8)
     
     # send a go_diff command to drive forward
     print(arlo.go_diff(leftSpeed, rightSpeed, 1, 1))
