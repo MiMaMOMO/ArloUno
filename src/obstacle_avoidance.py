@@ -12,8 +12,8 @@ print("Running ...")
 # Robot speed. We use different speed here 
 leftSpeed = 60
 rightSpeed = 64
-rot_speed_front = 1.44
-rot_speed_sides = 0.728
+rot_speed_front = 1.46
+rot_speed_sides = 1.00
 
 for i in range(0, 10000):
     
