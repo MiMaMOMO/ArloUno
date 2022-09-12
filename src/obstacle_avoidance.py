@@ -33,14 +33,14 @@ for i in range(0, 10000):
     if left_distance <= 200:
         # Send a go_diff command to drive forward.
         # Rotate right by only driving with the left wheel
-        print(arlo.go_diff(leftSpeed, rightSpeed, 0, 1))
+        print(arlo.go_diff(leftSpeed, rightSpeed, 1, 0))
         
         sleep(rot_speed_sides)
         
     if right_distance <= 200:
         # Send a go_diff command to drive forward.
         # Rotate right by only driving with the left wheel
-        print(arlo.go_diff(leftSpeed, rightSpeed, 1, 0))
+        print(arlo.go_diff(leftSpeed, rightSpeed, 0, 1))
         
         sleep(rot_speed_sides)
     
