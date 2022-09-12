@@ -21,7 +21,7 @@ for i in range(0, 10000):
     left_distance = arlo.read_left_ping_sensor()
     right_distance = arlo.read_left_ping_sensor()
     
-    print(front_distance)
+    print(right_distance)
     
     if front_distance <= 500: 
         # Send a go_diff command to drive forward.
