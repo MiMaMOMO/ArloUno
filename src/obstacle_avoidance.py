@@ -19,7 +19,7 @@ for i in range(0, 10000):
     
     front_distance = arlo.read_front_ping_sensor()
     left_distance = arlo.read_left_ping_sensor()
-    right_distance = arlo.read_left_ping_sensor()
+    right_distance = arlo.read_right_ping_sensor()
     
     print(right_distance)
     
