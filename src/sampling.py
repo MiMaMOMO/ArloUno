@@ -15,7 +15,7 @@ def generate_samples():
     q = []                  # The random sample of q(x)
     sample_bottom = 0.0     # Bottom bound of the range of q
     sample_top = 15.0       # Top bound of the range of q
-    k = 200                  # The number of samples in q 
+    k = 20                  # The number of samples in q 
     
     # Step 1, Sampling - q(x) 
     # Populate q by choosing random floats between 0 - 15 
@@ -37,8 +37,12 @@ def importance_weights():
     #print('\n')
     
     # Use robot_pose(x) to find the importance_weights by using a distribution from q(x)
+    #for x in q:
+    #    w.append((x, robot_pose(x) / x))
+        
+    # ...
     for x in q:
-        w.append((x, robot_pose(x) / x))
+        w.append((x, p_two(x) / x))
         
     return w
     
@@ -87,7 +91,7 @@ def robot_pose(x):
     
     return p
 
-def test(x):
+def p_two(x):
     p = norm.pdf(x, loc = 5, scale = 4)
     
     return p 
