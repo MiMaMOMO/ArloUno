@@ -1,5 +1,5 @@
 # A2.1 - Obstacle avoidance 
-
+    
 import robot
 
 from time import sleep

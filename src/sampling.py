@@ -1,8 +1,11 @@
-# A2.3 - Sampling using SIR (Sampling-Importance-Resampling)
+# A2.3, A2.4 - Sampling using SIR (Sampling-Importance-Resampling)
 
-from random import uniform as uf
+from random import sample, uniform as uf
+from tkinter import Scale
 from scipy.stats import *
+import numpy as np
 
+# Step 1 - Generate random samples 
 def generate_samples():
     '''
     The SIR algorithm. 
@@ -12,7 +15,7 @@ def generate_samples():
     q = []                  # The random sample of q(x)
     sample_bottom = 0.0     # Bottom bound of the range of q
     sample_top = 15.0       # Top bound of the range of q
-    k = 20                  # The number of samples in q 
+    k = 200                  # The number of samples in q 
     
     # Step 1, Sampling - q(x) 
     # Populate q by choosing random floats between 0 - 15 
@@ -30,8 +33,8 @@ def importance_weights():
     q = generate_samples()  # Generate random samples 
     w = []                  # Sample weights 
     
-    print(q)
-    print('\n')
+    #print(q)
+    #print('\n')
     
     # Use robot_pose(x) to find the importance_weights by using a distribution from q(x)
     for x in q:
@@ -39,6 +42,33 @@ def importance_weights():
         
     return w
     
+# Step 3 - Resampling 
+def resample():
+    '''
+    ...
+    '''
+    
+    # Normalize weigths 
+    samples = importance_weights()
+    
+    q = []
+    w = []
+    
+    for i in samples:
+        q.append(i[0])
+    
+    for i in samples:
+        w.append(i[1])
+    
+    norm_weigths = [float(i)/sum(w) for i in w]
+    
+    # Generates a random sample from a the normalized weigths 
+    np_samples = np.asarray(q)
+    np_weigths = np.asarray(norm_weigths)
+    resample = np.random.choice(np_samples, len(q), True, np_weigths)
+    
+    return resample
+
 def robot_pose(x):
     '''
     This uses robot_pose(x) to in the assignment for a normal distribution. This number is used to importance_weights the samples in q(x). 
@@ -57,4 +87,31 @@ def robot_pose(x):
     
     return p
 
-print(importance_weights())
+def test(x):
+    p = norm.pdf(x, loc = 5, scale = 4)
+    
+    return p 
+    
+def test_norm():
+    # Normalize weigths 
+    samples = importance_weights()
+    
+    q = []
+    w = []
+    
+    for i in samples:
+        q.append(i[0])
+    
+    for i in samples:
+        w.append(i[1])
+    
+    norm_weigths = [float(i)/sum(w) for i in w]
+    
+    # Generates a random sample from a the normalized weigths 
+    np_samples = np.asarray(q)
+    np_weigths = np.asarray(norm_weigths)
+    resample = np.random.choice(np_samples, len(q), True, np_weigths)
+    
+    return resample
+
+print(test_norm())
