@@ -27,46 +27,42 @@ def generate_samples():
 # Step 2 - Calculating the weights of each sample 
 def importance_weights():
     '''
-    Calculate importance_weights for each sample. 
+    Calculate importance_weights for each sample given p(x) in sub-exercise 3.
     '''
     
     q = generate_samples()  # Generate random samples 
-    w = []                  # Sample weights 
-    
-    #print(q)
-    #print('\n')
+    w = []                  # Sample weights of q using p(x)
     
     # Use robot_pose(x) to find the importance_weights by using a distribution from q(x)
-    #for x in q:
-    #    w.append((x, robot_pose(x) / x))
-        
-    # ...
     for x in q:
-        w.append((x, p_two(x) / x))
+        w.append((x, robot_pose(x) / x))
         
     return w
     
 # Step 3 - Resampling 
 def resample():
     '''
-    ...
+    Resample the normal samples in q(x) by normalizng the weigths and randomize the chosen samples. 
     '''
     
     # Normalize weigths 
     samples = importance_weights()
     
-    q = []
-    w = []
+    q = []      # Consist of samples 
+    w = []      # Consist of weigths 
     
+    # Get first value in the tuples of weigths and samples 
     for i in samples:
         q.append(i[0])
     
+    # Get second value in the tuples of weigths and samples 
     for i in samples:
         w.append(i[1])
     
+    # Normalize the weigths 
     norm_weigths = [float(i)/sum(w) for i in w]
     
-    # Generates a random sample from a the normalized weigths 
+    # Generates a random resample from the normalized weigths 
     np_samples = np.asarray(q)
     np_weigths = np.asarray(norm_weigths)
     resample = np.random.choice(np_samples, len(q), True, np_weigths)
@@ -96,19 +92,23 @@ def p_two(x):
     
     return p 
     
-def test_norm():
+def resample_norm():
+    
     # Normalize weigths 
     samples = importance_weights()
     
     q = []
     w = []
     
+    # Get first value of the tuple of weights and samples 
     for i in samples:
         q.append(i[0])
     
+    # Get second value of the tuple of weights and samples 
     for i in samples:
         w.append(i[1])
     
+    # Normalize weigths 
     norm_weigths = [float(i)/sum(w) for i in w]
     
     # Generates a random sample from a the normalized weigths 
@@ -118,4 +118,4 @@ def test_norm():
     
     return resample
 
-print(test_norm())
+print(resample_norm())
