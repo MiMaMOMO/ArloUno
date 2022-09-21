@@ -4,6 +4,7 @@ from random import sample, uniform as uf
 from tkinter import Scale
 from scipy.stats import *
 import numpy as np
+import matplotlib.pyplot as plt
 
 # Step 1 - Generate random samples 
 def generate_samples():
@@ -119,3 +120,12 @@ def resample_norm():
     return resample
 
 print(resample_norm())
+
+x = np.linspace(0,15,100)
+p = 0.3 * norm.pdf(x, loc = 2.0, scale = 1.0) + 0.4 * norm.pdf(x, loc = 5.0, scale = 2.0) + 0.3 * norm.pdf(x, loc = 9.0, scale = 1.0)
+plt.plot(x, p, color='red', label="test")
+plt.hist(x = resample(), density = True)
+plt.savefig('test.png')
+plt.xlabel = "range"
+plt.ylabel = "frequency"
+plt.xticks(np.arange(0,15,1))
