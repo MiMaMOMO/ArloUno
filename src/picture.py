@@ -46,6 +46,6 @@ while cv2.waitKey(4) == -1: # Wait for a key pressed event
     cv2.imshow(WIN_RF, frameReference)
 
     if cv2.waitKey(33) == ord('a'):
-        cv2.imwrite("frame.png", frameReference)
+        cv2.imwrite("ARUCOPICTURE.png", frameReference)
 
 # Finished successfully
