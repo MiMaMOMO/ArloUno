@@ -50,8 +50,9 @@ while cv2.waitKey(4) == -1:
     [rvecs, tvecs, obj] = cv2.aruco.estimatePoseSingleMarkers(corners, 0.1, cam_matrix, distCoeffs)
     print(f"rvecs: {rvecs}")
     print(f"tvecs: {tvecs}")
-    beta = np.arccos((tvecs/np.abs(tvecs)) * [0,0,1])
-    print(beta)
+    if tvecs is not None:
+        beta = np.arccos((tvecs/np.abs(tvecs)) * [0,0,1])
+        print(beta)
 
 
 
