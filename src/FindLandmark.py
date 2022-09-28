@@ -46,7 +46,7 @@ while cv2.waitKey(4) == -1:
         exit(-1)
 
     corners, ids, rejected = cv2.aruco.detectMarkers(frameReference, arucoDict, parameters=arucoParams)
-    [rvecs, tvecs] = cv2.aruco.estimatePoseSingleMarkers(corners, 0.1, cam_matrix, distCoeffs)
+    [rvecs, tvecs, obj] = cv2.aruco.estimatePoseSingleMarkers(corners, 0.1, cam_matrix, distCoeffs)
     print(rvecs)
     print(tvecs)
 
