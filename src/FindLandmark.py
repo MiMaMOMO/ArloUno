@@ -23,7 +23,7 @@ print("OpenCV version = " + cv2.__version__)
 # Open a camera device for capturing
 cam = cv2.VideoCapture(gstreamer_pipeline(), apiPreference=cv2.CAP_GSTREAMER)
 
-
+arlo = robot.Robot()
 
 if not cam.isOpened(): # Error
     print("Could not open camera")
@@ -54,7 +54,8 @@ while cv2.waitKey(4) == -1:
         sign = np.sign(np.dot(tvecs,np.asarray([1.0,0.0,0.0])))
         beta = sign * (np.arccos(np.dot((tvecs/np.linalg.norm(tvecs)), np.asarray([0.0,0.0,1.0]))))[0][0]
         print(beta)
-        
+        while (np.abs(beta) > 0.14):
+            print(arlo.go_diff(64, 64, 1, 0))
 
 
 

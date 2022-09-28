@@ -14,7 +14,7 @@ leftSpeed = 64
 rightSpeed = 64
 
 # Send a go_diff command to drive forward.
-print(arlo.go_diff(leftSpeed, rightSpeed, 1, 0))
+print(arlo.go_diff(leftSpeed, rightSpeed, 1, -1))
 
 # The time Arlo have to rotate 90 deegrees before the next command 
 sleep(0.728)
