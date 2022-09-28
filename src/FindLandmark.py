@@ -1,6 +1,7 @@
 import robot
 from time import sleep
 import cv2
+import numpy as np
 
 def gstreamer_pipeline(capture_width=1024, capture_height=720, framerate=30):
     """Utility function for setting parameters for the gstreamer camera pipeline"""
@@ -23,6 +24,7 @@ print("OpenCV version = " + cv2.__version__)
 cam = cv2.VideoCapture(gstreamer_pipeline(), apiPreference=cv2.CAP_GSTREAMER)
 
 
+
 if not cam.isOpened(): # Error
     print("Could not open camera")
     exit(-1)
@@ -34,6 +36,8 @@ cv2.moveWindow(WIN_RF, 100, 100)
 
 arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
 arucoParams = cv2.aruco.DetectorParameters_create()
+cam_matrix = np.asarray([[1600, 0, (1024/2)],[0, 1600, (720/2)],[0,0,1]])
+distCoeffs = np.asarray([0,0,0,0])
 
 while cv2.waitKey(4) == -1:
     retval, frameReference = cam.read() # Read frame
@@ -43,7 +47,16 @@ while cv2.waitKey(4) == -1:
         exit(-1)
 
     corners, ids, rejected = cv2.aruco.detectMarkers(frameReference, arucoDict, parameters=arucoParams)
+    [rvecs, tvecs, obj] = cv2.aruco.estimatePoseSingleMarkers(corners, 0.1, cam_matrix, distCoeffs)
+    #print(f"rvecs: {rvecs}")
+    print(f"tvecs: {tvecs}")
+    if tvecs is not None:
+        beta = np.arccos(np.dot((tvecs/np.linalg.norm(tvecs)), np.asarray([0.0,0.0,1.0])))
+        print(beta)
 
+
+
+    ###VISUALISATION
     # verify *at least* one ArUco marker was detected
     if len(corners) > 0:
         # flatten the ArUco IDs list
@@ -76,6 +89,8 @@ while cv2.waitKey(4) == -1:
                 0.5, (0, 255, 0), 2)
             print("[INFO] ArUco marker ID: {}".format(markerID))
             # show the output frameReference
+            
         
     cv2.imshow("frameReference", frameReference)
+    
 
