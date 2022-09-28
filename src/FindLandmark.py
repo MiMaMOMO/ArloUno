@@ -49,16 +49,16 @@ while cv2.waitKey(4) == -1:
     corners, ids, rejected = cv2.aruco.detectMarkers(frameReference, arucoDict, parameters=arucoParams)
     [rvecs, tvecs, obj] = cv2.aruco.estimatePoseSingleMarkers(corners, 0.1, cam_matrix, distCoeffs)
     #print(f"rvecs: {rvecs}")
-    print(f"tvecs: {tvecs}")
+    #print(f"tvecs: {tvecs}")
     if tvecs is not None:
         sign = (np.sign(np.dot(tvecs,np.asarray([1.0,0.0,0.0]))))[0][0]
         beta = sign * (np.arccos(np.dot((tvecs/np.linalg.norm(tvecs)), np.asarray([0.0,0.0,1.0]))))[0][0]
-        print(beta)
         if (np.abs(beta) > 0.20):
             left = 1 + sign #sign is either -1 or 1 
             right = 1 - sign
             print(arlo.go_diff(64, 64, left, right))#right turn
             sleep(np.degrees(np.abs(beta)) * 0.008)
+            print(np.degrees(np.abs(beta)) * 0.008)
             print(arlo.stop())
             #sleep(1.0)
 
