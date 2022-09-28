@@ -41,7 +41,9 @@ distCoeffs = np.asarray([0,0,0,0])
 
 while cv2.waitKey(4) == -1:
     retval, frameReference = cam.read() # Read frame
-        
+    sleep(1.0)
+    retval, frameReference = cam.read()
+
     if not retval: # Error
         print(" < < <  Game over!  > > > ")
         exit(-1)
