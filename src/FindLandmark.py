@@ -21,7 +21,8 @@ def gstreamer_pipeline(capture_width=1024, capture_height=720, framerate=30):
 print("OpenCV version = " + cv2.__version__)
 
 # Open a camera device for capturing
-cam = cv2.VideoCapture(gstreamer_pipeline(), apiPreference=cv2.CAP_GSTREAMER)
+#cam = cv2.VideoCapture(gstreamer_pipeline(), apiPreference=cv2.CAP_GSTREAMER)
+cam = cv2.VideoCapture(0)
 
 
 if not cam.isOpened(): # Error
@@ -49,7 +50,12 @@ while cv2.waitKey(4) == -1:
     [rvecs, tvecs, obj] = cv2.aruco.estimatePoseSingleMarkers(corners, 0.1, cam_matrix, distCoeffs)
     print(f"rvecs: {rvecs}")
     print(f"tvecs: {tvecs}")
+    beta = np.arccos((tvecs/len(tvecs)) * [0,0,1])
+    print(beta)
 
+
+
+    ###VISUALISATION
     # verify *at least* one ArUco marker was detected
     if len(corners) > 0:
         # flatten the ArUco IDs list
