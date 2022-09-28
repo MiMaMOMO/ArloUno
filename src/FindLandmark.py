@@ -46,6 +46,8 @@ arucoParams = cv2.aruco.DetectorParameters_create()
 corners, ids, rejected = cv2.aruco.detectMarkers(frameReference, arucoDict, parameters=arucoParams)
 
 print(f"corners: {corners}")
+print(f"ids: {ids}")
+print(f"rejected: {rejected}")
 
 # # Create a robot object and initialize
 # arlo = robot.Robot()
