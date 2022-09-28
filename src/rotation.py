@@ -14,7 +14,6 @@ leftSpeed = 64
 rightSpeed = 64
 
 # Send a go_diff command to drive forward.
-# Rotate right by only driving with the left wheel
 print(arlo.go_diff(leftSpeed, rightSpeed, 1, 0))
 
 # The time Arlo have to rotate 90 deegrees before the next command 
