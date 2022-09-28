@@ -60,23 +60,22 @@ while cv2.waitKey(4) == -1:
             bottomRight = (int(bottomRight[0]), int(bottomRight[1]))
             bottomLeft = (int(bottomLeft[0]), int(bottomLeft[1]))
             topLeft = (int(topLeft[0]), int(topLeft[1]))
-
-    for m in range(len(ids)):
-        # draw the bounding box of the ArUCo detection
-        cv2.line(frameReference, topLeft, topRight, (0, 255, 0), 2)
-        cv2.line(frameReference, topRight, bottomRight, (0, 255, 0), 2)
-        cv2.line(frameReference, bottomRight, bottomLeft, (0, 255, 0), 2)
-        cv2.line(frameReference, bottomLeft, topLeft, (0, 255, 0), 2)
-        # compute and draw the center (x, y)-coordinates of the ArUco
-        # marker
-        cX = int((topLeft[0] + bottomRight[0]) / 2.0)
-        cY = int((topLeft[1] + bottomRight[1]) / 2.0)
-        cv2.circle(frameReference, (cX, cY), 4, (0, 0, 255), -1)
-        # draw the ArUco marker ID on the frameReference
-        cv2.putText(frameReference, str(markerID),
-            (topLeft[0], topLeft[1] - 15), cv2.FONT_HERSHEY_SIMPLEX,
-            0.5, (0, 255, 0), 2)
-        print("[INFO] ArUco marker ID: {}".format(markerID))
-        # show the output frameReference
+            # draw the bounding box of the ArUCo detection
+            cv2.line(frameReference, topLeft, topRight, (0, 255, 0), 2)
+            cv2.line(frameReference, topRight, bottomRight, (0, 255, 0), 2)
+            cv2.line(frameReference, bottomRight, bottomLeft, (0, 255, 0), 2)
+            cv2.line(frameReference, bottomLeft, topLeft, (0, 255, 0), 2)
+            # compute and draw the center (x, y)-coordinates of the ArUco
+            # marker
+            cX = int((topLeft[0] + bottomRight[0]) / 2.0)
+            cY = int((topLeft[1] + bottomRight[1]) / 2.0)
+            cv2.circle(frameReference, (cX, cY), 4, (0, 0, 255), -1)
+            # draw the ArUco marker ID on the frameReference
+            cv2.putText(frameReference, str(markerID),
+                (topLeft[0], topLeft[1] - 15), cv2.FONT_HERSHEY_SIMPLEX,
+                0.5, (0, 255, 0), 2)
+            print("[INFO] ArUco marker ID: {}".format(markerID))
+            # show the output frameReference
+        
     cv2.imshow("frameReference", frameReference)
 
