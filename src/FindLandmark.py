@@ -39,7 +39,9 @@ arucoParams = cv2.aruco.DetectorParameters_create()
 cam_matrix = np.asarray([[1600, 0, (1024/2)],[0, 1600, (720/2)],[0,0,1]])
 distCoeffs = np.asarray([0,0,0,0])
 
+sleep(2.0)
 while cv2.waitKey(4) == -1:
+
     retval, frameReference = cam.read() # Read frame
     sleep(1.0)
     retval, frameReference = cam.read()
