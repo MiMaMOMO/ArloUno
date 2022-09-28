@@ -59,7 +59,7 @@ while cv2.waitKey(4) == -1:
             right = 1 - sign
             print(arlo.go_diff(64, 64, left, right))#right turn
             sleep(np.degrees(np.abs(beta)) * (0.728/90))
-            #print(np.degrees(np.abs(beta)) * 0.008)
+            print(np.degrees(np.abs(beta)) * (0.728/90))
             print(arlo.stop())
             sleep(1.0)
 
