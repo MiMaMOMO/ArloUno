@@ -60,6 +60,7 @@ while cv2.waitKey(4) == -1:
             sign = np.sign(np.dot(tvecs,np.asarray([1.0,0.0,0.0])))
             beta = sign * (np.arccos(np.dot((tvecs/np.linalg.norm(tvecs)), np.asarray([0.0,0.0,1.0]))))[0][0]
             arlo.go_diff(32, 32, 0, 1)
+            sleep(1)
             arlo.stop()
 
 
