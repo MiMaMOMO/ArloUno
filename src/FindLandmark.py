@@ -1,6 +1,7 @@
 import robot
 from time import sleep
 import cv2
+import numpy as np
 
 def gstreamer_pipeline(capture_width=1024, capture_height=720, framerate=30):
     """Utility function for setting parameters for the gstreamer camera pipeline"""
@@ -34,6 +35,8 @@ cv2.moveWindow(WIN_RF, 100, 100)
 
 arucoDict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_6X6_250)
 arucoParams = cv2.aruco.DetectorParameters_create()
+cam_matrix = np.asarray([[1600, 0, (1024/2)],[0, 1600, (720/2)],[0,0,1]])
+distCoeffs = np.asarray([0,0,0,0])
 
 while cv2.waitKey(4) == -1:
     retval, frameReference = cam.read() # Read frame
@@ -43,6 +46,9 @@ while cv2.waitKey(4) == -1:
         exit(-1)
 
     corners, ids, rejected = cv2.aruco.detectMarkers(frameReference, arucoDict, parameters=arucoParams)
+    [rvecs, tvecs] = cv2.aruco.estimatePoseSingleMarkers(corners, 0.1, cam_matrix, distCoeffs)
+    print(rvecs)
+    print(tvecs)
 
     # verify *at least* one ArUco marker was detected
     if len(corners) > 0:
@@ -76,6 +82,8 @@ while cv2.waitKey(4) == -1:
                 0.5, (0, 255, 0), 2)
             print("[INFO] ArUco marker ID: {}".format(markerID))
             # show the output frameReference
+            
         
     cv2.imshow("frameReference", frameReference)
+    
 
