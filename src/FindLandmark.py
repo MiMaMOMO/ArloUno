@@ -56,7 +56,7 @@ while cv2.waitKey(4) == -1:
         print(beta)
         
         while(beta > 0.20):
-            arlo.go_diff(64, 64, 0, 1)
+            arlo.go_diff(32, 32, 0, 1)
 
 
 
