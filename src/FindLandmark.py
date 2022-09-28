@@ -51,8 +51,10 @@ while cv2.waitKey(4) == -1:
     #print(f"rvecs: {rvecs}")
     print(f"tvecs: {tvecs}")
     if tvecs is not None:
-        beta = (np.arccos(np.dot((tvecs/np.linalg.norm(tvecs)), np.asarray([0.0,0.0,1.0]))))[0][0]
+        sign = np.sign(np.dot(tvecs,np.asarray([1.0,0.0,0.0])))
+        beta = sign * (np.arccos(np.dot((tvecs/np.linalg.norm(tvecs)), np.asarray([0.0,0.0,1.0]))))[0][0]
         print(beta)
+        
 
 
 
