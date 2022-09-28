@@ -3,7 +3,7 @@ from time import sleep
 import cv2
 import numpy as np
 
-def gstreamer_pipeline(capture_width=1024, capture_height=720, framerate=30):
+def gstreamer_pipeline(capture_width=1024, capture_height=720, framerate=30): # maybe turn up fps
     """Utility function for setting parameters for the gstreamer camera pipeline"""
     return (
         "libcamerasrc !"
@@ -39,7 +39,6 @@ arucoParams = cv2.aruco.DetectorParameters_create()
 cam_matrix = np.asarray([[1600, 0, (1024/2)],[0, 1600, (720/2)],[0,0,1]])
 distCoeffs = np.asarray([0,0,0,0])
 
-sleep(2.0)
 while cv2.waitKey(4) == -1:
 
     retval, frameReference = cam.read() # Read frame
@@ -51,22 +50,29 @@ while cv2.waitKey(4) == -1:
         exit(-1)
 
     corners, ids, rejected = cv2.aruco.detectMarkers(frameReference, arucoDict, parameters=arucoParams)
-    [rvecs, tvecs, obj] = cv2.aruco.estimatePoseSingleMarkers(corners, 0.1, cam_matrix, distCoeffs)
-    #print(f"rvecs: {rvecs}")
-    #print(f"tvecs: {tvecs}")
-    if tvecs is not None:
+
+    if ids is not None:
+        [rvecs, tvecs, obj] = cv2.aruco.estimatePoseSingleMarkers(corners, 0.1, cam_matrix, distCoeffs)
+        #last elements in tvecs is distance to the arucobox
+        #print(f"rvecs: {rvecs}")
+        #print(f"tvecs: {tvecs}")
+        #if tvecs is not None:
         sign = (np.sign(np.dot(tvecs,np.asarray([1.0,0.0,0.0]))))[0][0]
         beta = sign * (np.arccos(np.dot((tvecs/np.linalg.norm(tvecs)), np.asarray([0.0,0.0,1.0]))))[0][0]
         print(f"beta {beta}")
         if (np.abs(beta) > 0.20):
             if (sign == 1):
                 print(arlo.go_diff(64, 64, 1, 0))#right turn
+                sleep(np.degrees(np.abs(beta)) * (0.728/90))
+                print(np.degrees(np.abs(beta)) * (0.728/90))
+                print(arlo.stop())
+                sleep(1.0)
             else:
                 print(arlo.go_diff(64, 64, 0, 1))
-            sleep(np.degrees(np.abs(beta)) * (0.728/90))
-            print(np.degrees(np.abs(beta)) * (0.728/90))
-            print(arlo.stop())
-            sleep(5.0)
+                sleep(np.degrees(np.abs(beta)) * (0.728/90))
+                print(np.degrees(np.abs(beta)) * (0.728/90))
+                print(arlo.stop())
+                sleep(1.0)
 
 
 
