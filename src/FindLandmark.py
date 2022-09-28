@@ -73,7 +73,7 @@ while cv2.waitKey(4) == -1:
                 print(np.degrees(np.abs(beta)) * (0.728/90))
                 print(arlo.stop())
                 sleep(1.0)
-
+    #else when we dont see a box turn turn so we see one
 
 
     # ###VISUALISATION
