@@ -64,7 +64,7 @@ while cv2.waitKey(4) == -1:
             sleep(np.degrees(np.abs(beta)) * (0.728/90))
             print(np.degrees(np.abs(beta)) * (0.728/90))
             print(arlo.stop())
-            sleep(1.0)
+            sleep(5.0)
 
 
 
