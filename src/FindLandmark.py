@@ -54,10 +54,10 @@ while cv2.waitKey(4) == -1:
         sign = np.sign(np.dot(tvecs,np.asarray([1.0,0.0,0.0])))
         beta = sign * (np.arccos(np.dot((tvecs/np.linalg.norm(tvecs)), np.asarray([0.0,0.0,1.0]))))[0][0]
         print(beta)
-        while (np.abs(beta) > 0.14):
-            left = -
-            right = +
-            print(arlo.go_diff(64, 64, 1, 0))
+        while (np.abs(beta) > 0.20):
+            left = 1 + sign
+            right = 1 - sign
+            print(arlo.go_diff(64, 64, left, right))#right turn
 
 
 
