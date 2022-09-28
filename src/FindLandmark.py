@@ -51,52 +51,54 @@ while cv2.waitKey(4) == -1:
     #print(f"rvecs: {rvecs}")
     print(f"tvecs: {tvecs}")
     if tvecs is not None:
-        sign = np.sign(np.dot(tvecs,np.asarray([1.0,0.0,0.0])))
+        sign = (np.sign(np.dot(tvecs,np.asarray([1.0,0.0,0.0]))))[0][0]
         beta = sign * (np.arccos(np.dot((tvecs/np.linalg.norm(tvecs)), np.asarray([0.0,0.0,1.0]))))[0][0]
-        while (np.abs(beta[0][0]) > 0.20):
-            sign = np.sign(np.dot(tvecs,np.asarray([1.0,0.0,0.0])))
-            beta = sign * (np.arccos(np.dot((tvecs/np.linalg.norm(tvecs)), np.asarray([0.0,0.0,1.0]))))[0][0]
-            left = 1 + sign[0][0] #sign is either -1 or 1 
-            right = 1 - sign[0][0]
+        print(beta)
+        if (np.abs(beta) > 0.20):
+            left = 1 + sign #sign is either -1 or 1 
+            right = 1 - sign
             print(arlo.go_diff(64, 64, left, right))#right turn
+            sleep(np.degrees(beta) * 0.008)
+            print(arlo.stop())
+            sleep(0.041)
 
 
 
-    ###VISUALISATION
-    # verify *at least* one ArUco marker was detected
-    if len(corners) > 0:
-        # flatten the ArUco IDs list
-        ids = ids.flatten()
-        print(f"total ids: {ids}")
-        # loop over the detected ArUCo corners
-        for (markerCorner, markerID) in zip(corners, ids):
-            # extract the marker corners (which are always returned in
-            # top-left, top-right, bottom-right, and bottom-left order)
-            corners = markerCorner.reshape((4, 2))
-            (topLeft, topRight, bottomRight, bottomLeft) = corners
-            # convert each of the (x, y)-coordinate pairs to integers
-            topRight = (int(topRight[0]), int(topRight[1]))
-            bottomRight = (int(bottomRight[0]), int(bottomRight[1]))
-            bottomLeft = (int(bottomLeft[0]), int(bottomLeft[1]))
-            topLeft = (int(topLeft[0]), int(topLeft[1]))
-            # draw the bounding box of the ArUCo detection
-            cv2.line(frameReference, topLeft, topRight, (0, 255, 0), 2)
-            cv2.line(frameReference, topRight, bottomRight, (0, 255, 0), 2)
-            cv2.line(frameReference, bottomRight, bottomLeft, (0, 255, 0), 2)
-            cv2.line(frameReference, bottomLeft, topLeft, (0, 255, 0), 2)
-            # compute and draw the center (x, y)-coordinates of the ArUco
-            # marker
-            cX = int((topLeft[0] + bottomRight[0]) / 2.0)
-            cY = int((topLeft[1] + bottomRight[1]) / 2.0)
-            cv2.circle(frameReference, (cX, cY), 4, (0, 0, 255), -1)
-            # draw the ArUco marker ID on the frameReference
-            cv2.putText(frameReference, str(markerID),
-                (topLeft[0], topLeft[1] - 15), cv2.FONT_HERSHEY_SIMPLEX,
-                0.5, (0, 255, 0), 2)
-            print("[INFO] ArUco marker ID: {}".format(markerID))
-            # show the output frameReference
+    # ###VISUALISATION
+    # # verify *at least* one ArUco marker was detected
+    # if len(corners) > 0:
+    #     # flatten the ArUco IDs list
+    #     ids = ids.flatten()
+    #     print(f"total ids: {ids}")
+    #     # loop over the detected ArUCo corners
+    #     for (markerCorner, markerID) in zip(corners, ids):
+    #         # extract the marker corners (which are always returned in
+    #         # top-left, top-right, bottom-right, and bottom-left order)
+    #         corners = markerCorner.reshape((4, 2))
+    #         (topLeft, topRight, bottomRight, bottomLeft) = corners
+    #         # convert each of the (x, y)-coordinate pairs to integers
+    #         topRight = (int(topRight[0]), int(topRight[1]))
+    #         bottomRight = (int(bottomRight[0]), int(bottomRight[1]))
+    #         bottomLeft = (int(bottomLeft[0]), int(bottomLeft[1]))
+    #         topLeft = (int(topLeft[0]), int(topLeft[1]))
+    #         # draw the bounding box of the ArUCo detection
+    #         cv2.line(frameReference, topLeft, topRight, (0, 255, 0), 2)
+    #         cv2.line(frameReference, topRight, bottomRight, (0, 255, 0), 2)
+    #         cv2.line(frameReference, bottomRight, bottomLeft, (0, 255, 0), 2)
+    #         cv2.line(frameReference, bottomLeft, topLeft, (0, 255, 0), 2)
+    #         # compute and draw the center (x, y)-coordinates of the ArUco
+    #         # marker
+    #         cX = int((topLeft[0] + bottomRight[0]) / 2.0)
+    #         cY = int((topLeft[1] + bottomRight[1]) / 2.0)
+    #         cv2.circle(frameReference, (cX, cY), 4, (0, 0, 255), -1)
+    #         # draw the ArUco marker ID on the frameReference
+    #         cv2.putText(frameReference, str(markerID),
+    #             (topLeft[0], topLeft[1] - 15), cv2.FONT_HERSHEY_SIMPLEX,
+    #             0.5, (0, 255, 0), 2)
+    #         print("[INFO] ArUco marker ID: {}".format(markerID))
+    #         # show the output frameReference
             
         
-    cv2.imshow("frameReference", frameReference)
+    # cv2.imshow("frameReference", frameReference)
     
 
