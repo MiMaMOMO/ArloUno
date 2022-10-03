@@ -25,9 +25,9 @@ cam = cv2.VideoCapture(gstreamer_pipeline(), apiPreference=cv2.CAP_GSTREAMER)
 
 arlo = robot.Robot()
 
-#if not cam.isOpened(): # Error
-#    print("Could not open camera")
-#    exit(-1)
+if not cam.isOpened(): # Error
+    print("Could not open camera")
+    exit(-1)
 
 # Open a window
 # WIN_RF = "Example 1"
@@ -42,8 +42,6 @@ distCoeffs = np.asarray([0,0,0,0])
 while cv2.waitKey(4) == -1:
 
     retval, frameReference = cam.read() # Read frame
-    sleep(1.0)
-    retval, frameReference = cam.read()
 
     if not retval: # Error
         print(" < < <  Game over!  > > > ")
