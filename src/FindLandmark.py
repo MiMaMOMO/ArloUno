@@ -51,8 +51,8 @@ while cv2.waitKey(4) == -1:
 
     corners, ids, rejected = cv2.aruco.detectMarkers(frameReference, arucoDict, parameters=arucoParams)
 
-    if ids is not None:
-        [rvecs, tvecs, obj] = cv2.aruco.estimatePoseSingleMarkers(corners, 0.1, cam_matrix, distCoeffs)
+    if ids is not None: #try with type() around ids and None
+        [rvecs, tvecs, obj] = cv2.aruco.estimatePoseSingleMarkers(corners, 0.1, cam_matrix, distCoeffs) #try 0.145 markerlength
         #last elements in tvecs is distance to the arucobox
         #print(f"rvecs: {rvecs}")
         #print(f"tvecs: {tvecs}")
