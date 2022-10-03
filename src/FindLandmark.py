@@ -77,8 +77,9 @@ while cv2.waitKey(4) == -1:
         # move dirve forward into its own if statement, check how far the box is 
     else #when we dont see a box turn turn so we see one
         print(arlo.go_diff(64, 64, 1, 0))#right turn
-        sleep(beta * (0.728/90))
+        sleep((0.728/90) * 5)
         print(arlo.stop())
+        sleep(0.1)
 
     ###VISUALISATION
     # verify *at least* one ArUco marker was detected
