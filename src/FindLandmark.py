@@ -60,7 +60,7 @@ while cv2.waitKey(4) == -1:
         print(f"sign {sign}")
         beta = sign * (np.arccos(np.dot((tvecs/np.linalg.norm(tvecs)), np.asarray([0.0,0.0,1.0]))))[0][0]
         print(f"beta {np.degrees(np.abs(beta))}")
-        if (np.abs(beta) > 0.20):
+        if (np.degrees(np.abs(beta)) > np.degrees(0.20)):
             if (sign == 1):
                 print(arlo.go_diff(64, 64, 1, 0))#right turn
                 sleep(np.degrees(np.abs(beta)) * (0.728/90))
