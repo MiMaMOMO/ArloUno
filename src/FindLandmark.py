@@ -41,7 +41,8 @@ distCoeffs = np.asarray([0,0,0,0])
 
 while cv2.waitKey(4) == -1:
 
-    retval, frameReference = cam.read() # Read frame
+    for i in range(10):
+        retval, frameReference = cam.read() # Read frame
 
     if not retval: # Error
         print(" < < <  Game over!  > > > ")
@@ -64,14 +65,14 @@ while cv2.waitKey(4) == -1:
                 sleep(np.degrees(np.abs(beta)) * (0.728/90))
                 print(np.degrees(np.abs(beta)) * (0.728/90))
                 print(arlo.stop())
-                sleep(0.01)
+                sleep(1.0)
                 continue
             else:
                 print(arlo.go_diff(64, 64, 0, 1))
                 sleep(np.degrees(np.abs(beta)) * (0.728/90))
                 print(np.degrees(np.abs(beta)) * (0.728/90))
                 print(arlo.stop())
-                sleep(0.01)
+                sleep(1.0)
                 continue
     #else when we dont see a box turn turn so we see one
 
