@@ -52,6 +52,7 @@ while cv2.waitKey(4) == -1:
 
     if ids is not None: #try with type() around ids and None
         [rvecs, tvecs, obj] = cv2.aruco.estimatePoseSingleMarkers(corners, 0.145, cam_matrix, distCoeffs) #try 0.145 markerlength
+        length = tvecs[0][0,2]
         sign = (np.sign(np.dot(tvecs,np.asarray([1.0,0.0,0.0]))))[0][0]
         print(f"sign {sign}")
         beta = np.degrees(np.abs(sign * (np.arccos(np.dot((tvecs/np.linalg.norm(tvecs)), np.asarray([0.0,0.0,1.0]))))[0][0]))
@@ -62,7 +63,7 @@ while cv2.waitKey(4) == -1:
                 sleep(beta * (0.728/90))
                 print(arlo.stop())
                 sleep(0.1)
-                if 1600 * 14.5 / (corners[0] - corners[3]) > 100:
+                if length > 100: #1600 * 14.5 / (corners[0] - corners[3]) > 100:
                     print(arlo.go_diff(60, 64, 1, 1))#drive est 1m forward
                     sleep(2.52)
                     print(arlo.stop())
@@ -72,7 +73,7 @@ while cv2.waitKey(4) == -1:
                 sleep(beta * (0.728/90))
                 print(arlo.stop())
                 sleep(0.1)
-                if 1600 * 14.5 / (corners[0] - corners[3]) > 100:
+                if length > 100: #1600 * 14.5 / (corners[0] - corners[3]) > 100:
                     print(arlo.go_diff(60, 64, 1, 1))#drive est 1m forward
                     sleep(2.52)
                     print(arlo.stop())
