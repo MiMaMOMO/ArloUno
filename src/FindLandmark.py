@@ -41,6 +41,7 @@ distCoeffs = np.asarray([0,0,0,0])
 
 while cv2.waitKey(4) == -1:
 
+    sleep(1.0)
     retval, frameReference = cam.read() # Read frame
 
     if not retval: # Error
