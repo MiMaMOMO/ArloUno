@@ -52,10 +52,6 @@ while cv2.waitKey(4) == -1:
 
     if ids is not None: #try with type() around ids and None
         [rvecs, tvecs, obj] = cv2.aruco.estimatePoseSingleMarkers(corners, 0.145, cam_matrix, distCoeffs) #try 0.145 markerlength
-        #last elements in tvecs is distance to the arucobox
-        #print(f"rvecs: {rvecs}")
-        #print(f"tvecs: {tvecs}")
-        #if tvecs is not None:
         sign = (np.sign(np.dot(tvecs,np.asarray([1.0,0.0,0.0]))))[0][0]
         print(f"sign {sign}")
         beta = np.degrees(np.abs(sign * (np.arccos(np.dot((tvecs/np.linalg.norm(tvecs)), np.asarray([0.0,0.0,1.0]))))[0][0]))
@@ -64,13 +60,17 @@ while cv2.waitKey(4) == -1:
             if (sign == 1):
                 print(arlo.go_diff(64, 64, 1, 0))#right turn
                 sleep(beta * (0.728/90))
-                print(beta * (0.728/90))
+                print(arlo.stop())
+                print(arlo.go_diff(60, 64, 1, 1))#drive est 1m forward
+                sleep(2.52)
                 print(arlo.stop())
                 sleep(0.1)
             else:
-                print(arlo.go_diff(64, 64, 0, 1))
+                print(arlo.go_diff(64, 64, 0, 1))#left turn
                 sleep(beta * (0.728/90))
-                print(beta * (0.728/90))
+                print(arlo.stop())
+                print(arlo.go_diff(60, 64, 1, 1))#drive est 1m forward
+                sleep(2.52)
                 print(arlo.stop())
                 sleep(0.1)
     #else when we dont see a box turn turn so we see one
