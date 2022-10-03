@@ -63,7 +63,7 @@ while cv2.waitKey(4) == -1:
                 sleep(beta * (0.728/90))
                 print(arlo.stop())
                 sleep(0.1)
-                if length > 100: #1600 * 14.5 / (corners[0] - corners[3]) > 100:
+                if arlo.read_front_ping_sensor > 1000: #1600 * 14.5 / (corners[0] - corners[3]) > 100:
                     print(arlo.go_diff(60, 64, 1, 1))#drive est 1m forward
                     sleep(2.52)
                     print(arlo.stop())
@@ -73,7 +73,7 @@ while cv2.waitKey(4) == -1:
                 sleep(beta * (0.728/90))
                 print(arlo.stop())
                 sleep(0.1)
-                if length > 100: #1600 * 14.5 / (corners[0] - corners[3]) > 100:
+                if arlo.read_front_ping_sensor > 1000: #1600 * 14.5 / (corners[0] - corners[3]) > 100:
                     print(arlo.go_diff(60, 64, 1, 1))#drive est 1m forward
                     sleep(2.52)
                     print(arlo.stop())
