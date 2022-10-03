@@ -58,21 +58,21 @@ while cv2.waitKey(4) == -1:
         #if tvecs is not None:
         sign = (np.sign(np.dot(tvecs,np.asarray([1.0,0.0,0.0]))))[0][0]
         print(f"sign {sign}")
-        beta = sign * (np.arccos(np.dot((tvecs/np.linalg.norm(tvecs)), np.asarray([0.0,0.0,1.0]))))[0][0]
-        print(f"beta {np.degrees(np.abs(beta))}")
-        if (np.degrees(np.abs(beta)) > np.degrees(0.20)):
+        beta = np.degrees(np.abs(sign * (np.arccos(np.dot((tvecs/np.linalg.norm(tvecs)), np.asarray([0.0,0.0,1.0]))))[0][0]))
+        print(f"beta {beta}")
+        if (beta > np.degrees(0.20)):
             if (sign == 1):
                 print(arlo.go_diff(64, 64, 1, 0))#right turn
-                sleep(np.degrees(np.abs(beta)) * (0.728/90))
-                print(np.degrees(np.abs(beta)) * (0.728/90))
+                sleep(beta * (0.728/90))
+                print(beta * (0.728/90))
                 print(arlo.stop())
-                sleep(1.0)
+                sleep(0.1)
             else:
                 print(arlo.go_diff(64, 64, 0, 1))
-                sleep(np.degrees(np.abs(beta)) * (0.728/90))
-                print(np.degrees(np.abs(beta)) * (0.728/90))
+                sleep(beta * (0.728/90))
+                print(beta * (0.728/90))
                 print(arlo.stop())
-                sleep(1.0)
+                sleep(0.1)
     #else when we dont see a box turn turn so we see one
 
 
