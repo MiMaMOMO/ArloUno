@@ -62,22 +62,17 @@ while cv2.waitKey(4) == -1:
                 print(arlo.go_diff(64, 64, 1, 0))#right turn
                 sleep(beta * (0.728/90))
                 print(arlo.stop())
-                sleep(0.1)
-                if arlo.read_front_ping_sensor() > 1000: #1600 * 14.5 / (corners[0] - corners[3]) > 100:
-                    print(arlo.go_diff(60, 64, 1, 1))#drive est 1m forward
-                    sleep(2.52)
-                    print(arlo.stop())
-                    sleep(0.1)
+                sleep(0.1)     
             else:
                 print(arlo.go_diff(64, 64, 0, 1))#left turn
                 sleep(beta * (0.728/90))
                 print(arlo.stop())
                 sleep(0.1)
-                if arlo.read_front_ping_sensor() > 1000: #1600 * 14.5 / (corners[0] - corners[3]) > 100:
-                    print(arlo.go_diff(60, 64, 1, 1))#drive est 1m forward
-                    sleep(2.52)
-                    print(arlo.stop())
-                    sleep(0.1)
+        if arlo.read_front_ping_sensor() > 1000: #1600 * 14.5 / (corners[0] - corners[3]) > 100:
+            print(arlo.go_diff(60, 64, 1, 1))#drive est 1m forward
+            sleep(2.52)
+            print(arlo.stop())
+            sleep(0.1)
     else: #when we dont see a box turn turn so we see one
         print(arlo.go_diff(64, 64, 1, 0))#right turn
         sleep((0.728/90) * 15)
