@@ -82,7 +82,7 @@ while cv2.waitKey(4) == -1:
         print(arlo.go_diff(64, 64, 1, 0))#right turn
         sleep((0.728/90) * 15)
         print(arlo.stop())
-        sleep(0.1)
+        sleep(0.5)
 
     ###VISUALISATION
     # verify *at least* one ArUco marker was detected
