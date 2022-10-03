@@ -25,9 +25,9 @@ cam = cv2.VideoCapture(gstreamer_pipeline(), apiPreference=cv2.CAP_GSTREAMER)
 
 arlo = robot.Robot()
 
-if not cam.isOpened(): # Error
-    print("Could not open camera")
-    exit(-1)
+#if not cam.isOpened(): # Error
+#    print("Could not open camera")
+#    exit(-1)
 
 # Open a window
 # WIN_RF = "Example 1"
