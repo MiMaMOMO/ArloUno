@@ -79,7 +79,7 @@ while cv2.waitKey(4) == -1:
                     sleep(0.1)
     else: #when we dont see a box turn turn so we see one
         print(arlo.go_diff(64, 64, 1, 0))#right turn
-        sleep((0.728/90) * 5)
+        sleep((0.728/90) * 15)
         print(arlo.stop())
         sleep(0.1)
 
