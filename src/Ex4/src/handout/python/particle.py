@@ -70,7 +70,7 @@ def move_particle(particle, delta_x, delta_y, delta_theta):
      # Move the particle with the right velocity 
     particle.x += delta_x
     particle.y += delta_y
-    particle.theta += delta_theta
+    particle.theta += delta_theta # This one might need more tweaking 
 
 
 def add_uncertainty(particles_list, sigma, sigma_theta):

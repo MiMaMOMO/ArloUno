@@ -10,7 +10,7 @@ import sys
 
 # Flags
 showGUI = True  # Whether or not to open GUI windows
-onRobot = True  # Whether or not we are running on the Arlo robot
+onRobot = False # Whether or not we are running on the Arlo robot
 
 def isRunningOnArlo():
     """Return True if we are running on Arlo, otherwise False.
@@ -136,7 +136,7 @@ try:
     velocity = 0.0              # cm/sec
     angular_velocity = 0.0      # radians/sec
 
-    # TODO: Initialize the robot (XXX: You do this)
+    # TODO: Initialize the robot (XXX: You do this). We can only initialize when using Arlo 
     # arlo = robot.Robot()
 
     # Allocate space for world map
@@ -151,9 +151,7 @@ try:
     else:
         cam = camera.Camera(0, 'macbookpro', useCaptureThread = True)
         
-
-
-    while True:
+    while 1:
 
         # Move the robot according to user input (only for testing)
         action = cv2.waitKey(10)
@@ -172,19 +170,15 @@ try:
                 angular_velocity += 0.2
             elif action == ord('d'): # Right
                 angular_velocity -= 0.2
-
-
-
         
         # TODO: Use motor controls to update particles
         # XXX: Make the robot drive
         # XXX: You do this
 
-
         # Fetch next frame
         colour = cam.get_next_frame()
         
-        w = []
+        # w = []
         
         # Detect objects
         objectIDs, dists, angles = cam.detect_aruco_objects(colour)
@@ -193,13 +187,12 @@ try:
             # List detected objects
             for i in range(len(objectIDs)):
                 print("Object ID = ", objectIDs[i], ", Distance = ", dists[i], ", angle = ", angles[i])
-                # TODO: ...
-                # XXX: Do something for each detected object - remember, the same ID may appear several times
+                # TODO: Do something for each detected object - remember, the same ID may appear several times
                 
-                for i in particles:
-                    print(math.sqrt(
-                        (landmarks[4][0] - i.getX()) ** 2 + (landmarks[4][1] - i.getY()) ** 2
-                    ))
+                # for i in particles:
+                #     print(math.sqrt(
+                #         (landmarks[4][0] - i.getX()) ** 2 + (landmarks[4][1] - i.getY()) ** 2
+                #     ))
 
             # TODO: Compute particle weights
             # XXX: You do this
@@ -210,7 +203,6 @@ try:
             # Normalize weigths 
             #norm_weigths = [float(i)/sum(w) for i in w]
             
-
             # TODO: Resampling
             # XXX: You do this
             #np_weigths = np.array(norm_weigths)
@@ -223,7 +215,6 @@ try:
             for p in particles:
                 p.setWeight(1.0/num_particles)
 
-    
         est_pose = particle.estimate_pose(particles) # The estimate of the robots current pose
 
         if showGUI:
