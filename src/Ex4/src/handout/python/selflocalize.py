@@ -19,7 +19,6 @@ def isRunningOnArlo():
     return onRobot
 
 if isRunningOnArlo():
-    # TODO: You need to change this path to point to where your robot.py file is located. DONE.
     sys.path.append("../../../../")
 
 # Try to import robot module 
@@ -42,11 +41,10 @@ CBLACK = (0, 0, 0)
 
 # Landmarks.
 # The robot knows the position of 2 landmarks. Their coordinates are in the unit centimeters [cm].
-# TODO: Remember to change Aruco IDS and coordinates for each session 
 landmarkIDs = [3, 8]
 landmarks = {
     3: (0.0, 0.0),  # Coordinates for landmark 1
-    8: (62.0, 0.0)  # Coordinates for landmark 2
+    8: (300.0, 0.0)  # Coordinates for landmark 2
 }
 
 landmark_colors = [CRED, CGREEN] # Colors used when drawing the landmarks
@@ -172,8 +170,9 @@ try:
                 angular_velocity -= 0.2
         
         # TODO: Use motor controls to update particles
-        # XXX: Make the robot drive
-        # XXX: You do this
+        # XXX: Make the robot drive 
+        for p in particles:
+            particle.move_particle(p, velocity, velocity, angular_velocity)
 
         # Fetch next frame
         colour = cam.get_next_frame()
@@ -186,11 +185,6 @@ try:
             for i in range(len(objectIDs)):
                 print("Object ID = ", objectIDs[i], ", Distance = ", dists[i], ", angle = ", angles[i])
                 # TODO: Do something for each detected object - remember, the same ID may appear several times
-                
-                # for i in particles:
-                #     print(math.sqrt(
-                #         (landmarks[4][0] - i.getX()) ** 2 + (landmarks[4][1] - i.getY()) ** 2
-                #     ))
 
             ### Compute particle weights ### 
             weight_sum = 0                      # The total sum of all weigths 
