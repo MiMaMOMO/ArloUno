@@ -196,12 +196,33 @@ try:
 
             # TODO: Compute particle weights
             # XXX: You do this
-            # Compute importance weigths 
-            #for particle in particles: 
-            #    w.append(est_pose / particle)
+            weight_sum = 0      # The total sum of all weigths 
+            spread_dist = 1     # The spread for the distance 
+            spread_angle = 1    # The spread for the orientation 
+            
+            # Compute the unnormalized weigth for each particle 
+            for particle in particles:
                 
-            # Normalize weigths 
-            #norm_weigths = [float(i)/sum(w) for i in w]
+                # Compute weights for each particle by using their distance 
+                x = pow(landmarks[objectIDs[0]][0] - particle.getX(), 2)
+                y = pow(landmarks[objectIDs[0]][1] - particle.gety(), 2)
+                
+                dist = math.sqrt(x + y)
+                dist_weigth = np.exp(-((pow(dist, 2) / (2 * pow(spread_dist, 2)))))
+                
+                # Compute weights for each particle by using their orientation 
+                theta = angles[0] - particle.getTheta()
+                orientation_weigth = np.exp(-(pow(theta, 2) / (2 * pow(spread_angle, 2))))
+                
+                # Compute the true weigth for the particle 
+                weight = dist_weigth * orientation_weigth
+                particle.setWeight(weight)
+                
+                # Add to the sum of weights to normalize later 
+                weight_sum += weight
+                
+            # Normalize the weight for each particle 
+            [particle.setWeight(particle.getWeight/weight_sum) for particle in particles]
             
             # TODO: Resampling
             # XXX: You do this
