@@ -68,16 +68,19 @@ while cv2.waitKey(4) == -1:
                 sleep(beta * (0.728/90))
                 print(arlo.stop())
                 sleep(0.1)
-        if arlo.read_front_ping_sensor() > 1000: #1600 * 14.5 / (corners[0] - corners[3]) > 100:
+        distance = arlo.read_front_ping_sensor()
+        if distance > 1000: #1600 * 14.5 / (corners[0] - corners[3]) > 100:
             print(arlo.go_diff(60, 64, 1, 1))#drive est 1m forward
-            sleep(2.52)
+            sleep(np.argmin(2.52, (2.52/1000) * distance)) ### TODO attempt to transform in to a relative distance
             print(arlo.stop())
             sleep(0.1)
     else: #when we dont see a box turn turn so we see one
         print(arlo.go_diff(64, 64, 1, 0))#right turn
         sleep((0.728/90) * 15)
         print(arlo.stop())
-        sleep(0.5)
+        sleep(0.7)
+        for i in range(5): retval, frameReference = cam.read() # Read frame
+        sleep(0.1)
 
     ###VISUALISATION
     # verify *at least* one ArUco marker was detected
