@@ -43,10 +43,10 @@ CBLACK = (0, 0, 0)
 # Landmarks.
 # The robot knows the position of 2 landmarks. Their coordinates are in the unit centimeters [cm].
 # TODO: Remember to change Aruco IDS and coordinates for each session 
-landmarkIDs = [3, 4]
+landmarkIDs = [3, 8]
 landmarks = {
     3: (0.0, 0.0),  # Coordinates for landmark 1
-    4: (62.0, 0.0)  # Coordinates for landmark 2
+    8: (62.0, 0.0)  # Coordinates for landmark 2
 }
 
 landmark_colors = [CRED, CGREEN] # Colors used when drawing the landmarks
@@ -178,8 +178,6 @@ try:
         # Fetch next frame
         colour = cam.get_next_frame()
         
-        # w = []
-        
         # Detect objects
         objectIDs, dists, angles = cam.detect_aruco_objects(colour)
         if not isinstance(objectIDs, type(None)):
@@ -194,40 +192,41 @@ try:
                 #         (landmarks[4][0] - i.getX()) ** 2 + (landmarks[4][1] - i.getY()) ** 2
                 #     ))
 
-            # TODO: Compute particle weights
-            # XXX: You do this
-            weight_sum = 0      # The total sum of all weigths 
-            spread_dist = 1     # The spread for the distance 
-            spread_angle = 1    # The spread for the orientation 
+            ### Compute particle weights ### 
+            weight_sum = 0                      # The total sum of all weigths 
+            spread_dist = 8                     # The spread for the distance 
+            spread_angle = 8                    # The spread for the orientation 
             
-            # Compute the unnormalized weigth for each particle 
-            for particle in particles:
+            # Compute the unnormalized weight for each particle 
+            for p in particles:
                 
                 # Compute weights for each particle by using their distance 
-                x = pow(landmarks[objectIDs[0]][0] - particle.getX(), 2)
-                y = pow(landmarks[objectIDs[0]][1] - particle.gety(), 2)
+                x = pow(landmarks[objectIDs[0]][0] - p.getX(), 2)
+                y = pow(landmarks[objectIDs[0]][1] - p.getY(), 2)
                 
                 dist = math.sqrt(x + y)
                 dist_weigth = np.exp(-((pow(dist, 2) / (2 * pow(spread_dist, 2)))))
                 
                 # Compute weights for each particle by using their orientation 
-                theta = angles[0] - particle.getTheta()
+                theta = angles[0] - p.getTheta()
                 orientation_weigth = np.exp(-(pow(theta, 2) / (2 * pow(spread_angle, 2))))
                 
                 # Compute the true weigth for the particle 
                 weight = dist_weigth * orientation_weigth
-                particle.setWeight(weight)
+                
+                p.setWeight(weight)
                 
                 # Add to the sum of weights to normalize later 
                 weight_sum += weight
                 
             # Normalize the weight for each particle 
-            [particle.setWeight(particle.getWeight/weight_sum) for particle in particles]
+            [p.setWeight(p.getWeight() / weight_sum) for p in particles]
             
-            # TODO: Resampling
-            # XXX: You do this
-            #np_weigths = np.array(norm_weigths)
-            #resample = np.random.choice(particles, len(particles), True, np_weigths)
+            # Store weights 
+            weights = [p.getWeight() for p in particles]
+            
+            # Implement resampling step
+            resampling = np.random.choice(particles, len(particles), True, weights)
 
             # Draw detected objects
             cam.draw_aruco_objects(colour)
