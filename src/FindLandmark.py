@@ -74,6 +74,10 @@ while cv2.waitKey(4) == -1:
             sleep(min(2.52, (2.52/1000) * distance)) ### TODO attempt to transform in to a relative distance
             print(arlo.stop())
             sleep(0.1)
+            print(arlo.go_diff(64, 64, 0, 1))#left turn
+            sleep(15 * (0.728/90))
+            print(arlo.stop())
+            sleep(0.5)
     else: #when we dont see a box turn turn so we see one
         print(arlo.go_diff(64, 64, 1, 0))#right turn
         sleep((0.728/90) * 15)
