@@ -217,7 +217,7 @@ try:
                 p.setWeight(weight)
                 
                 # Add to the sum of weights to normalize later 
-                weight_sum += weight
+                weight_sum += weight 
                 
             # Normalize the weight for each particle 
             [p.setWeight(p.getWeight() / weight_sum) for p in particles]
