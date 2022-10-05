@@ -10,7 +10,7 @@ import sys
 
 # Flags
 showGUI = True  # Whether or not to open GUI windows
-onRobot = True  # Whether or not we are running on the Arlo robot
+onRobot = False # Whether or not we are running on the Arlo robot
 
 def isRunningOnArlo():
     """Return True if we are running on Arlo, otherwise False.
@@ -43,10 +43,10 @@ CBLACK = (0, 0, 0)
 # Landmarks.
 # The robot knows the position of 2 landmarks. Their coordinates are in the unit centimeters [cm].
 # TODO: Remember to change Aruco IDS and coordinates for each session 
-landmarkIDs = [3, 4]
+landmarkIDs = [3, 8]
 landmarks = {
     3: (0.0, 0.0),  # Coordinates for landmark 1
-    4: (62.0, 0.0)  # Coordinates for landmark 2
+    8: (62.0, 0.0)  # Coordinates for landmark 2
 }
 
 landmark_colors = [CRED, CGREEN] # Colors used when drawing the landmarks
@@ -136,7 +136,7 @@ try:
     velocity = 0.0              # cm/sec
     angular_velocity = 0.0      # radians/sec
 
-    # TODO: Initialize the robot (XXX: You do this)
+    # TODO: Initialize the robot (XXX: You do this). We can only initialize when using Arlo 
     # arlo = robot.Robot()
 
     # Allocate space for world map
@@ -151,9 +151,7 @@ try:
     else:
         cam = camera.Camera(0, 'macbookpro', useCaptureThread = True)
         
-
-
-    while True:
+    while 1:
 
         # Move the robot according to user input (only for testing)
         action = cv2.waitKey(10)
@@ -172,19 +170,13 @@ try:
                 angular_velocity += 0.2
             elif action == ord('d'): # Right
                 angular_velocity -= 0.2
-
-
-
         
         # TODO: Use motor controls to update particles
         # XXX: Make the robot drive
         # XXX: You do this
 
-
         # Fetch next frame
         colour = cam.get_next_frame()
-        
-        w = []
         
         # Detect objects
         objectIDs, dists, angles = cam.detect_aruco_objects(colour)
@@ -193,28 +185,48 @@ try:
             # List detected objects
             for i in range(len(objectIDs)):
                 print("Object ID = ", objectIDs[i], ", Distance = ", dists[i], ", angle = ", angles[i])
-                # TODO: ...
-                # XXX: Do something for each detected object - remember, the same ID may appear several times
+                # TODO: Do something for each detected object - remember, the same ID may appear several times
                 
-                for i in particles:
-                    print(math.sqrt(
-                        (landmarks[4][0] - i.getX()) ** 2 + (landmarks[4][1] - i.getY()) ** 2
-                    ))
+                # for i in particles:
+                #     print(math.sqrt(
+                #         (landmarks[4][0] - i.getX()) ** 2 + (landmarks[4][1] - i.getY()) ** 2
+                #     ))
 
-            # TODO: Compute particle weights
-            # XXX: You do this
-            # Compute importance weigths 
-            #for particle in particles: 
-            #    w.append(est_pose / particle)
-                
-            # Normalize weigths 
-            #norm_weigths = [float(i)/sum(w) for i in w]
+            ### Compute particle weights ### 
+            weight_sum = 0                      # The total sum of all weigths 
+            spread_dist = 8                     # The spread for the distance 
+            spread_angle = 8                    # The spread for the orientation 
             
-
-            # TODO: Resampling
-            # XXX: You do this
-            #np_weigths = np.array(norm_weigths)
-            #resample = np.random.choice(particles, len(particles), True, np_weigths)
+            # Compute the unnormalized weight for each particle 
+            for p in particles:
+                
+                # Compute weights for each particle by using their distance 
+                x = pow(landmarks[objectIDs[0]][0] - p.getX(), 2)
+                y = pow(landmarks[objectIDs[0]][1] - p.getY(), 2)
+                
+                dist = math.sqrt(x + y)
+                dist_weigth = np.exp(-((pow(dist, 2) / (2 * pow(spread_dist, 2)))))
+                
+                # Compute weights for each particle by using their orientation 
+                theta = angles[0] - p.getTheta()
+                orientation_weigth = np.exp(-(pow(theta, 2) / (2 * pow(spread_angle, 2))))
+                
+                # Compute the true weigth for the particle 
+                weight = dist_weigth * orientation_weigth
+                
+                p.setWeight(weight)
+                
+                # Add to the sum of weights to normalize later 
+                weight_sum += weight 
+                
+            # Normalize the weight for each particle 
+            [p.setWeight(p.getWeight() / weight_sum) for p in particles]
+            
+            # Store weights 
+            weights = [p.getWeight() for p in particles]
+            
+            # Implement resampling step
+            resampling = np.random.choice(particles, len(particles), True, weights)
 
             # Draw detected objects
             cam.draw_aruco_objects(colour)
@@ -223,7 +235,6 @@ try:
             for p in particles:
                 p.setWeight(1.0/num_particles)
 
-    
         est_pose = particle.estimate_pose(particles) # The estimate of the robots current pose
 
         if showGUI:
