@@ -4,10 +4,10 @@ import random_numbers as rn
 
 class Particle(object):
     """Data structure for storing particle information (state and weight)"""
-    def __init__(self, x=0.0, y=0.0, theta=0.0, weight=0.0):
+    def __init__(self, x = 0.0, y = 0.0, theta = 0.0, weight = 0.0):
         self.x = x
         self.y = y
-        self.theta = np.mod(theta, 2.0*np.pi)
+        self.theta = np.mod(theta, 2.0 * np.pi)
         self.weight = weight
 
     def getX(self):
@@ -29,11 +29,10 @@ class Particle(object):
         self.y = val
 
     def setTheta(self, val):
-        self.theta = np.mod(val, 2.0*np.pi)
+        self.theta = np.mod(val, 2.0 * np.pi)
 
     def setWeight(self, val):
         self.weight = val
-
 
 def estimate_pose(particles_list):
     """Estimate the pose from particles by computing the average position and orientation over all particles. 
@@ -53,7 +52,7 @@ def estimate_pose(particles_list):
     if flen != 0:
         x = x_sum / flen
         y = y_sum / flen
-        theta = np.arctan2(sin_sum/flen, cos_sum/flen)
+        theta = np.arctan2(sin_sum / flen, cos_sum / flen)
     else:
         x = x_sum
         y = y_sum
@@ -61,16 +60,12 @@ def estimate_pose(particles_list):
         
     return Particle(x, y, theta)
      
-     
-# TODO: Implement this 
 def move_particle(particle, delta_x, delta_y, delta_theta):
     """Move the particle by (delta_x, delta_y, delta_theta)"""
-    
-    # Move the particle with the right velocity 
+    # # Move the particle with the right velocity 
     particle.x += delta_x
     particle.y += delta_y
-    particle.theta += delta_theta # This one might need more tweaking 
-
+    particle.theta += np.mod(particle.theta + delta_theta, 2.0 * np.pi)
 
 def add_uncertainty(particles_list, sigma, sigma_theta):
     """Add some noise to each particle in the list. Sigma and sigma_theta is the noise
@@ -79,7 +74,6 @@ def add_uncertainty(particles_list, sigma, sigma_theta):
         particle.x += rn.randn(0.0, sigma)
         particle.y += rn.randn(0.0, sigma)
         particle.theta = np.mod(particle.theta + rn.randn(0.0, sigma_theta), 2.0 * np.pi) 
-
 
 def add_uncertainty_von_mises(particles_list, sigma, theta_kappa):
     """Add some noise to each particle in the list. Sigma and theta_kappa is the noise
