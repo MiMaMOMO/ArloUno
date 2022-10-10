@@ -3,7 +3,7 @@ import numpy as np
 
 
 # TODO: make this configurable from the command line using parser
-markerID = 10 # Try 1 - 4
+markerID = 5 # Try 1 - 4
 
 # Define some relevant constants
 dpi = 72  # dots (pixels) per inch [inch^(-1)]
@@ -37,9 +37,9 @@ cv2.putText(landmarkImage, str(markerID), (startWidth, startHeight - 60), cv2.FO
 
 
 # Save image
-cv2.imwrite("../../../data/landmark" + str(markerID) + ".png", landmarkImage)
+cv2.imwrite("images/landmark" + str(markerID) + ".png", landmarkImage)
 
 # Show image
-cv2.namedWindow("Landmark")
-cv2.imshow("Landmark", landmarkImage)
-cv2.waitKey()
+# cv2.namedWindow("Landmark")
+# cv2.imshow("Landmark", landmarkImage)
+# cv2.waitKey()
