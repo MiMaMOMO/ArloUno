@@ -3,8 +3,6 @@ import cv2
 import particle
 import camera
 import numpy as np
-import time
-from timeit import default_timer as timer
 import sys
 
 
@@ -39,15 +37,15 @@ CMAGENTA = (255, 0, 255)
 CWHITE = (255, 255, 255)
 CBLACK = (0, 0, 0)
 
-# Landmarks.
-# The robot knows the position of 2 landmarks. Their coordinates are in the unit centimeters [cm].
-landmarkIDs = [3, 8]
-landmarks = {
-    3: (0.0, 0.0),  # Coordinates for landmark 1
-    8: (300.0, 0.0)  # Coordinates for landmark 2
-}
+# Colors used when drawing the landmarks
+landmark_colors = [CRED, CGREEN] 
 
-landmark_colors = [CRED, CGREEN] # Colors used when drawing the landmarks
+# The robot knows the position of 2 landmarks. Their coordinates are in the unit centimeters [cm].
+landmarkIDs = [3, 4]
+landmarks = {
+    3: (0.0, 0.0),          # Coordinates for landmark 1 (RED)
+    4: (50.0, 0.0)         # Coordinates for landmark 2 (GREEN)
+}
 
 
 def jet(x):
@@ -104,7 +102,12 @@ def initialize_particles(num_particles):
     particles = []
     for i in range(num_particles):
         # Random starting points. 
-        p = particle.Particle(600.0*np.random.ranf() - 100.0, 600.0*np.random.ranf() - 250.0, np.mod(2.0*np.pi*np.random.ranf(), 2.0*np.pi), 1.0/num_particles)
+        p = particle.Particle(
+            600.0 * np.random.ranf() - 100.0, 
+            600.0 * np.random.ranf() - 250.0, 
+            np.mod(2.0 * np.pi * np.random.ranf(), 2.0 * np.pi), 
+            1.0 / num_particles
+        )
         particles.append(p)
 
     return particles
@@ -133,12 +136,16 @@ try:
     # Driving parameters
     velocity = 0.0              # cm/sec
     angular_velocity = 0.0      # radians/sec
+    
+    # Spread 
+    spread_dist = 3.0           # The spread for the distance 
+    spread_angle = 1.0          # The spread for the orientation 
 
     # TODO: Initialize the robot (XXX: You do this). We can only initialize when using Arlo 
     # arlo = robot.Robot()
 
     # Allocate space for world map
-    world = np.zeros((500,500,3), dtype=np.uint8)
+    world = np.zeros((500, 500, 3), dtype = np.uint8)
 
     # Draw map
     draw_world(est_pose, particles, world)
@@ -171,81 +178,75 @@ try:
         
         # TODO: Use motor controls to update particles
         # XXX: Make the robot drive 
-        for p in particles:
-            particle.move_particle(p, velocity, velocity, angular_velocity)
 
         # Fetch next frame
         colour = cam.get_next_frame()
         
         # Detect objects
         objectIDs, dists, angles = cam.detect_aruco_objects(colour)
+        
+        # We detected atleast one landmark 
         if not isinstance(objectIDs, type(None)):
             
             # List detected objects
             for i in range(len(objectIDs)):
                 print("Object ID = ", objectIDs[i], ", Distance = ", dists[i], ", angle = ", angles[i])
-                # TODO: Do something for each detected object - remember, the same ID may appear several times
+                # TODO: Do something for each detected object - remember, the same ID may appear several times. If that happens maybe pick the ArUco landmark with the closest mark 
 
-            ### Compute particle weights ### 
-            weight_sum = 0                      # The total sum of all weigths 
-            spread_dist = 8                     # The spread for the distance 
-            spread_angle = 8                    # The spread for the orientation 
+            # Compute particle weights
+            weight_sum = 0.0                        # The total sum of all weigths 
             
             # Compute the unnormalized weight for each particle 
             for p in particles:
                 
                 # Compute weights for each particle by using their distance 
-                x = pow(landmarks[objectIDs[0]][0] - p.getX(), 2)
-                y = pow(landmarks[objectIDs[0]][1] - p.getY(), 2)
+                dist_x = pow(landmarks[objectIDs[0]][0] - p.getX(), 2)
+                dist_y = pow(landmarks[objectIDs[0]][1] - p.getY(), 2)
                 
-                dist = math.sqrt(x + y)
-                dist_weigth = np.exp(-((pow(dist, 2) / (2 * pow(spread_dist, 2)))))
+                dist = math.sqrt(dist_x + dist_y)
+                dist_weight = np.exp(-(pow(dists[0] - dist, 2) / (2 * pow(spread_dist, 2))))
                 
                 # Compute weights for each particle by using their orientation 
                 theta = angles[0] - p.getTheta()
-                orientation_weigth = np.exp(-(pow(theta, 2) / (2 * pow(spread_angle, 2))))
+                orientation_weight = np.exp(-(pow(theta, 2) / (2 * pow(spread_angle, 2))))
                 
-                # Compute the true weigth for the particle 
-                weight = dist_weigth * orientation_weigth
+                # Set the particles new weight 
+                p.setWeight(dist_weight * orientation_weight)
                 
-                p.setWeight(weight)
-                
-                # Add to the sum of weights to normalize later 
-                weight_sum += weight 
-                
-            # Normalize the weight for each particle 
-            [p.setWeight(p.getWeight() / weight_sum) for p in particles]
+                # Add to the sum of weights
+                weight_sum += p.getWeight()
             
-            # Store weights 
-            weights = [p.getWeight() for p in particles]
+            # Store normalized weights of each particle for probability purposes 
+            weights = [(p.getWeight() / weight_sum) for p in particles]
             
-            # Implement resampling step
-            resampling = np.random.choice(particles, len(particles), True, weights)
-
+            # Resample the particles 
+            particles = np.random.choice(
+                a = particles, 
+                size = num_particles, 
+                replace = True, 
+                p = weights
+            )
+            
             # Draw detected objects
             cam.draw_aruco_objects(colour)
         else:
             # No observation - reset weights to uniform distribution
             for p in particles:
-                p.setWeight(1.0/num_particles)
+                p.setWeight(1.0 / num_particles)
 
-        est_pose = particle.estimate_pose(particles) # The estimate of the robots current pose
+        # Add uncertainity to each particle 
+        particle.add_uncertainty(particles, 0.1, 0.01)
+        
+        # The estimate of the robots current pose
+        est_pose = particle.estimate_pose(particles) 
 
+        # Update the world map 
         if showGUI:
-            # Draw map
-            draw_world(est_pose, particles, world)
-    
-            # Show frame
-            cv2.imshow(WIN_RF1, colour)
-
-            # Show world
-            cv2.imshow(WIN_World, world)
+            draw_world(est_pose, particles, world)      # Draw map
+            cv2.imshow(WIN_RF1, colour)                 # Show frame
+            cv2.imshow(WIN_World, world)                # Show world
   
 # Make sure to clean up even if an exception occurred
 finally: 
-        
-    # Close all windows
-    cv2.destroyAllWindows()
-
-    # Clean-up capture thread
-    cam.terminateCaptureThread()
+    cv2.destroyAllWindows()         # Close all windows
+    cam.terminateCaptureThread()    # Clean-up capture thread
