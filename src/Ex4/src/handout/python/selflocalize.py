@@ -1,4 +1,6 @@
+import copy
 import math
+import random
 import cv2
 import particle
 import camera
@@ -41,10 +43,10 @@ CBLACK = (0, 0, 0)
 landmark_colors = [CRED, CGREEN] 
 
 # The robot knows the position of 2 landmarks. Their coordinates are in the unit centimeters [cm].
-landmarkIDs = [3, 4]
+landmarkIDs = [3, 9]
 landmarks = {
     3: (0.0, 0.0),          # Coordinates for landmark 1 (RED)
-    4: (50.0, 0.0)         # Coordinates for landmark 2 (GREEN)
+    9: (300.0, 0.0)         # Coordinates for landmark 2 (GREEN)
 }
 
 
@@ -138,7 +140,7 @@ try:
     angular_velocity = 0.0      # radians/sec
     
     # Spread 
-    spread_dist = 3.0           # The spread for the distance 
+    spread_dist = 30.0          # The spread for the distance 
     spread_angle = 1.0          # The spread for the orientation 
 
     # TODO: Initialize the robot (XXX: You do this). We can only initialize when using Arlo 
@@ -211,7 +213,7 @@ try:
                 orientation_weight = np.exp(-(pow(theta, 2) / (2 * pow(spread_angle, 2))))
                 
                 # Set the particles new weight 
-                p.setWeight(dist_weight * orientation_weight)
+                p.setWeight(orientation_weight)
                 
                 # Add to the sum of weights
                 weight_sum += p.getWeight()
@@ -219,13 +221,25 @@ try:
             # Store normalized weights of each particle for probability purposes 
             weights = [(p.getWeight() / weight_sum) for p in particles]
             
+            # [print(w) for w in weights]
+            
             # Resample the particles 
-            particles = np.random.choice(
+            resampling = np.random.choice(
                 a = particles, 
                 size = num_particles, 
                 replace = True, 
                 p = weights
             )
+            
+            # Copy the new references of resampling
+            for i in range(len(resampling)): 
+                resampling[i] = copy.deepcopy(resampling[i])
+                
+            # Replace our particles with the resampling 
+            particles = resampling
+            
+            # Add uncertainity to each particle 
+            particle.add_uncertainty(particles, 1.0, 0.01)
             
             # Draw detected objects
             cam.draw_aruco_objects(colour)
@@ -234,9 +248,6 @@ try:
             for p in particles:
                 p.setWeight(1.0 / num_particles)
 
-        # Add uncertainity to each particle 
-        particle.add_uncertainty(particles, 0.1, 0.01)
-        
         # The estimate of the robots current pose
         est_pose = particle.estimate_pose(particles) 
 
