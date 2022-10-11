@@ -1,6 +1,5 @@
 import copy
 import math
-import random
 import cv2
 import particle
 import camera
@@ -43,21 +42,21 @@ CBLACK = (0, 0, 0)
 landmark_colors = [CRED, CGREEN] 
 
 # The robot knows the position of 2 landmarks. Their coordinates are in the unit centimeters [cm].
-landmarkIDs = [3, 9]
+landmarkIDs = [3, 4]
 landmarks = {
     3: (0.0, 0.0),          # Coordinates for landmark 1 (RED)
-    9: (300.0, 0.0)         # Coordinates for landmark 2 (GREEN)
+    4: (100.0, 0.0)         # Coordinates for landmark 2 (GREEN)
 }
 
 
 def jet(x):
     """Colour map for drawing particles. This function determines the colour of 
     a particle from its weight."""
-    r = (x >= 3.0/8.0 and x < 5.0/8.0) * (4.0 * x - 3.0/2.0) + (x >= 5.0/8.0 and x < 7.0/8.0) + (x >= 7.0/8.0) * (-4.0 * x + 9.0/2.0)
-    g = (x >= 1.0/8.0 and x < 3.0/8.0) * (4.0 * x - 1.0/2.0) + (x >= 3.0/8.0 and x < 5.0/8.0) + (x >= 5.0/8.0 and x < 7.0/8.0) * (-4.0 * x + 7.0/2.0)
-    b = (x < 1.0/8.0) * (4.0 * x + 1.0/2.0) + (x >= 1.0/8.0 and x < 3.0/8.0) + (x >= 3.0/8.0 and x < 5.0/8.0) * (-4.0 * x + 5.0/2.0)
+    r = (x >= 3.0 / 8.0 and x < 5.0 / 8.0) * (4.0 * x - 3.0 / 2.0) + (x >= 5.0 / 8.0 and x < 7.0 / 8.0) + (x >= 7.0 / 8.0) * (-4.0 * x + 9.0 / 2.0)
+    g = (x >= 1.0 / 8.0 and x < 3.0 / 8.0) * (4.0 * x - 1.0 / 2.0) + (x >= 3.0 / 8.0 and x < 5.0 / 8.0) + (x >= 5.0 / 8.0 and x < 7.0 / 8.0) * (-4.0 * x + 7.0 / 2.0)
+    b = (x < 1.0 / 8.0) * (4.0 * x + 1.0 / 2.0) + (x >= 1.0 / 8.0 and x < 3.0 / 8.0) + (x >= 3.0 / 8.0 and x < 5.0 / 8.0) * (-4.0 * x + 5.0 / 2.0)
 
-    return (255.0*r, 255.0*g, 255.0*b)
+    return (255.0 * r, 255.0 * g, 255.0 * b)
 
 def draw_world(est_pose, particles, world):
     """Visualization.
@@ -101,16 +100,18 @@ def draw_world(est_pose, particles, world):
     cv2.line(world, a, b, CMAGENTA, 2)
 
 def initialize_particles(num_particles):
-    particles = []
+    particles = np.empty(num_particles, dtype = type(particle.Particle))
+    
+    # Random starting points for each particle 
     for i in range(num_particles):
-        # Random starting points. 
         p = particle.Particle(
             600.0 * np.random.ranf() - 100.0, 
             600.0 * np.random.ranf() - 250.0, 
             np.mod(2.0 * np.pi * np.random.ranf(), 2.0 * np.pi), 
             1.0 / num_particles
         )
-        particles.append(p)
+        
+        particles[i] = p
 
     return particles
 
@@ -129,7 +130,7 @@ try:
         cv2.moveWindow(WIN_World, 500, 50)
 
     # Initialize particles
-    num_particles = 1000
+    num_particles = 2500
     particles = initialize_particles(num_particles)
 
     # The estimate of the robots current pose
@@ -202,26 +203,31 @@ try:
             for p in particles:
                 
                 # Compute weights for each particle by using their distance 
-                dist_x = pow(landmarks[objectIDs[0]][0] - p.getX(), 2)
-                dist_y = pow(landmarks[objectIDs[0]][1] - p.getY(), 2)
+                x = landmarks[objectIDs[0]][0] - p.getX()
+                y = landmarks[objectIDs[0]][1] - p.getY()
                 
-                dist = math.sqrt(dist_x + dist_y)
+                dist = np.sqrt(pow(x, 2) + pow(y, 2))
                 dist_weight = np.exp(-(pow(dists[0] - dist, 2) / (2 * pow(spread_dist, 2))))
                 
-                # Compute weights for each particle by using their orientation 
-                theta = angles[0] - p.getTheta()
-                orientation_weight = np.exp(-(pow(theta, 2) / (2 * pow(spread_angle, 2))))
+                # Compute weights for each particle by using their orientation
+                orientation_vector = np.array([np.cos(p.getTheta()), np.sin(p.getTheta())])
+                orthogonal_vector = np.array([-orientation_vector[1], orientation_vector[0]])
+                pointing_vector = np.array([x, y]) / dist
+                
+                orientation_sign = np.sign(np.dot(pointing_vector, orthogonal_vector))
+                inverse_cos = np.arccos(np.dot(pointing_vector, orientation_vector))
+                angle_landmark = orientation_sign * inverse_cos
+                orientation = angles[0] - angle_landmark
+                orientation_weight = np.exp(-(pow(orientation, 2) / (2 * pow(spread_angle, 2))))
                 
                 # Set the particles new weight 
-                p.setWeight(orientation_weight)
+                p.setWeight(dist_weight * orientation_weight)
                 
                 # Add to the sum of weights
                 weight_sum += p.getWeight()
             
             # Store normalized weights of each particle for probability purposes 
             weights = [(p.getWeight() / weight_sum) for p in particles]
-            
-            # [print(w) for w in weights]
             
             # Resample the particles 
             resampling = np.random.choice(
@@ -235,11 +241,11 @@ try:
             for i in range(len(resampling)): 
                 resampling[i] = copy.deepcopy(resampling[i])
                 
-            # Replace our particles with the resampling 
+            # Replace our particles with the resampling particles 
             particles = resampling
             
             # Add uncertainity to each particle 
-            particle.add_uncertainty(particles, 1.0, 0.01)
+            particle.add_uncertainty(particles, 1.0, 0.05)
             
             # Draw detected objects
             cam.draw_aruco_objects(colour)

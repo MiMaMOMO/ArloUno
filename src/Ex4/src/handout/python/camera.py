@@ -9,6 +9,7 @@ from pkg_resources import parse_version
 
 gstreamerCameraFound = False
 piCameraFound = False
+
 try:
     import picamera
     from picamera.array import PiRGBArray
@@ -304,8 +305,8 @@ class Camera(object):
         of the camera). This corresponds to that the angle is measuring location along the horizontal x-axis.
 
         If no object is detected, the returned variables are set to None."""
-        self.aruco_corners, self.ids, rejectedImgPoints = cv2.aruco.detectMarkers(img, self.arucoDict)
-        self.rvecs, self.tvecs, _objPoints = cv2.aruco.estimatePoseSingleMarkers(self.aruco_corners, self.arucoMarkerLength, self.intrinsic_matrix, self.distortion_coeffs)
+        self.aruco_corners, self.ids, _ = cv2.aruco.detectMarkers(img, self.arucoDict)
+        self.rvecs, self.tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(self.aruco_corners, self.arucoMarkerLength, self.intrinsic_matrix, self.distortion_coeffs)
 
 
         if not isinstance(self.ids, type(None)):
