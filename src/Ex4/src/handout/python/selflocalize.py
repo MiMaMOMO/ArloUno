@@ -153,7 +153,7 @@ try:
     draw_world(est_pose, particles, world)
 
     print("Opening and initializing camera")
-    if camera.isRunningOnArlo():
+    if isRunningOnArlo():
         cam = camera.Camera(0, 'arlo', useCaptureThread = True)
     else:
         cam = camera.Camera(0, 'macbookpro', useCaptureThread = True)
