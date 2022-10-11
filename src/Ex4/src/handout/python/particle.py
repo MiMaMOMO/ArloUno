@@ -41,6 +41,7 @@ def estimate_pose(particles_list):
     y_sum = 0.0
     cos_sum = 0.0
     sin_sum = 0.0
+    flen = len(particles_list)
      
     for particle in particles_list:
         x_sum += particle.getX()
@@ -48,7 +49,6 @@ def estimate_pose(particles_list):
         cos_sum += np.cos(particle.getTheta())
         sin_sum += np.sin(particle.getTheta())
         
-    flen = len(particles_list)
     if flen != 0:
         x = x_sum / flen
         y = y_sum / flen
