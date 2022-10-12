@@ -18,7 +18,7 @@ def isRunningOnArlo():
     return onRobot
 
 if isRunningOnArlo():
-    sys.path.append("../../../../")
+    sys.path.append("../")
 
 # Try to import robot module 
 try:
@@ -130,7 +130,7 @@ try:
         cv2.moveWindow(WIN_World, 500, 50)
 
     # Initialize particles
-    num_particles = 2500
+    num_particles = 100
     particles = initialize_particles(num_particles)
 
     # The estimate of the robots current pose
@@ -194,7 +194,7 @@ try:
             # List detected objects
             for i in range(len(objectIDs)):
                 print("Object ID = ", objectIDs[i], ", Distance = ", dists[i], ", angle = ", angles[i])
-                # TODO: Do something for each detected object - remember, the same ID may appear several times. If that happens maybe pick the ArUco landmark with the closest mark 
+                # TODO: Do something for each detected object - remember, the same ID may appear several times if we look angular at one box. If that happens maybe pick the ArUco landmark with the closest mark 
 
             # Compute particle weights
             weight_sum = 0.0                        # The total sum of all weigths 
