@@ -42,6 +42,7 @@ CBLACK = (0, 0, 0)
 landmark_colors = [CRED, CGREEN] 
 
 # The robot knows the position of 2 landmarks. Their coordinates are in the unit centimeters [cm].
+# TODO: Add middlepoint 
 landmarkIDs = [3, 4]
 landmarks = {
     3: (0.0, 0.0),          # Coordinates for landmark 1 (RED)
@@ -115,6 +116,8 @@ def initialize_particles(num_particles):
 
     return particles
 
+def reset_weights(particle):
+    particle.setWeight(0)
 
 ### MAIN PROGRAM ###
 try:
@@ -130,7 +133,7 @@ try:
         cv2.moveWindow(WIN_World, 500, 50)
 
     # Initialize particles
-    num_particles = 100
+    num_particles = 1000
     particles = initialize_particles(num_particles)
 
     # The estimate of the robots current pose
@@ -141,7 +144,7 @@ try:
     angular_velocity = 0.0      # radians/sec
     
     # Spread 
-    spread_dist = 30.0          # The spread for the distance 
+    spread_dist = 15.0          # The spread for the distance 
     spread_angle = 1.0          # The spread for the orientation 
 
     # TODO: Initialize the robot (XXX: You do this). We can only initialize when using Arlo 
@@ -191,42 +194,56 @@ try:
         # We detected atleast one landmark 
         if not isinstance(objectIDs, type(None)):
             
-            IDXshortestbox = np.argmin(dists)
-            print(objectIDs[IDXshortestbox])
+            # Find the dupplicate indexes and reverse the order for deletion 
+            duplicate_idx = [idx for idx, item in enumerate(objectIDs) if item in objectIDs[:idx]]
+            duplicate_idx_sorted = sorted(duplicate_idx, reverse = True)
+
+            # Remove the duplicated landmarks at random 
+            if len(duplicate_idx_sorted) > 0:
+                for idx in duplicate_idx_sorted:
+                    objectIDs = np.delete(objectIDs, idx) 
+                    dists = np.delete(dists, idx) 
+                    angles = np.delete(angles, idx) 
+            
+            IDXshortestbox = np.argmin(dists)               # Index of shortest distance 
+            weight_sum = 0.0                                # The total sum of all weigths
+            
+            # Reset the weights 
+            [p.setWeight(0) for p in particles]
+
             # List detected objects
             for i in range(len(objectIDs)):
                 print("Object ID = ", objectIDs[i], ", Distance = ", dists[i], ", angle = ", angles[i])
-                # TODO: Do something for each detected object - remember, the same ID may appear several times if we look angular at one box. If that happens maybe pick the ArUco landmark with the closest mark 
+                
+                # Compute the unnormalized weight for each particle in the i'th objectID  
+                for p in particles:
+                
+                    # Compute weights for each particle by using their distance 
+                    x = landmarks[objectIDs[i]][0] - p.getX()
+                    y = landmarks[objectIDs[i]][1] - p.getY()
+                    
+                    dist = np.sqrt(pow(x, 2) + pow(y, 2))
+                    dist_weight = np.exp(-(pow(dists[i] - dist, 2) / (2 * pow(spread_dist, 2))))
 
-            # Compute particle weights
-            weight_sum = 0.0                        # The total sum of all weigths 
-            
-            # Compute the unnormalized weight for each particle 
-            for p in particles:
+                    # Compute weights for each particle by using their orientation
+                    orientation_vector = np.array([np.cos(p.getTheta()), np.sin(p.getTheta())])
+                    orthogonal_vector = np.array([-orientation_vector[1], orientation_vector[0]])
+                    pointing_vector = np.array([x, y]) / dist
+
+                    orientation_sign = np.sign(np.dot(pointing_vector, orthogonal_vector))
+                    inverse_cos = np.arccos(np.dot(pointing_vector, orientation_vector))
+                    angle_landmark = orientation_sign * inverse_cos
+                    orientation = angles[i] - angle_landmark
+                    orientation_weight = np.exp(-(pow(orientation, 2) / (2 * pow(spread_angle, 2))))
+                    
+                    # Weights of particles 
+                    weight = dist_weight * orientation_weight
                 
-                # Compute weights for each particle by using their distance 
-                x = landmarks[objectIDs[IDXshortestbox]][0] - p.getX()
-                y = landmarks[objectIDs[IDXshortestbox]][1] - p.getY()
+                    # Set the particles new weight alongside its former weights 
+                    p.setWeight(p.getWeight() + weight)
                 
-                dist = np.sqrt(pow(x, 2) + pow(y, 2))
-                dist_weight = np.exp(-(pow(dists[IDXshortestbox] - dist, 2) / (2 * pow(spread_dist, 2))))
-                
-                # Compute weights for each particle by using their orientation
-                orientation_vector = np.array([np.cos(p.getTheta()), np.sin(p.getTheta())])
-                orthogonal_vector = np.array([-orientation_vector[1], orientation_vector[0]])
-                pointing_vector = np.array([x, y]) / dist
-                
-                orientation_sign = np.sign(np.dot(pointing_vector, orthogonal_vector))
-                inverse_cos = np.arccos(np.dot(pointing_vector, orientation_vector))
-                angle_landmark = orientation_sign * inverse_cos
-                orientation = angles[IDXshortestbox] - angle_landmark
-                orientation_weight = np.exp(-(pow(orientation, 2) / (2 * pow(spread_angle, 2))))
-                
-                # Set the particles new weight 
-                p.setWeight(dist_weight * orientation_weight)
-                
-                # Add to the sum of weights
-                weight_sum += p.getWeight()
+                    # Add to the sum of weights
+                    weight_sum += weight
             
             # Store normalized weights of each particle for probability purposes 
             weights = [(p.getWeight() / weight_sum) for p in particles]
