@@ -9,7 +9,7 @@ import sys
 
 # Flags
 showGUI = True  # Whether or not to open GUI windows
-onRobot = False # Whether or not we are running on the Arlo robot
+onRobot = True  # Whether or not we are running on the Arlo robot
 
 def isRunningOnArlo():
     """Return True if we are running on Arlo, otherwise False.
@@ -42,7 +42,6 @@ CBLACK = (0, 0, 0)
 landmark_colors = [CRED, CGREEN] 
 
 # The robot knows the position of 2 landmarks. Their coordinates are in the unit centimeters [cm].
-# TODO: Add middlepoint 
 landmarkIDs = [3, 4]
 landmarks = {
     3: (0.0, 0.0),          # Coordinates for landmark 1 (RED)
@@ -116,8 +115,6 @@ def initialize_particles(num_particles):
 
     return particles
 
-def reset_weights(particle):
-    particle.setWeight(0)
 
 ### MAIN PROGRAM ###
 try:
@@ -148,7 +145,7 @@ try:
     spread_angle = 1.0          # The spread for the orientation 
 
     # TODO: Initialize the robot (XXX: You do this). We can only initialize when using Arlo 
-    # arlo = robot.Robot()
+    arlo = robot.Robot()
 
     # Allocate space for world map
     world = np.zeros((500, 500, 3), dtype = np.uint8)
@@ -168,22 +165,12 @@ try:
         action = cv2.waitKey(10)
         if action == ord('q'): # Quit
             break
-    
-        if not isRunningOnArlo():
-            if action == ord('w'): # Forward
-                velocity += 4.0
-            elif action == ord('x'): # Backwards
-                velocity -= 4.0
-            elif action == ord('s'): # Stop
-                velocity = 0.0
-                angular_velocity = 0.0
-            elif action == ord('a'): # Left
-                angular_velocity += 0.2
-            elif action == ord('d'): # Right
-                angular_velocity -= 0.2
         
         # TODO: Use motor controls to update particles
         # XXX: Make the robot drive 
+        
+        
+        
 
         # Fetch next frame
         colour = cam.get_next_frame()
@@ -257,6 +244,7 @@ try:
             )
             
             # Copy the new references of resampling
+            # TODO: Maybe put resetting the weights into one of these loops 
             for i in range(len(resampling)): 
                 resampling[i] = copy.deepcopy(resampling[i])
                 
