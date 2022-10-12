@@ -191,6 +191,8 @@ try:
         # We detected atleast one landmark 
         if not isinstance(objectIDs, type(None)):
             
+            IDXshortestbox = np.argmin(dists)
+            print(objectIDs[IDXshortestbox])
             # List detected objects
             for i in range(len(objectIDs)):
                 print("Object ID = ", objectIDs[i], ", Distance = ", dists[i], ", angle = ", angles[i])
@@ -203,11 +205,11 @@ try:
             for p in particles:
                 
                 # Compute weights for each particle by using their distance 
-                x = landmarks[objectIDs[0]][0] - p.getX()
-                y = landmarks[objectIDs[0]][1] - p.getY()
+                x = landmarks[objectIDs[IDXshortestbox]][0] - p.getX()
+                y = landmarks[objectIDs[IDXshortestbox]][1] - p.getY()
                 
                 dist = np.sqrt(pow(x, 2) + pow(y, 2))
-                dist_weight = np.exp(-(pow(dists[0] - dist, 2) / (2 * pow(spread_dist, 2))))
+                dist_weight = np.exp(-(pow(dists[IDXshortestbox] - dist, 2) / (2 * pow(spread_dist, 2))))
                 
                 # Compute weights for each particle by using their orientation
                 orientation_vector = np.array([np.cos(p.getTheta()), np.sin(p.getTheta())])
@@ -217,7 +219,7 @@ try:
                 orientation_sign = np.sign(np.dot(pointing_vector, orthogonal_vector))
                 inverse_cos = np.arccos(np.dot(pointing_vector, orientation_vector))
                 angle_landmark = orientation_sign * inverse_cos
-                orientation = angles[0] - angle_landmark
+                orientation = angles[IDXshortestbox] - angle_landmark
                 orientation_weight = np.exp(-(pow(orientation, 2) / (2 * pow(spread_angle, 2))))
                 
                 # Set the particles new weight 
