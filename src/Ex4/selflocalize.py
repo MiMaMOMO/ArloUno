@@ -135,6 +135,11 @@ try:
 
     # The estimate of the robots current pose
     est_pose = particle.estimate_pose(particles) 
+    
+    # Middlepoint between the two landmarks (GOAL)
+    middle_x = (landmarks[3][0] + landmarks[4][0]) / 2
+    middle_y = (landmarks[3][1] + landmarks[4][1]) / 2
+    middle_point = (middle_x, middle_y)
 
     # Driving parameters
     velocity = 0.0              # cm/sec
@@ -144,8 +149,8 @@ try:
     spread_dist = 15.0          # The spread for the distance 
     spread_angle = 1.0          # The spread for the orientation 
 
-    # TODO: Initialize the robot (XXX: You do this). We can only initialize when using Arlo 
-    arlo = robot.Robot()
+    # Initialize Arlo  
+    # arlo = robot.Robot()
 
     # Allocate space for world map
     world = np.zeros((500, 500, 3), dtype = np.uint8)
@@ -169,9 +174,6 @@ try:
         # TODO: Use motor controls to update particles
         # XXX: Make the robot drive 
         
-        
-        
-
         # Fetch next frame
         colour = cam.get_next_frame()
         
@@ -181,19 +183,21 @@ try:
         # We detected atleast one landmark 
         if not isinstance(objectIDs, type(None)):
             
+            # The total sum of all weigths
+            weight_sum = 0.0
+            
             # Find the dupplicate indexes and reverse the order for deletion 
             duplicate_idx = [idx for idx, item in enumerate(objectIDs) if item in objectIDs[:idx]]
             duplicate_idx_sorted = sorted(duplicate_idx, reverse = True)
 
             # Remove the duplicated landmarks at random 
-            if len(duplicate_idx_sorted) > 0:
+            if duplicate_idx_sorted:
                 for idx in duplicate_idx_sorted:
                     objectIDs = np.delete(objectIDs, idx) 
                     dists = np.delete(dists, idx) 
                     angles = np.delete(angles, idx) 
             
-            IDXshortestbox = np.argmin(dists)               # Index of shortest distance 
-            weight_sum = 0.0                                # The total sum of all weigths
+            # IDXshortestbox = np.argmin(dists)               # Index of shortest distance 
             
             # Reset the weights 
             [p.setWeight(0) for p in particles]
@@ -244,7 +248,6 @@ try:
             )
             
             # Copy the new references of resampling
-            # TODO: Maybe put resetting the weights into one of these loops 
             for i in range(len(resampling)): 
                 resampling[i] = copy.deepcopy(resampling[i])
                 
