@@ -17,7 +17,7 @@ def isRunningOnArlo():
     return onRobot
 
 if isRunningOnArlo():
-    sys.path.append("../")
+    sys.path.append("../src")
 
 # Try to import robot module 
 try:
@@ -153,14 +153,14 @@ def update_windows(est_pose, particles, world, frame):
         cv2.imshow(WIN_RF1, frame)                  # Show frame
         cv2.imshow(WIN_World, world)                # Show world
 
-def compute_middle():
+def compute_center():
     '''
-    Compute the target of Arlo which is between the two landmarks. 
+    Compute the target of Arlo which is the center between the two landmarks. 
     '''
-    middle_x = (landmarks[3][0] + landmarks[4][0]) / 2
-    middle_y = (landmarks[3][1] + landmarks[4][1]) / 2
+    center_x = (landmarks[3][0] + landmarks[4][0]) / 2
+    center_y = (landmarks[3][1] + landmarks[4][1]) / 2
     
-    return (middle_x, middle_y)
+    return (center_x, center_y)
 
 def get_cam():
     '''
@@ -237,6 +237,7 @@ def delete_duplicates(objectIDs, dists, angles):
     '''
     Find and delete the duplicates and choose the right ones depending on angle. 
     '''
+    # TODO: Delete the duplicate which have the wrong angle from Arlo. 
     # Find the dupplicate indexes and reverse the order for deletion 
     duplicate_idx = [idx for idx, item in enumerate(objectIDs) if item in objectIDs[:idx]]
     duplicate_idx_sorted = sorted(duplicate_idx, reverse = True)
@@ -250,6 +251,21 @@ def delete_duplicates(objectIDs, dists, angles):
             
     return objectIDs, dists, angles
                     
+def compute_center_parameters(center, arlo_pose):
+    '''
+    Compute the distance and angle from Arlo to the center point between the landmarks. 
+    '''                    
+    
+    # Compute the distance between the center point and Arlo 
+    x = center[0] - arlo_pose.getX()
+    y = center[1] - arlo_pose.getY()
+    dist = np.sqrt(pow(x, 2) + pow(y, 2))
+    
+    # Compute the angle between the center point and Arlo 
+    angle = (arlo_pose.getTheta() - np.arccos(y / dist)) * 180 / np.pi
+    
+    return dist, angle
+
 
 ### MAIN PROGRAM ###
 try:
@@ -264,7 +280,7 @@ try:
     est_pose = particle.estimate_pose(particles) 
     
     # Middlepoint between the two landmarks (GOAL)
-    middle_point = compute_middle()
+    center_point = compute_center()
 
     # Initialize Arlo  
     # arlo = robot.Robot()
@@ -280,7 +296,7 @@ try:
     # Check which camera we want to use 
     cam = get_cam()
     
-    # Try to selflocalize and get to the middle point using the particle filter 
+    # Try to selflocalize and get to the center point using the particle filter 
     while 1:
 
         # Get a pressed key if any for 10 ms. Maybe if removed could boost performance? 
@@ -293,8 +309,24 @@ try:
         # Move the robot according to user input (only for testing)
         control_with_input(action, velocity, angular_velocity)
         
-        # TODO: Use motor controls to update particles
+        # TODO: Use motor controls to update particles.
+        # TODO: Compute a driving strategy for making sure to see both landmarks. 
         # XXX: Make the robot drive 
+        [particle.move_particle(p, velocity, velocity, angular_velocity) for p in particles]
+        
+        # Step 1. Keep turning the robot until it can see both landmarks. 
+        # Step 2. If Arlo makes a full turn and have not seen both landmarks, 
+        # one of the landmarks is probably behind the other. Make Arlo drive x, 
+        # amount of meters to either left or right. 
+        # Step 3. Self localize by estimating Arlos position using the 
+        # landmarks and the particle filter. 
+        # Step 4. Pinpoint the location of the center point, Arlos distance and angle.
+        # Step 5. Use the angle to turn towards the center point. 
+        # Step 6. Use the distance to move Arlo towards the center point. 
+        # Step 7. Remember to update the particles position.
+        # Step 8. Check if the distance is within a certain tolerance level
+        # of the center point. GOAL. 
+        
         
         # Fetch next frame
         frame = cam.get_next_frame()
