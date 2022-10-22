@@ -1,5 +1,4 @@
 import copy
-import math
 import cv2
 import particle
 import camera
@@ -9,7 +8,7 @@ import sys
 
 # Flags
 showGUI = True  # Whether or not to open GUI windows
-onRobot = True  # Whether or not we are running on the Arlo robot
+onRobot = False # Whether or not we are running on the Arlo robot
 
 def isRunningOnArlo():
     """Return True if we are running on Arlo, otherwise False.
@@ -48,9 +47,22 @@ landmarks = {
     4: (100.0, 0.0)         # Coordinates for landmark 2 (GREEN)
 }
 
+# General parameters 
+num_particles = 1000        # The number of particles 
+WIN_RF1 = "Robot view"      # The name of the Arlo window
+WIN_World = "World view"    # The name of the particle window 
+
+# Driving parameters
+velocity = 0.0              # cm/sec
+angular_velocity = 0.0      # radians/sec
+
+# Spread parameters  
+spread_dist = 15.0          # The spread for the distance 
+spread_angle = 1.0          # The spread for the orientation 
+
 
 def jet(x):
-    """Colour map for drawing particles. This function determines the colour of 
+    """frame map for drawing particles. This function determines the frame of 
     a particle from its weight."""
     r = (x >= 3.0 / 8.0 and x < 5.0 / 8.0) * (4.0 * x - 3.0 / 2.0) + (x >= 5.0 / 8.0 and x < 7.0 / 8.0) + (x >= 7.0 / 8.0) * (-4.0 * x + 9.0 / 2.0)
     g = (x >= 1.0 / 8.0 and x < 3.0 / 8.0) * (4.0 * x - 1.0 / 2.0) + (x >= 3.0 / 8.0 and x < 5.0 / 8.0) + (x >= 5.0 / 8.0 and x < 7.0 / 8.0) * (-4.0 * x + 7.0 / 2.0)
@@ -80,11 +92,11 @@ def draw_world(est_pose, particles, world):
     for particle in particles:
         x = int(particle.getX() + offsetX)
         y = ymax - (int(particle.getY() + offsetY))
-        colour = jet(particle.getWeight() / max_weight)
-        cv2.circle(world, (x,y), 2, colour, 2)
+        frame = jet(particle.getWeight() / max_weight)
+        cv2.circle(world, (x,y), 2, frame, 2)
         b = (int(particle.getX() + 15.0*np.cos(particle.getTheta()))+offsetX, 
                                      ymax - (int(particle.getY() + 15.0*np.sin(particle.getTheta()))+offsetY))
-        cv2.line(world, (x,y), b, colour, 2)
+        cv2.line(world, (x,y), b, frame, 2)
 
     # Draw landmarks
     for i in range(len(landmarkIDs)):
@@ -100,6 +112,9 @@ def draw_world(est_pose, particles, world):
     cv2.line(world, a, b, CMAGENTA, 2)
 
 def initialize_particles(num_particles):
+    '''
+    Initialize a set of particles in a numpy array. 
+    '''
     particles = np.empty(num_particles, dtype = type(particle.Particle))
     
     # Random starting points for each particle 
@@ -115,39 +130,141 @@ def initialize_particles(num_particles):
 
     return particles
 
+def open_windows():
+    '''
+    Opens the two windows of Arlo and the particle world if show gui is on. 
+    '''
+    if showGUI:
+        # Open Arlos window
+        cv2.namedWindow(WIN_RF1)
+        cv2.moveWindow(WIN_RF1, 50, 50)
+        
+        # Open the particle world 
+        cv2.namedWindow(WIN_World)
+        cv2.moveWindow(WIN_World, 500, 50)
+
+def update_windows(est_pose, particles, world, frame):
+    '''
+    Updates the world maps. 
+    '''
+    # Update the world map
+    if showGUI:
+        draw_world(est_pose, particles, world)      # Draw map
+        cv2.imshow(WIN_RF1, frame)                  # Show frame
+        cv2.imshow(WIN_World, world)                # Show world
+
+def compute_middle():
+    '''
+    Compute the target of Arlo which is between the two landmarks. 
+    '''
+    middle_x = (landmarks[3][0] + landmarks[4][0]) / 2
+    middle_y = (landmarks[3][1] + landmarks[4][1]) / 2
+    
+    return (middle_x, middle_y)
+
+def get_cam():
+    '''
+    Initialize the right camera. 
+    '''
+    if isRunningOnArlo():
+        return camera.Camera(0, 'arlo', useCaptureThread = True)
+    else:
+        return camera.Camera(0, 'macbookpro', useCaptureThread = True)
+
+def control_with_input(action, velocity, angular_velocity):
+    '''
+    Update the particles according to input from the keyboard. 
+    ''' 
+    if not isRunningOnArlo():
+        if action == ord('w'):          # Forward
+            velocity += 4.0
+        elif action == ord('x'):        # Backwards
+            velocity -= 4.0
+        elif action == ord('s'):        # Stop
+            velocity = 0.0
+            angular_velocity = 0.0
+        elif action == ord('a'):        # Left
+            angular_velocity += 0.2
+        elif action == ord('d'):        # Right
+            angular_velocity -= 0.2
+
+def compute_weight(objectIDs, i, p, dists, angles):
+    '''
+    Compute each particles weight. 
+    '''
+    # Compute weights for each particle by using their distance 
+    x = landmarks[objectIDs[i]][0] - p.getX()
+    y = landmarks[objectIDs[i]][1] - p.getY()
+    
+    dist = np.sqrt(pow(x, 2) + pow(y, 2))
+    dist_weight = np.exp(-(pow(dists[i] - dist, 2) / (2 * pow(spread_dist, 2))))
+
+    # Compute weights for each particle by using their orientation
+    orientation_vector = np.array([np.cos(p.getTheta()), np.sin(p.getTheta())])
+    orthogonal_vector = np.array([-orientation_vector[1], orientation_vector[0]])
+    pointing_vector = np.array([x, y]) / dist
+
+    orientation_sign = np.sign(np.dot(pointing_vector, orthogonal_vector))
+    inverse_cos = np.arccos(np.dot(pointing_vector, orientation_vector))
+    angle_landmark = orientation_sign * inverse_cos
+    orientation = angles[i] - angle_landmark
+    orientation_weight = np.exp(-(pow(orientation, 2) / (2 * pow(spread_angle, 2))))
+    
+    return (dist_weight * orientation_weight)
+
+def resample(particles, weights):
+    '''
+    Resample the particles.
+    '''
+    return np.random.choice(particles, num_particles, True, weights)
+
+def copy_resampling_references(resampling):
+    '''
+    Copy the references for each particle in the resampling.
+    '''
+    for i in range(len(resampling)): 
+        resampling[i] = copy.deepcopy(resampling[i])
+
+def clean_up(cam):
+    '''
+    Clean up after we have self localized.
+    '''
+    cv2.destroyAllWindows()         # Close all windows
+    cam.terminateCaptureThread()    # Clean-up capture thread
+
+
+def delete_duplicates(objectIDs, dists, angles):
+    '''
+    Find and delete the duplicates and choose the right ones depending on angle. 
+    '''
+    # Find the dupplicate indexes and reverse the order for deletion 
+    duplicate_idx = [idx for idx, item in enumerate(objectIDs) if item in objectIDs[:idx]]
+    duplicate_idx_sorted = sorted(duplicate_idx, reverse = True)
+
+    # Remove the duplicated landmarks at random 
+    if duplicate_idx_sorted:
+        for idx in duplicate_idx_sorted:
+            objectIDs = np.delete(objectIDs, idx) 
+            dists = np.delete(dists, idx) 
+            angles = np.delete(angles, idx) 
+            
+    return objectIDs, dists, angles
+                    
 
 ### MAIN PROGRAM ###
 try:
     
     # Open windows 
-    if showGUI:
-        WIN_RF1 = "Robot view"
-        cv2.namedWindow(WIN_RF1)
-        cv2.moveWindow(WIN_RF1, 50, 50)
-
-        WIN_World = "World view"
-        cv2.namedWindow(WIN_World)
-        cv2.moveWindow(WIN_World, 500, 50)
+    open_windows()
 
     # Initialize particles
-    num_particles = 1000
     particles = initialize_particles(num_particles)
 
     # The estimate of the robots current pose
     est_pose = particle.estimate_pose(particles) 
     
     # Middlepoint between the two landmarks (GOAL)
-    middle_x = (landmarks[3][0] + landmarks[4][0]) / 2
-    middle_y = (landmarks[3][1] + landmarks[4][1]) / 2
-    middle_point = (middle_x, middle_y)
-
-    # Driving parameters
-    velocity = 0.0              # cm/sec
-    angular_velocity = 0.0      # radians/sec
-    
-    # Spread 
-    spread_dist = 15.0          # The spread for the distance 
-    spread_angle = 1.0          # The spread for the orientation 
+    middle_point = compute_middle()
 
     # Initialize Arlo  
     # arlo = robot.Robot()
@@ -159,26 +276,31 @@ try:
     draw_world(est_pose, particles, world)
 
     print("Opening and initializing camera")
-    if isRunningOnArlo():
-        cam = camera.Camera(0, 'arlo', useCaptureThread = True)
-    else:
-        cam = camera.Camera(0, 'macbookpro', useCaptureThread = True)
-        
+    
+    # Check which camera we want to use 
+    cam = get_cam()
+    
+    # Try to selflocalize and get to the middle point using the particle filter 
     while 1:
 
-        # Move the robot according to user input (only for testing)
+        # Get a pressed key if any for 10 ms. Maybe if removed could boost performance? 
         action = cv2.waitKey(10)
-        if action == ord('q'): # Quit
+        
+        # Quit if we press q 
+        if action == ord('q'): 
             break
+        
+        # Move the robot according to user input (only for testing)
+        control_with_input(action, velocity, angular_velocity)
         
         # TODO: Use motor controls to update particles
         # XXX: Make the robot drive 
         
         # Fetch next frame
-        colour = cam.get_next_frame()
+        frame = cam.get_next_frame()
         
         # Detect objects
-        objectIDs, dists, angles = cam.detect_aruco_objects(colour)
+        objectIDs, dists, angles = cam.detect_aruco_objects(frame)
         
         # We detected atleast one landmark 
         if not isinstance(objectIDs, type(None)):
@@ -186,18 +308,8 @@ try:
             # The total sum of all weigths
             weight_sum = 0.0
             
-            # Find the dupplicate indexes and reverse the order for deletion 
-            duplicate_idx = [idx for idx, item in enumerate(objectIDs) if item in objectIDs[:idx]]
-            duplicate_idx_sorted = sorted(duplicate_idx, reverse = True)
-
-            # Remove the duplicated landmarks at random 
-            if duplicate_idx_sorted:
-                for idx in duplicate_idx_sorted:
-                    objectIDs = np.delete(objectIDs, idx) 
-                    dists = np.delete(dists, idx) 
-                    angles = np.delete(angles, idx) 
-            
-            # IDXshortestbox = np.argmin(dists)               # Index of shortest distance 
+            # Delete the duplicate if we see the same landmark in one frame 
+            objectIDs, dists, angles = delete_duplicates(objectIDs, dists, angles)
             
             # Reset the weights 
             [p.setWeight(0) for p in particles]
@@ -208,28 +320,10 @@ try:
                 
                 # Compute the unnormalized weight for each particle in the i'th objectID  
                 for p in particles:
-                
-                    # Compute weights for each particle by using their distance 
-                    x = landmarks[objectIDs[i]][0] - p.getX()
-                    y = landmarks[objectIDs[i]][1] - p.getY()
-                    
-                    dist = np.sqrt(pow(x, 2) + pow(y, 2))
-                    dist_weight = np.exp(-(pow(dists[i] - dist, 2) / (2 * pow(spread_dist, 2))))
-
-                    # Compute weights for each particle by using their orientation
-                    orientation_vector = np.array([np.cos(p.getTheta()), np.sin(p.getTheta())])
-                    orthogonal_vector = np.array([-orientation_vector[1], orientation_vector[0]])
-                    pointing_vector = np.array([x, y]) / dist
-
-                    orientation_sign = np.sign(np.dot(pointing_vector, orthogonal_vector))
-                    inverse_cos = np.arccos(np.dot(pointing_vector, orientation_vector))
-                    angle_landmark = orientation_sign * inverse_cos
-                    orientation = angles[i] - angle_landmark
-                    orientation_weight = np.exp(-(pow(orientation, 2) / (2 * pow(spread_angle, 2))))
                     
                     # Weights of particles 
-                    weight = dist_weight * orientation_weight
-                
+                    weight = compute_weight(objectIDs, i, p, dists, angles)
+
                     # Set the particles new weight alongside its former weights 
                     p.setWeight(p.getWeight() + weight)
                 
@@ -240,25 +334,19 @@ try:
             weights = [(p.getWeight() / weight_sum) for p in particles]
             
             # Resample the particles 
-            resampling = np.random.choice(
-                a = particles, 
-                size = num_particles, 
-                replace = True, 
-                p = weights
-            )
+            resampling = resample(particles, weights)
             
             # Copy the new references of resampling
-            for i in range(len(resampling)): 
-                resampling[i] = copy.deepcopy(resampling[i])
+            copy_resampling_references(resampling)
                 
             # Replace our particles with the resampling particles 
             particles = resampling
             
             # Add uncertainity to each particle 
-            particle.add_uncertainty(particles, 1.0, 0.05)
+            particle.add_uncertainty(particles, 1.0, 0.01)
             
             # Draw detected objects
-            cam.draw_aruco_objects(colour)
+            cam.draw_aruco_objects(frame)
         else:
             # No observation - reset weights to uniform distribution
             for p in particles:
@@ -268,12 +356,8 @@ try:
         est_pose = particle.estimate_pose(particles) 
 
         # Update the world map 
-        if showGUI:
-            draw_world(est_pose, particles, world)      # Draw map
-            cv2.imshow(WIN_RF1, colour)                 # Show frame
-            cv2.imshow(WIN_World, world)                # Show world
+        update_windows(est_pose, particles, world, frame)
   
 # Make sure to clean up even if an exception occurred
 finally: 
-    cv2.destroyAllWindows()         # Close all windows
-    cam.terminateCaptureThread()    # Clean-up capture thread
+    clean_up(cam)

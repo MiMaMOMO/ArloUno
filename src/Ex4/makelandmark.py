@@ -1,9 +1,9 @@
-import cv2  # Import the OpenCV library
+import cv2  
 import numpy as np
 
 
-# TODO: make this configurable from the command line using parser
-markerID = 5 # Try 1 - 4
+# You can make this configurable from the command line using parser
+markerID = 4 # Try 1 - 4
 
 # Define some relevant constants
 dpi = 72  # dots (pixels) per inch [inch^(-1)]
@@ -34,7 +34,6 @@ startWidth = int(np.round((width-markerSize)/2))
 startHeight = int(np.round((height-markerSize)/2))
 landmarkImage[startHeight:int(startHeight+markerSize), startWidth:int(startWidth+markerSize)] = cv2.aruco.drawMarker(arucoDict, markerID, markerSize, 1)
 cv2.putText(landmarkImage, str(markerID), (startWidth, startHeight - 60), cv2.FONT_HERSHEY_SIMPLEX, 2.0, (0,0,0), 2)
-
 
 # Save image
 cv2.imwrite("images/landmark" + str(markerID) + ".png", landmarkImage)

@@ -1,4 +1,4 @@
-import cv2  # Import the OpenCV library
+import cv2  
 import numpy as np
 import time
 import sys
@@ -49,7 +49,6 @@ def gstreamer_pipeline(capture_width=1280, capture_height=720, framerate=30):
     )
 
 
-
 class CaptureThread(threading.Thread):
     """Internal worker thread that captures frames from the camera"""
     
@@ -58,7 +57,6 @@ class CaptureThread(threading.Thread):
         self.cam = cam
         self.framebuffer = framebuffer
         self.terminateThreadEvent = threading.Event()
-
 
     def run(self):
         while not self.terminateThreadEvent.is_set():
@@ -93,7 +91,6 @@ class CaptureThread(threading.Thread):
 
             # Update framebuffer
             self.framebuffer.new_frame(image)
-        
         
     def stop(self):
         """Terminate the worker thread"""
@@ -159,8 +156,7 @@ class Camera(object):
             self.distortion_coeffs = np.asarray([0., 0., -1.6169374082976234e-02, 8.7657653170062459e-03, 0.], dtype = np.float64)
         else:
             print("Camera.__init__: Unknown robot type")
-            exit(-1)
-            
+            exit(-1)     
 
         # Open a camera device for capturing                 
         if piCameraFound:
