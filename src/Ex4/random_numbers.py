@@ -6,7 +6,6 @@ def randn(mu, sigma):
     mean mu, standard deviation sigma"""
     return sigma * np.random.randn() + mu
     
-    
 def rand_von_mises(mu, kappa):
     """Generate random samples from the Von Mises distribution"""
     if kappa < 1e-6:
@@ -35,8 +34,8 @@ def rand_von_mises(mu, kappa):
 
 
 if __name__ == '__main__':
-    # Tests
     
+    # Tests
     print("Gaussian distribution:")
     r = np.zeros(1000)
     for i in range(1000):
