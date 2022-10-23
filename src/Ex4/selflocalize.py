@@ -261,10 +261,14 @@ def compute_center_parameters(center, arlo_pose):
     y = center[1] - arlo_pose.getY()
     dist = np.sqrt(pow(x, 2) + pow(y, 2))
     
-    # Compute the angle between the center point and Arlo 
+    # Compute the angle between the center point and Arlo and absolute angle  
     angle = (arlo_pose.getTheta() - np.arccos(y / dist)) * 180 / np.pi
+    abs_angle = np.abs(angle)
     
-    return dist, angle
+    # Compute the sign so we knoew if we should move right or left 
+    sign = np.sign(angle)
+    
+    return dist, abs_angle, sign 
 
 
 ### MAIN PROGRAM ###
