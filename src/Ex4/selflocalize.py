@@ -157,8 +157,8 @@ def compute_center():
     '''
     Compute the target of Arlo which is the center between the two landmarks. 
     '''
-    center_x = (landmarks[3][0] + landmarks[4][0]) / 2
-    center_y = (landmarks[3][1] + landmarks[4][1]) / 2
+    center_x = (landmarks[1][0] + landmarks[2][0]) / 2
+    center_y = (landmarks[1][1] + landmarks[2][1]) / 2
     
     return (center_x, center_y)
 
