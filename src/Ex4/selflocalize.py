@@ -8,7 +8,7 @@ import sys
 
 # Flags
 showGUI = True  # Whether or not to open GUI windows
-onRobot = True  # Whether or not we are running on the Arlo robot
+onRobot = False  # Whether or not we are running on the Arlo robot
 
 def isRunningOnArlo():
     """Return True if we are running on Arlo, otherwise False.
@@ -193,11 +193,11 @@ def compute_weight(objectIDs, i, p, dists, angles):
     Compute each particles weight. 
     '''
     # Compute weights for each particle by using their distance 
-    x = landmarks[objectIDs[i]][0] - p.getX()
-    y = landmarks[objectIDs[i]][1] - p.getY()
+    x = landmarks[objectIDs[i]][0] - p.getX() # XXX 
+    y = landmarks[objectIDs[i]][1] - p.getY() # XXX 
     
     dist = np.sqrt(pow(x, 2) + pow(y, 2))
-    dist_weight = np.exp(-(pow(dists[i] - dist, 2) / (2 * pow(spread_dist, 2))))
+    dist_weight = np.exp(-(pow(dists[i] - dist, 2) / (2 * pow(spread_dist, 2)))) # XXX 
 
     # Compute weights for each particle by using their orientation
     orientation_vector = np.array([np.cos(p.getTheta()), np.sin(p.getTheta())])
@@ -207,7 +207,7 @@ def compute_weight(objectIDs, i, p, dists, angles):
     orientation_sign = np.sign(np.dot(pointing_vector, orthogonal_vector))
     inverse_cos = np.arccos(np.dot(pointing_vector, orientation_vector))
     angle_landmark = orientation_sign * inverse_cos
-    orientation = angles[i] - angle_landmark
+    orientation = angles[i] - angle_landmark # XXX 
     orientation_weight = np.exp(-(pow(orientation, 2) / (2 * pow(spread_angle, 2))))
     
     return (dist_weight * orientation_weight)
@@ -284,10 +284,10 @@ try:
     est_pose = particle.estimate_pose(particles) 
     
     # Middlepoint between the two landmarks (GOAL)
-    center_point = compute_center()
+    # XXX: center_point = compute_center()
 
     # Initialize Arlo  
-    arlo = robot.Robot()
+    # arlo = robot.Robot()
 
     # Allocate space for world map
     world = np.zeros((500, 500, 3), dtype = np.uint8)
@@ -311,12 +311,12 @@ try:
             break
         
         # Move the robot according to user input (only for testing)
-        control_with_input(action, velocity, angular_velocity)
+        # control_with_input(action, velocity, angular_velocity)
         
         # TODO: Use motor controls to update particles.
         # TODO: Compute a driving strategy for making sure to see both landmarks. 
         # XXX: Make the robot drive 
-        [particle.move_particle(p, velocity, velocity, angular_velocity) for p in particles]
+        # [particle.move_particle(p, velocity, velocity, angular_velocity) for p in particles]
         
         # Step 1. Keep turning the robot until it can see both landmarks. 
         # Step 2. If Arlo makes a full turn and have not seen both landmarks, 
@@ -379,7 +379,7 @@ try:
             particles = resampling
             
             # Add uncertainity to each particle 
-            particle.add_uncertainty(particles, 0.1, 0.01)
+            particle.add_uncertainty(particles, 1.0, 0.01)
             
             # Draw detected objects
             cam.draw_aruco_objects(frame)
