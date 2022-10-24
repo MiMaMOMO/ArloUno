@@ -17,7 +17,7 @@ def isRunningOnArlo():
     return onRobot
 
 if isRunningOnArlo():
-    sys.path.append("../src")
+    sys.path.append("../")
 
 # Try to import robot module 
 try:
