@@ -8,7 +8,7 @@ import sys
 
 # Flags
 showGUI = True  # Whether or not to open GUI windows
-onRobot = False # Whether or not we are running on the Arlo robot
+onRobot = True  # Whether or not we are running on the Arlo robot
 
 def isRunningOnArlo():
     """Return True if we are running on Arlo, otherwise False.
@@ -41,10 +41,10 @@ CBLACK = (0, 0, 0)
 landmark_colors = [CRED, CGREEN] 
 
 # The robot knows the position of 2 landmarks. Their coordinates are in the unit centimeters [cm].
-landmarkIDs = [3, 4]
+landmarkIDs = [1, 2]
 landmarks = {
-    3: (0.0, 0.0),          # Coordinates for landmark 1 (RED)
-    4: (100.0, 0.0)         # Coordinates for landmark 2 (GREEN)
+    1: (0.0, 0.0),          # Coordinates for landmark 1 (RED)
+    2: (300.0, 0.0)         # Coordinates for landmark 2 (GREEN)
 }
 
 # General parameters 
@@ -287,7 +287,7 @@ try:
     center_point = compute_center()
 
     # Initialize Arlo  
-    # arlo = robot.Robot()
+    arlo = robot.Robot()
 
     # Allocate space for world map
     world = np.zeros((500, 500, 3), dtype = np.uint8)
@@ -379,7 +379,7 @@ try:
             particles = resampling
             
             # Add uncertainity to each particle 
-            particle.add_uncertainty(particles, 1.0, 0.01)
+            particle.add_uncertainty(particles, 0.1, 0.01)
             
             # Draw detected objects
             cam.draw_aruco_objects(frame)
