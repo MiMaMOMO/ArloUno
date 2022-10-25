@@ -14,13 +14,13 @@ def rotate(angle, dir) -> None:
     '''
     pass
 
-def drive(dist, aruco_tolerance = 0.0) -> None:
+def drive(dist, landmark_range = 0.0) -> None:
     '''
     Make Arlo drive a certain amount of distance. 
     
     Parameters:
         dist(float):            The distance that Arlo intends on driving in cm.
-        aruco_tolerance(float): How close we want to drive towards a landmark in m 
+        landmark_range(float): How close we want to drive towards a landmark in m 
     '''
 
     scaled_dist = dist / 100                    # Scale the distance down to meters  
@@ -36,6 +36,6 @@ def drive(dist, aruco_tolerance = 0.0) -> None:
 
         # If Arlo wants to go near a box we account for that by a certain tolerance 
         # Otherwise let Arlo drive the full dist
-        if timer.elapsed_time() > (drive_time - (METER * aruco_tolerance)):
+        if timer.elapsed_time() > (drive_time - (METER * landmark_range)):
             arlo.stop()
             break       
