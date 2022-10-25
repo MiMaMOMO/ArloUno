@@ -20,7 +20,7 @@ def drive(dist, aruco_tolerance = 0.0) -> None:
     
     Parameters:
         dist(float):            The distance that Arlo intends on driving in cm.
-        aruco_tolerance(float): How close we want to drive towards a landmark in cm 
+        aruco_tolerance(float): How close we want to drive towards a landmark in m 
     '''
 
     scaled_dist = dist / 100                    # Scale the distance down to meters  
