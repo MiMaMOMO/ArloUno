@@ -34,14 +34,12 @@ def rotate(arlo, angle) -> None:
     print(sign)
     
     if sign == -1.0:
-        right_dir = 1
-        print(right_dir)
-    else:
         left_dir = 1
-        print(left_dir)
+    else:
+        right_dir = 1
     
     # Make Arlo rotate in the right direction 
-    arlo.go_diff(LEFT_ROT_VELOCITY, RIGHT_ROT_VELOCITY, right_dir, left_dir) 
+    arlo.go_diff(LEFT_ROT_VELOCITY, RIGHT_ROT_VELOCITY, left_dir, right_dir) 
     time.sleep(0.01)
     
     while 1: 
