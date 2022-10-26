@@ -30,8 +30,8 @@ def rotate(angle) -> None:
     print(sign)
     
     if sign == -1.0:
-        print(right_dir)
         right_dir = 1
+        print(right_dir)
     else:
         left_dir = 1
         print(left_dir)
