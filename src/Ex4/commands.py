@@ -3,8 +3,11 @@ import time
 
 import numpy as np 
 
-from Ex4.Timer import Timer
-from Ex4.settings import *
+# from Ex4.Timer import Timer
+# from Ex4.settings import *
+
+from settings import * 
+from Timer import Timer
 
 
 # Initialize the robot 
