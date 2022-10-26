@@ -343,7 +343,7 @@ try:
         # We detected atleast one landmark 
         if not isinstance(objectIDs, type(None)):
             
-            commands.drive(angles[0])
+            commands.rotate(angles[0])
             break
             
             # The total sum of all weigths
