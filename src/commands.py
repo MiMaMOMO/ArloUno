@@ -1,4 +1,5 @@
 import robot
+import time
 
 from Ex4.Timer import Timer
 from Ex4.settings import *
@@ -46,6 +47,7 @@ def drive(dist, landmark_range = 0.0) -> None:
 
     # Make Arlo drive forward 
     arlo.go_diff(LEFT_VELOCITY, RIGHT_VELOCITY, 1, 1) 
+    time.sleep(2)
     
     # Control what happens while Arlo drives with the program 
     # If the amound of time have passed, stop Arlo 
@@ -54,6 +56,7 @@ def drive(dist, landmark_range = 0.0) -> None:
         # If Arlo wants to go near a box we account for that by a certain tolerance 
         # Otherwise let Arlo drive the full dist
         if timer.elapsed_time() > (drive_time - (METER * landmark_range)):
+            print("Stop!")
             arlo.stop()
             break   
         
