@@ -51,7 +51,7 @@ landmarks = {
 }
 
 # General parameters 
-num_particles = 2000        # The number of particles 
+num_particles = 1000        # The number of particles 
 WIN_RF1 = "Robot view"      # The name of the Arlo window
 WIN_World = "World view"    # The name of the particle window 
 
@@ -325,7 +325,7 @@ try:
         # TODO: Use motor controls to update particles.
         # TODO: Compute a driving strategy for making sure to see both landmarks. 
         # XXX: Make the robot drive 
-        [particle.move_particle(p, velocity, velocity, angular_velocity) for p in particles]
+        # [particle.move_particle(p, velocity, velocity, angular_velocity) for p in particles]
         
         # Step 1. Keep turning the robot until it can see both landmarks. 
         # Step 2. If Arlo makes a full turn and have not seen both landmarks, 
@@ -391,7 +391,7 @@ try:
             particles = resampling
             
             # Add uncertainity to each particle 
-            particle.add_uncertainty(particles, 0.75, 0.01)
+            particle.add_uncertainty(particles, 5.0, 0.01)
             
             # Draw detected objects
             cam.draw_aruco_objects(frame)
@@ -403,7 +403,7 @@ try:
         # The estimate of the robots current pose
         est_pose = particle.estimate_pose(particles) 
 
-        # Update the world map 
+        # Update the windows 
         update_windows(est_pose, particles, world, frame)
   
 # Make sure to clean up even if an exception occurred
