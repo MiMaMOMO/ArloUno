@@ -289,7 +289,7 @@ try:
     # XXX: center_point = compute_center()
 
     # Initialize Arlo  
-    # arlo = robot.Robot()
+    arlo = robot.Robot()
 
     # Allocate space for world map
     world = np.zeros((500, 500, 3), dtype = np.uint8)
@@ -343,7 +343,7 @@ try:
         # We detected atleast one landmark 
         if not isinstance(objectIDs, type(None)):
             
-            commands.rotate(angles[0])
+            commands.rotate(arlo, angles[0])
             break
             
             # The total sum of all weigths

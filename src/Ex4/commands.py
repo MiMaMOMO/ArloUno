@@ -11,10 +11,10 @@ from Timer import Timer
 
 
 # Initialize the robot 
-arlo = robot.Robot()
+# arlo = robot.Robot()
 
 
-def rotate(angle) -> None:
+def rotate(arlo, angle) -> None:
     '''
     Make Arlo rotate in the right direction and angle. 
     '''
@@ -50,7 +50,7 @@ def rotate(angle) -> None:
             break
     
 
-def drive(dist, landmark_range = 0.0) -> None:
+def drive(arlo, dist, landmark_range = 0.0) -> None:
     '''
     Make Arlo drive a certain amount of distance. 
     
