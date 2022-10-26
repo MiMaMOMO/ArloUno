@@ -60,5 +60,5 @@ def drive(dist, landmark_range = 0.0) -> None:
             arlo.stop()
             break   
         
-drive(100)  
+drive(300)  
 print("Drived!")  
