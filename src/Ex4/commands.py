@@ -24,6 +24,9 @@ def rotate(arlo, angle) -> None:
     rot_time = scaled_angel * (ORIENTATION / 90)   # Seconds it takes Arlo to rotate angle amount 
     timer = Timer()                                 # Timer used to measure a countdown for Arlo
     
+    print(scaled_angel)
+    print(rot_time)
+    
     # Find the direction we should rotate 
     left_dir = 0
     right_dir = 0
