@@ -30,8 +30,10 @@ def rotate(angle) -> None:
     print(sign)
     
     if sign == -1.0:
+        print(right_dir)
         right_dir = 1
     else:
+        print(left_dir)
         left_dir = 1
     
     # Make Arlo rotate in the right direction 
