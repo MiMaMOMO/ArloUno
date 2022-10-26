@@ -5,11 +5,11 @@ import camera
 import numpy as np
 import sys
 
-import commands
+# import commands
 
 
 # Flags
-showGUI = False  # Whether or not to open GUI windows
+showGUI = True  # Whether or not to open GUI windows
 onRobot = True  # Whether or not we are running on the Arlo robot
 
 def isRunningOnArlo():
@@ -343,16 +343,14 @@ try:
         # We detected atleast one landmark 
         if not isinstance(objectIDs, type(None)):
             
-            print(angles[0])
-            
-            commands.rotate(arlo, angles[0])
-            break
+            #commands.rotate(arlo, angles[0])
+            #break
             
             # The total sum of all weigths
             weight_sum = 0.0
             
             # Delete the duplicate if we see the same landmark in one frame 
-            objectIDs, dists, angles = delete_duplicates(objectIDs, dists, angles)
+            # objectIDs, dists, angles = delete_duplicates(objectIDs, dists, angles)
             
             # Reset the weights 
             [p.setWeight(0) for p in particles]
