@@ -10,8 +10,6 @@ from Ex4.settings import *
 # Initialize the robot 
 arlo = robot.Robot()
 
-print("Initialized!")
-
 
 def rotate(angle) -> None:
     '''
@@ -41,12 +39,10 @@ def rotate(angle) -> None:
     time.sleep(0.01)
     
     while 1: 
-        print("Made it.!")
         
         # If Arlo wants to go near a box we account for that by a certain tolerance
         # Otherwise let Arlo drive the full dist
         if timer.elapsed_time() > rot_time:
-            print("Made it to if!")
             arlo.stop()
             break
     
@@ -77,5 +73,3 @@ def drive(dist, landmark_range = 0.0) -> None:
         if timer.elapsed_time() > (drive_time - (METER * landmark_range)):
             arlo.stop()
             break    
-        
-rotate(-1.57) 
