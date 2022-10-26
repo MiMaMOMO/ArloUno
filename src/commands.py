@@ -19,7 +19,7 @@ def rotate(angle) -> None:
     '''
     
     scaled_angel = np.abs(np.degrees(angle))                # Make radians into degrees 
-    rot_time = scaled_angel * (ORIENTATION / 360)   # Seconds it takes Arlo to rotate angle amount 
+    rot_time = scaled_angel * (ORIENTATION / 90)   # Seconds it takes Arlo to rotate angle amount 
     timer = Timer()                                 # Timer used to measure a countdown for Arlo
     
     # Find the direction we should rotate 
