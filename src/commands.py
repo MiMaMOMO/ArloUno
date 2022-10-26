@@ -13,7 +13,7 @@ arlo = robot.Robot()
 print("Initialized!")
 
 
-def rotate(angle, dir) -> None:
+def rotate(angle, dir = None) -> None:
     '''
     Make Arlo rotate in the right direction and angle. 
     '''
