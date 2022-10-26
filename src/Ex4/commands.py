@@ -45,7 +45,7 @@ def rotate(angle) -> None:
         
         # If Arlo wants to go near a box we account for that by a certain tolerance
         # Otherwise let Arlo drive the full dist
-        if timer.elapsed_time() > rot_time:
+        if timer.elapsed_time() > rot_time + ERR:
             arlo.stop()
             break
     

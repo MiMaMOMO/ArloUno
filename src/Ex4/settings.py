@@ -65,3 +65,4 @@ CWHITE = (255, 255, 255)            # The color white
 CBLACK = (0, 0, 0)                  # The color black 
 
 ### TIMER ### 
+ERR = 0.6
