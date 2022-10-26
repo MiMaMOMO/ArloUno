@@ -72,4 +72,4 @@ def drive(dist, landmark_range = 0.0) -> None:
             arlo.stop()
             break    
         
-rotate(1.57) 
+rotate(-1.57) 
