@@ -60,8 +60,8 @@ velocity = 0.0              # cm/sec
 angular_velocity = 0.0      # radians/sec
 
 # Spread parameters  
-spread_dist = 30.0          # The spread for the distance 
-spread_angle = 10.0          # The spread for the orientation 
+spread_dist = 20.0          # The spread for the distance 
+spread_angle = 1.0          # The spread for the orientation 
 
 
 def jet(x):
@@ -391,7 +391,7 @@ try:
             particles = resampling
             
             # Add uncertainity to each particle 
-            particle.add_uncertainty(particles, 2.0, 0.01)
+            particle.add_uncertainty(particles, 1.0, 0.01)
             
             # Draw detected objects
             cam.draw_aruco_objects(frame)
