@@ -4,12 +4,11 @@ import particle
 import camera
 import numpy as np
 import sys
-import commands
 
 
 # Flags
 showGUI = True  # Whether or not to open GUI windows
-onRobot = False  # Whether or not we are running on the Arlo robot
+onRobot = True  # Whether or not we are running on the Arlo robot
 
 def isRunningOnArlo():
     """Return True if we are running on Arlo, otherwise False.
@@ -23,6 +22,7 @@ if isRunningOnArlo():
 # Try to import robot module 
 try:
     import robot 
+    import commands
     onRobot = True
 except ImportError:
     print("selflocalize.py: robot module not present - forcing not running on Arlo!")
