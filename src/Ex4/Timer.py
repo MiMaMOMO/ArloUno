@@ -3,7 +3,7 @@ import time
 
 class Timer:
     def __init__(self) -> None:
-        self.start_time = 0.0
+        self.start_time = time.perf_counter()
         
     def elapsed_time(self) -> float:
         '''
@@ -12,4 +12,4 @@ class Timer:
         Returns:
             The elapsed time between initializen and now. 
         '''
-        return (time.perf_counter() - self.start_time)    
+        return (time.perf_counter() - self.start_time)
