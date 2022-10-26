@@ -29,7 +29,7 @@ def rotate(angle) -> None:
     
     print(sign)
     
-    if sign == -1:
+    if sign == -1.0:
         right_dir = 1
     else:
         left_dir = 1
