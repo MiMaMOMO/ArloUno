@@ -342,8 +342,8 @@ try:
         # We detected atleast one landmark 
         if not isinstance(objectIDs, type(None)):
             
-            commands.drive(dists[0], 0.3)
-            break
+            # commands.drive(dists[0], 0.3)
+            # break
             
             # The total sum of all weigths
             weight_sum = 0.0
