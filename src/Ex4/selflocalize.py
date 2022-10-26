@@ -1,11 +1,12 @@
 import copy
+from imaplib import Commands
 import cv2
 import particle
 import camera
 import numpy as np
 import sys
 
-# import commands
+import commands
 
 
 # Flags
@@ -50,7 +51,7 @@ landmarks = {
 }
 
 # General parameters 
-num_particles = 1000        # The number of particles 
+num_particles = 2000        # The number of particles 
 WIN_RF1 = "Robot view"      # The name of the Arlo window
 WIN_World = "World view"    # The name of the particle window 
 
@@ -59,7 +60,7 @@ velocity = 0.0              # cm/sec
 angular_velocity = 0.0      # radians/sec
 
 # Spread parameters  
-spread_dist = 15.0          # The spread for the distance 
+spread_dist = 25.0          # The spread for the distance 
 spread_angle = 1.0          # The spread for the orientation 
 
 
@@ -312,6 +313,11 @@ try:
         if action == ord('q'): 
             break
         
+        if action == ord('d'):
+            commands.drive(100)
+            
+        
+        
         # Move the robot according to user input (only for testing)
         # control_with_input(action, velocity, angular_velocity)
         
@@ -384,7 +390,7 @@ try:
             particles = resampling
             
             # Add uncertainity to each particle 
-            particle.add_uncertainty(particles, 0.5, 0.01)
+            particle.add_uncertainty(particles, 1.0, 0.01)
             
             # Draw detected objects
             cam.draw_aruco_objects(frame)
