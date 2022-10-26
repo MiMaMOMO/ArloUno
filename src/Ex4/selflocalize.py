@@ -314,7 +314,7 @@ try:
             break
         
         if action == ord('d'):
-            commands.drive(100)
+            commands.drive(arlo, 100)
             
         
         
