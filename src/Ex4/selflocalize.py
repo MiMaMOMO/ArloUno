@@ -343,6 +343,8 @@ try:
         # We detected atleast one landmark 
         if not isinstance(objectIDs, type(None)):
             
+            print(angles[0])
+            
             commands.rotate(arlo, angles[0])
             break
             
