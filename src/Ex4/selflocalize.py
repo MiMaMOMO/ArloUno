@@ -384,7 +384,7 @@ try:
             particles = resampling
             
             # Add uncertainity to each particle 
-            particle.add_uncertainty(particles, 1.0, 0.01)
+            particle.add_uncertainty(particles, 0.5, 0.01)
             
             # Draw detected objects
             cam.draw_aruco_objects(frame)
