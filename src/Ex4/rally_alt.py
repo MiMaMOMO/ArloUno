@@ -440,7 +440,7 @@ try:
         # Update the world map
         update_windows(est_pose, particles, world, frame)
         
-        drive_centimeters(arlo, 100)
+        #drive_centimeters(arlo, 100)
 
 # Make sure to clean up even if an exception occurred
 finally:
