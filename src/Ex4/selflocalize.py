@@ -60,8 +60,8 @@ velocity = 0.0              # cm/sec
 angular_velocity = 0.0      # radians/sec
 
 # Spread parameters  
-spread_dist = 25.0          # The spread for the distance 
-spread_angle = 1.0          # The spread for the orientation 
+spread_dist = 35.0          # The spread for the distance 
+spread_angle = 5.0          # The spread for the orientation 
 
 
 def jet(x):
