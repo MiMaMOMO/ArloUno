@@ -5,6 +5,8 @@ import camera
 import numpy as np
 import sys
 
+import commands
+
 
 # Flags
 showGUI = True  # Whether or not to open GUI windows
@@ -22,7 +24,6 @@ if isRunningOnArlo():
 # Try to import robot module 
 try:
     import robot 
-    import commands
     onRobot = True
 except ImportError:
     print("selflocalize.py: robot module not present - forcing not running on Arlo!")
