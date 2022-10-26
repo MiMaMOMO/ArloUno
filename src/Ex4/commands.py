@@ -45,7 +45,7 @@ def rotate(angle) -> None:
         
         # If Arlo wants to go near a box we account for that by a certain tolerance
         # Otherwise let Arlo drive the full dist
-        if timer.elapsed_time() > rot_time + ERR:
+        if timer.elapsed_time() > rot_time:
             arlo.stop()
             break
     
@@ -78,4 +78,4 @@ def drive(dist, landmark_range = 0.0) -> None:
             break    
 
 
-rotate(0.2617)
+# rotate(0.2617)
