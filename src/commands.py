@@ -40,6 +40,8 @@ def rotate(angle) -> None:
     arlo.go_diff(LEFT_ROT_VELOCITY, RIGHT_ROT_VELOCITY, left_dir, right_dir) 
     time.sleep(0.01)
     
+    print("Made it.!")
+    
     while 1: 
         
         # If Arlo wants to go near a box we account for that by a certain tolerance
