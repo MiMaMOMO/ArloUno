@@ -78,4 +78,4 @@ def drive(dist, landmark_range = 0.0) -> None:
             break    
 
 
-rotate(0.7853)
+rotate(0.2617)
