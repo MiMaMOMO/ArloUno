@@ -39,7 +39,6 @@ def drive(dist, landmark_range = 0.0) -> None:
         dist(float):            The distance that Arlo intends on driving in cm.
         landmark_range(float):  How close we want to drive towards a landmark in m 
     '''
-    print("Driving!")
 
     scaled_dist = dist / 100                    # Scale the distance down to meters  
     drive_time = scaled_dist * METER            # How long in seconds it takes Arlo to drive dist
