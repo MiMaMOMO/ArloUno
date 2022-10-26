@@ -54,10 +54,10 @@ def drive(dist, landmark_range = 0.0) -> None:
 
         # If Arlo wants to go near a box we account for that by a certain tolerance 
         # Otherwise let Arlo drive the full dist
-        # if timer.elapsed_time() > (drive_time - (METER * landmark_range)):
-        #     print("Stop!")
-        #     arlo.stop()
-        #     break   
+    if timer.elapsed_time() > (drive_time - (METER * landmark_range)):
+        print("Stop!")
+        arlo.stop()
+        # break   
         
 drive(300)  
 print("Drived!")  
