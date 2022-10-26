@@ -13,7 +13,7 @@ arlo = robot.Robot()
 print("Initialized!")
 
 
-def rotate(angle, dir = None) -> None:
+def rotate(angle) -> None:
     '''
     Make Arlo rotate in the right direction and angle. 
     '''
@@ -23,10 +23,17 @@ def rotate(angle, dir = None) -> None:
     timer = Timer()                                 # Timer used to measure a countdown for Arlo
     
     # Find the direction we should rotate 
+    sign = np.sign(angle)
+    left_dir = 0
+    right_dir = 0
     
+    if sign == -1:
+        right_dir = 1
+    else:
+        left_dir = 1
     
     # Make Arlo rotate in the right direction 
-    arlo.go_diff(LEFT_ROT_VELOCITY, RIGHT_ROT_VELOCITY, 1, 0) 
+    arlo.go_diff(LEFT_ROT_VELOCITY, RIGHT_ROT_VELOCITY, left_dir, right_dir) 
     time.sleep(0.01)
     
     while 1: 
