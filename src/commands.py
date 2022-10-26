@@ -33,8 +33,8 @@ def rotate(angle) -> None:
         print(right_dir)
         right_dir = 1
     else:
-        print(left_dir)
         left_dir = 1
+        print(left_dir)
     
     # Make Arlo rotate in the right direction 
     arlo.go_diff(LEFT_ROT_VELOCITY, RIGHT_ROT_VELOCITY, left_dir, right_dir) 
