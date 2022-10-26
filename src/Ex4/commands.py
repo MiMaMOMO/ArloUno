@@ -76,3 +76,6 @@ def drive(dist, landmark_range = 0.0) -> None:
         if timer.elapsed_time() > (drive_time - (METER * landmark_range)):
             arlo.stop()
             break    
+
+
+rotate(0.7853)
