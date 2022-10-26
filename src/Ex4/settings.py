@@ -48,7 +48,7 @@ LEFT_ROT_VELOCITY = 64              # Arlos left wheel rotation speed
 METER = 2.52                        # How long it takes Arlo to drive one meter in seconds
 
 ### ORIENTATION ###
-ORIENTATION = 2.942                 # How long it takes Arlo to rotate 360 degrees
+ORIENTATION = 2.982                 # How long it takes Arlo to rotate 360 degrees
 
 ### SPREADS ###
 SPREAD_DIST = 15.0                  # The spread used when computing distance weights 
