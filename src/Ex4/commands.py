@@ -19,12 +19,12 @@ def rotate(angle) -> None:
     Make Arlo rotate in the right direction and angle. 
     '''
     
+    sign = np.sign(angle)
     scaled_angel = np.abs(np.degrees(angle))                # Make radians into degrees 
     rot_time = scaled_angel * (ORIENTATION / 90)   # Seconds it takes Arlo to rotate angle amount 
     timer = Timer()                                 # Timer used to measure a countdown for Arlo
     
     # Find the direction we should rotate 
-    sign = np.sign(angle)
     left_dir = 0
     right_dir = 0
     
@@ -76,3 +76,5 @@ def drive(dist, landmark_range = 0.0) -> None:
         if timer.elapsed_time() > (drive_time - (METER * landmark_range)):
             arlo.stop()
             break    
+        
+rotate(-1.57)
