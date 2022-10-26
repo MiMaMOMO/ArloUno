@@ -345,8 +345,8 @@ try:
             
             print(angles[0])
             
-            #commands.rotate(arlo, angles[0])
-            #break
+            commands.rotate(arlo, angles[0])
+            break
             
             # The total sum of all weigths
             weight_sum = 0.0
