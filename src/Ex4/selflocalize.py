@@ -315,6 +315,7 @@ try:
         
         if action == ord('d'):
             commands.drive(arlo, 100)
+            particle.move_particle(est_pose, est_pose.getX(), est_pose.getY(), est_pose.getTheta())
             
         
         
@@ -324,7 +325,7 @@ try:
         # TODO: Use motor controls to update particles.
         # TODO: Compute a driving strategy for making sure to see both landmarks. 
         # XXX: Make the robot drive 
-        # [particle.move_particle(p, velocity, velocity, angular_velocity) for p in particles]
+        [particle.move_particle(p, velocity, velocity, angular_velocity) for p in particles]
         
         # Step 1. Keep turning the robot until it can see both landmarks. 
         # Step 2. If Arlo makes a full turn and have not seen both landmarks, 
@@ -390,7 +391,7 @@ try:
             particles = resampling
             
             # Add uncertainity to each particle 
-            particle.add_uncertainty(particles, 1.0, 0.01)
+            particle.add_uncertainty(particles, 0.75, 0.01)
             
             # Draw detected objects
             cam.draw_aruco_objects(frame)
