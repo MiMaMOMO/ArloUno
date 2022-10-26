@@ -37,7 +37,7 @@ def drive(dist, landmark_range = 0.0) -> None:
     
     Parameters:
         dist(float):            The distance that Arlo intends on driving in cm.
-        landmark_range(float): How close we want to drive towards a landmark in m 
+        landmark_range(float):  How close we want to drive towards a landmark in m 
     '''
     print("Driving!")
 
@@ -56,9 +56,7 @@ def drive(dist, landmark_range = 0.0) -> None:
         # If Arlo wants to go near a box we account for that by a certain tolerance 
         # Otherwise let Arlo drive the full dist
         if timer.elapsed_time() > (drive_time - (METER * landmark_range)):
-            print("Stop!")
             arlo.stop()
-            #break   
+            break   
         
-drive(200)  
-print("Drived!")  
+drive(200, 0.3)  
