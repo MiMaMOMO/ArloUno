@@ -312,7 +312,7 @@ def reset_weight(particle):
 def localize():
     #keep turning right with 15 degrees scanning for known landmarks.
     for i in range(24):#24 iterations because 360/15 = 24, so one full rotation
-        print(arlo.go_diff(64, 64, 1, 0)) #alternately 
+        print(arlo.go_diff(64, 64, 1, 0)) #alternatevely use Mo's rotate
         sleep((0.728/90) * 15)
         print(arlo.stop())
         sleep(0.7)
@@ -325,9 +325,13 @@ def localize():
         objectIDs, dists, angles = remove_unkown(objectIDs, dists, angles, landmarks)
         # We detected atleast one landmark 
         if not isinstance(objectIDs, type(None)):
+            for i in range(10): #test how many iterations is needed a good estimated pose
+                pass
             #do particle filtering here to localise the robot
+            ###Note til Mo, enten lav partikellfilteret om til en funktion og kald det her ellers sæt det her foran partikel filteret.
+            ###Så kan vi kalde den her funktion hver gang vi har bevæget os eller sådan, for at finde ud af hvor vi er
+            ###Vi kan også prøve at bruge partikel filteret til at vurdere om vi har været tæt nok på en kasse til at sige den er besøgt
             return
-            ###Note til Mo, enten lav partilfilteret om til en funktion og kald det her ellers sæt det her foran partikel filteret.
     return 
 
 ### MAIN PROGRAM ###
