@@ -307,6 +307,9 @@ def remove_known(objectIDs, dists, angles, landmarks):
 def reset_weight(particle):
     particle.setWeight(0)
 
+def get_weight(particle):
+    return particle.getWeight()
+
 
 ###!!!### This function might be the baseline for using the particle filter
 def localize():
@@ -440,6 +443,9 @@ try:
                     weight_sum += weight
             
             # Store normalized weights of each particle for probability purposes 
+            #get_weights = np.vectorize(get_weight) 
+            #weights = get_weights(particles) / weight_sum
+            ### the above numpyfication needs testing!
             weights = [(p.getWeight() / weight_sum) for p in particles]
             
             # Resample the particles 
