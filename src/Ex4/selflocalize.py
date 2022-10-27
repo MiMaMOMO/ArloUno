@@ -1,15 +1,17 @@
 import copy
+from imaplib import Commands
 import cv2
 import particle
 import camera
 import numpy as np
 import sys
+
 import commands
 
 
 # Flags
 showGUI = True  # Whether or not to open GUI windows
-onRobot = False  # Whether or not we are running on the Arlo robot
+onRobot = True  # Whether or not we are running on the Arlo robot
 
 def isRunningOnArlo():
     """Return True if we are running on Arlo, otherwise False.
@@ -58,8 +60,8 @@ velocity = 0.0              # cm/sec
 angular_velocity = 0.0      # radians/sec
 
 # Spread parameters  
-spread_dist = 15.0          # The spread for the distance 
-spread_angle = 1.0          # The spread for the orientation 
+spread_dist = 25.0          # The spread for the distance 
+spread_angle = 2.0          # The spread for the orientation 
 
 
 def jet(x):
@@ -288,7 +290,7 @@ try:
     # XXX: center_point = compute_center()
 
     # Initialize Arlo  
-    # arlo = robot.Robot()
+    arlo = robot.Robot()
 
     # Allocate space for world map
     world = np.zeros((500, 500, 3), dtype = np.uint8)
@@ -310,6 +312,12 @@ try:
         # Quit if we press q 
         if action == ord('q'): 
             break
+        
+        if action == ord('d'):
+            commands.drive(arlo, 100)
+            particle.move_particle(est_pose, est_pose.getX(), est_pose.getY(), est_pose.getTheta())
+            
+        
         
         # Move the robot according to user input (only for testing)
         # control_with_input(action, velocity, angular_velocity)
@@ -342,14 +350,14 @@ try:
         # We detected atleast one landmark 
         if not isinstance(objectIDs, type(None)):
             
-            # commands.drive(dists[0], 0.3)
-            # break
+            #commands.rotate(arlo, angles[0])
+            #break
             
             # The total sum of all weigths
             weight_sum = 0.0
             
             # Delete the duplicate if we see the same landmark in one frame 
-            objectIDs, dists, angles = delete_duplicates(objectIDs, dists, angles)
+            # objectIDs, dists, angles = delete_duplicates(objectIDs, dists, angles)
             
             # Reset the weights 
             [p.setWeight(0) for p in particles]
@@ -395,7 +403,7 @@ try:
         # The estimate of the robots current pose
         est_pose = particle.estimate_pose(particles) 
 
-        # Update the world map 
+        # Update the windows 
         update_windows(est_pose, particles, world, frame)
   
 # Make sure to clean up even if an exception occurred

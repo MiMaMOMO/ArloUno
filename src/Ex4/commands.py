@@ -3,44 +3,44 @@ import time
 
 import numpy as np 
 
-from Ex4.Timer import Timer
-from Ex4.settings import *
+# from Ex4.Timer import Timer
+# from Ex4.settings import *
+
+from settings import * 
+from Timer import Timer
 
 
 # Initialize the robot 
-arlo = robot.Robot()
-
-print("Initialized!")
+# arlo = robot.Robot()
 
 
-def rotate(angle) -> None:
+def rotate(arlo, angle) -> None:
     '''
     Make Arlo rotate in the right direction and angle. 
     '''
     
-    scaled_angel = np.degrees(angle)                # Make radians into degrees 
-    rot_time = scaled_angel * (ORIENTATION / 360)   # Seconds it takes Arlo to rotate angle amount 
+    sign = np.sign(angle)
+    scaled_angel = np.abs(np.degrees(angle))                # Make radians into degrees 
+    rot_time = scaled_angel * (ORIENTATION / 90)   # Seconds it takes Arlo to rotate angle amount 
     timer = Timer()                                 # Timer used to measure a countdown for Arlo
     
+    print(scaled_angel)
+    print(rot_time)
+    
     # Find the direction we should rotate 
-    sign = np.sign(angle)
     left_dir = 0
     right_dir = 0
     
     print(sign)
     
     if sign == -1.0:
-        right_dir = 1
-        print(right_dir)
-    else:
         left_dir = 1
-        print(left_dir)
+    else:
+        right_dir = 1
     
     # Make Arlo rotate in the right direction 
     arlo.go_diff(LEFT_ROT_VELOCITY, RIGHT_ROT_VELOCITY, left_dir, right_dir) 
     time.sleep(0.01)
-    
-    print("Made it.!")
     
     while 1: 
         
@@ -51,7 +51,7 @@ def rotate(angle) -> None:
             break
     
 
-def drive(dist, landmark_range = 0.0) -> None:
+def drive(arlo, dist, landmark_range = 0.0) -> None:
     '''
     Make Arlo drive a certain amount of distance. 
     
@@ -77,5 +77,6 @@ def drive(dist, landmark_range = 0.0) -> None:
         if timer.elapsed_time() > (drive_time - (METER * landmark_range)):
             arlo.stop()
             break    
-        
-rotate(1.57) 
+
+
+# rotate(0.2617)
