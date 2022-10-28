@@ -1,10 +1,10 @@
-import cv2
+from cv2 import aruco
 
 ### ARUCO ### 
-ARUCO_DICT = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_250)
+ARUCO_DICT = aruco.getPredefinedDictionary(aruco.DICT_6X6_250)
 ARUCO_MARKER_LENGTH = 0.15
 
-### PATHS ### 
+### PATHS ###
 
 
 ### TITLES ###
@@ -16,9 +16,6 @@ ARLO_WIN_X = 50                     # X-coordinate for Arlos window
 ARLO_WIN_Y = 50                     # Y-coordinate for Arlos window
 WORLD_WIN_X = 500                   # X-coordinate for the world window
 WORLD_WIN_Y = 50                    # Y-coordinate for the world window
-
-### ARLO ###
-
 
 ### LANDMARKS ###
 landmarkIDs = [1, 2, 3, 4]          # The ID of each landmark we know  
@@ -37,22 +34,14 @@ SIGMA_UNCERTAINITY = 1.0            # Uncertainity added to sigma for distance
 THETA_UNCERTAINITY = 0.01           # Uncertainity added to theta for orientation 
 
 ### VELOCITY ###
-VELOCITY = 0                        # ???
-ANGULAR_VELOCITY = 0                # ???
 RIGHT_VELOCITY = 64                 # Arlos right wheel speed
 LEFT_VELOCITY = 60                  # Arlos left wheel speed
 RIGHT_ROT_VELOCITY = 64             # Arlos right wheel rotation speed
 LEFT_ROT_VELOCITY = 64              # Arlos left wheel rotation speed
 
-### DISTANCE ###
-METER = 2.52                        # How long it takes Arlo to drive one meter in seconds
-
-### ORIENTATION ###
-ORIENTATION = 0.728                 # How long it takes Arlo to rotate 360 degrees
-
 ### SPREADS ###
-SPREAD_DIST = 15.0                  # The spread used when computing distance weights 
-SPREAD_ANGLE = 1.0                  # The spread used when computing orientation weights 
+SPREAD_DIST = 25.0                  # The spread used when computing distance weights 
+SPREAD_ANGLE = 2.0                  # The spread used when computing orientation weights 
 
 ### COLORS ### 
 CRED = (0, 0, 255)                  # The color red 
@@ -64,5 +53,7 @@ CMAGENTA = (255, 0, 255)            # The color magenta
 CWHITE = (255, 255, 255)            # The color white 
 CBLACK = (0, 0, 0)                  # The color black 
 
-### TIMER ### 
-ERR = 0.6
+### TIME ### 
+TIME_ERROR = 0.55                   # Error in computing time 
+METER = 2.52                        # How long it takes Arlo to drive one meter in seconds
+ORIENTATION = 0.728                 # How long it takes Arlo to rotate 90 degrees

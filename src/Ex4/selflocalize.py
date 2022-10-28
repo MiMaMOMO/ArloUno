@@ -1,5 +1,4 @@
 import copy
-from imaplib import Commands
 import cv2
 import particle
 import camera
@@ -10,7 +9,7 @@ import commands
 
 
 # Flags
-showGUI = True  # Whether or not to open GUI windows
+showGUI = False # Whether or not to open GUI windows
 onRobot = True  # Whether or not we are running on the Arlo robot
 
 def isRunningOnArlo():
@@ -273,6 +272,24 @@ def compute_center_parameters(center, arlo_pose):
     
     return dist, abs_angle, sign 
 
+def new_position(angle, dist, x, y, theta):
+    '''
+    Computes the new x, y and theta value for a particle. 
+    '''
+    
+    # Compute the unit vector of our orientation in radians 
+    cos_x = np.cos(angle)
+    sin_y = np.sin(angle)
+    
+    # Compute the new values for each particle 
+    updated_x = x + (dist * cos_x)
+    updated_y = y + (dist * sin_y)
+    updated_theta = angle + theta
+    
+    # particle.move_particle(particle, updated_x, updated_y, updated_theta)
+    
+    return updated_x, updated_y, updated_theta
+
 
 ### MAIN PROGRAM ###
 try:
@@ -314,8 +331,18 @@ try:
             break
         
         if action == ord('d'):
-            commands.drive(arlo, 100)
-            particle.move_particle(est_pose, est_pose.getX(), est_pose.getY(), est_pose.getTheta())
+            arlo_x, = est_pose.getX()
+            arlo_y = est_pose.getY()
+            arlo_theta = est_pose.getTheta()
+            arlo_w = est_pose.getWeight()
+            
+            print(arlo_theta)
+            
+            commands.rotate(arlo, 1.57)
+            commands.drive(arlo, 100.0)
+            x, y, theta = new_position(1.57079, 100.0, arlo_x, arlo_y, arlo_theta, arlo_w)
+            particle.move_particle(est_pose, x, y, theta)
+            
             
         # TODO: Add uncertainity after moving (more uncertainity than normal)
         
