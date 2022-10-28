@@ -317,7 +317,7 @@ try:
             commands.drive(arlo, 100)
             particle.move_particle(est_pose, est_pose.getX(), est_pose.getY(), est_pose.getTheta())
             
-        
+        # TODO: Add uncertainity after moving (more uncertainity than normal)
         
         # Move the robot according to user input (only for testing)
         # control_with_input(action, velocity, angular_velocity)
