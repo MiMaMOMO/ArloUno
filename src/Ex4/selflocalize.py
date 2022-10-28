@@ -358,7 +358,7 @@ try:
             commands.drive(arlo, 100.0)
             x, y, theta = new_position(3.14159, 100.0, arlo_x, arlo_y, arlo_theta)
             particle.move_particle(est_pose, x, y, theta)
-            move_all_particles(particles, 3.14159, 100.0)
+            move_all_particles(particles, 100.0, 3.14159)
             
             
         # TODO: Add uncertainity after moving (more uncertainity than normal)
