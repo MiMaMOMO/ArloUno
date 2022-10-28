@@ -342,9 +342,9 @@ try:
             
             print(arlo_theta)
             
-            commands.rotate(arlo, 1.57)
+            commands.rotate(arlo, 3.14159)
             commands.drive(arlo, 100.0)
-            x, y, theta = new_position(1.57079, 100.0, arlo_x, arlo_y, arlo_theta)
+            x, y, theta = new_position(3.14159, 100.0, arlo_x, arlo_y, arlo_theta)
             particle.move_particle(est_pose, x, y, theta)
             
             
