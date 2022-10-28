@@ -331,7 +331,7 @@ try:
             break
         
         if action == ord('d'):
-            arlo_x, = est_pose.getX()
+            arlo_x = est_pose.getX()
             arlo_y = est_pose.getY()
             arlo_theta = est_pose.getTheta()
             arlo_w = est_pose.getWeight()
