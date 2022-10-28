@@ -282,8 +282,8 @@ def new_position(angle, dist, x, y, theta):
     sin_y = np.sin(angle)
     
     # Compute the new values for each particle 
-    updated_x = x + (dist * cos_x)
-    updated_y = y + (dist * sin_y)
+    updated_x = x - (dist * cos_x)
+    updated_y = y - (dist * sin_y)
     updated_theta = angle + theta
     
     # particle.move_particle(particle, updated_x, updated_y, updated_theta)
@@ -350,7 +350,6 @@ try:
             arlo_x = est_pose.getX()
             arlo_y = est_pose.getY()
             arlo_theta = est_pose.getTheta()
-            arlo_w = est_pose.getWeight()
             
             print(arlo_theta)
             

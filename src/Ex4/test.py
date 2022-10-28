@@ -1,14 +1,16 @@
 import numpy as np 
 
-angle = 1.57079
+angle_x = 3.14159
+angle_y = 1.57079
 dist = 100.0
 
-cos_x = np.cos(angle)
-sin_y = np.sin(angle)
+cos_x = np.cos(angle_y)
+sin_y = np.sin(angle_y)
 
-updated_x = 206.0 + (dist * cos_x)
-updated_y = 51.0 + (dist * sin_y)
-updated_theta = angle
+# 0.0, 0.0
+
+updated_x = 0.0 - (dist * cos_x)
+updated_y = 100.0 - (dist * sin_y)
 
 print("Cos(x):  {}".format(cos_x))
 print("Sin(y):  {}".format(sin_y))
