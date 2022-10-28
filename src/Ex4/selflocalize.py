@@ -322,6 +322,9 @@ try:
     
     # Try to selflocalize and get to the center point using the particle filter 
     while 1:
+        
+        print("x: {}".format(est_pose.getX()))
+        print("y: {}".format(est_pose.getY()))
 
         # Get a pressed key if any for 10 ms. Maybe if removed could boost performance? 
         action = cv2.waitKey(10)
