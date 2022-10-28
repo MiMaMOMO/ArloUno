@@ -6,8 +6,8 @@ dist = 100.0
 cos_x = np.cos(angle)
 sin_y = np.sin(angle)
 
-updated_x = 0.0 + (dist * cos_x)
-updated_y = 0.0 + (dist * sin_y)
+updated_x = 206.0 + (dist * cos_x)
+updated_y = 51.0 + (dist * sin_y)
 updated_theta = angle
 
 print("Cos(x):  {}".format(cos_x))
