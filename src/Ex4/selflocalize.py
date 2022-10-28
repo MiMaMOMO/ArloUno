@@ -325,7 +325,7 @@ try:
         
         print("x: {}".format(est_pose.getX()))
         print("y: {}".format(est_pose.getY()))
-        print("t: {}".format(est_pose.getY()))
+        print("t: {}".format(est_pose.getTheta()))
 
         # Get a pressed key if any for 10 ms. Maybe if removed could boost performance? 
         action = cv2.waitKey(10)
