@@ -431,7 +431,7 @@ try:
                 p.setWeight(1.0 / num_particles)
 
         # The estimate of the robots current pose
-        est_pose = particle.estimate_pose(particles) 
+        # est_pose = particle.estimate_pose(particles) 
 
         # Update the windows 
         update_windows(est_pose, particles, world, frame)
