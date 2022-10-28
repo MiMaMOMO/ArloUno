@@ -5,7 +5,7 @@ from settings import *
 
 class Timer:
     def __init__(self) -> None:
-        self.start_time = time.perf_counter() - TIME_ERROR
+        self.start_time = time.perf_counter()
         
     def elapsed_time(self) -> float:
         '''
