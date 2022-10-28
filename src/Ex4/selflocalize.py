@@ -290,6 +290,18 @@ def new_position(angle, dist, x, y, theta):
     
     return updated_x, updated_y, updated_theta
 
+def move_all_particles(particles, dist, angle): 
+    '''
+    '''
+    for p in particles:
+        p_x = p.getX()
+        p_y = p.getY()
+        p_theta = p.getTheta()
+        p_w = p.getWeight()
+        
+        x, y, theta = new_position(angle, dist, p_x, p_y, p_theta)
+        particle.move_particle(p, x, y, theta)
+    
 
 ### MAIN PROGRAM ###
 try:
@@ -346,6 +358,7 @@ try:
             commands.drive(arlo, 100.0)
             x, y, theta = new_position(3.14159, 100.0, arlo_x, arlo_y, arlo_theta)
             particle.move_particle(est_pose, x, y, theta)
+            move_all_particles(particles, 3.14159, 100.0)
             
             
         # TODO: Add uncertainity after moving (more uncertainity than normal)
