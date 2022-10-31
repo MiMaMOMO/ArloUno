@@ -398,12 +398,20 @@ try:
             arlo_y = est_pose.getY()
             arlo_theta = est_pose.getTheta()
             
+            print(arlo_theta)
+            print(arlo_x)
+            print(arlo_y)
+            
             # Tell Arlo to rotate and drive 
             commands.rotate(arlo, DEGREES_180)
             commands.drive(arlo, METER_1)
             
             # Compute the new position of Arlo 
             x, y, theta = new_position(DEGREES_180, METER_1, arlo_x, arlo_y, arlo_theta)
+            
+            print(theta)
+            print(x)
+            print(y)
             
             # Move arlo in the digital world 
             particle.move_particle(est_pose, x, y, theta)
