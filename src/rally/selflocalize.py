@@ -301,29 +301,38 @@ def remove_known(objectIDs, dists, angles, landmarks):
     else:
         return objectIDs, dists, angles
 
-def new_position(angle, dist, current_x, current_y, orientation):
+def new_position(theta, dist, current_x, current_y, orientation):
     '''
     Computes the new x, y and theta value for a particle after movement.  
     '''
     
     # Compute the unit vector of the angle in radians 
-    cos_x = np.cos(angle)
-    sin_y = np.sin(angle)
+    cos_x = np.cos(theta)
+    sin_y = np.sin(theta)
     
     # Compute the new orientation 
-    theta = np.mod(angle + orientation, 2.0 * np.pi)
+    theta = np.mod(theta + orientation, 2.0 * np.pi)
     
     # Compute the new values for each particle 
-    if theta <= DEGREES_180 and theta >= 0:
-        print(-dist)
-        print(sin_y)
-        x = current_x - (-dist * cos_x)
-        y = current_y + (dist * sin_y)
-    elif theta > DEGREES_180 and theta <= DEGREES_360:
-        print(-dist)
-        print(sin_y)
-        x = current_x + (dist * cos_x)
-        y = current_y - (-dist * sin_y)
+    if theta < 1.570 and theta > 0:
+        x = x - (-dist * cos_x)
+        y = y + (dist * sin_y)
+    elif theta > 1.570 and theta < 3.141:
+        x = x - (-dist * cos_x)
+        y = y + (dist * sin_y)
+    elif theta > 3.141 and theta < 4.711:
+        x = x - (-dist * cos_x)
+        y = y - (-dist * sin_y)
+    elif theta > 4.711 and theta < 6.282:
+        x = x + (dist * cos_x)
+        y = y - (-dist * sin_y)
+        
+    # if theta <= DEGREES_180 and theta >= 0:
+    #     x = current_x - (-dist * cos_x)
+    #     y = current_y + (dist * sin_y)
+    # elif theta > DEGREES_180 and theta <= DEGREES_360:
+    #     x = current_x + (dist * cos_x)
+    #     y = current_y - (-dist * sin_y)
     
     return x, y, theta
 
