@@ -4,13 +4,13 @@ import particle
 import camera
 import numpy as np
 import sys
-
-import commands
+from robot import robot
 
 
 # Flags
 showGUI = True  # Whether or not to open GUI windows
-onRobot = True  # Whether or not we are running on the Arlo robot
+onRobot = False  # Whether or not we are running on the Arlo robot
+
 
 def isRunningOnArlo():
     """Return True if we are running on Arlo, otherwise False.
@@ -18,16 +18,22 @@ def isRunningOnArlo():
     """
     return onRobot
 
+
 if isRunningOnArlo():
     sys.path.append("../")
 
-# Try to import robot module 
+# Try to import robot module
 try:
-    import robot 
+    import robot
     onRobot = True
 except ImportError:
     print("selflocalize.py: robot module not present - forcing not running on Arlo!")
     onRobot = False
+
+
+# Flags
+showGUI = True  # Whether or not to open GUI windows
+onRobot = True  # Whether or not we are running on the Arlo robot
 
 # Some color constants in BGR format
 CRED = (0, 0, 255)
@@ -40,50 +46,56 @@ CWHITE = (255, 255, 255)
 CBLACK = (0, 0, 0)
 
 # Colors used when drawing the landmarks
-landmark_colors = [CRED, CGREEN] 
+landmark_colors = [CRED, CGREEN, CBLUE, CBLACK]
 
 # The robot knows the position of 2 landmarks. Their coordinates are in the unit centimeters [cm].
-landmarkIDs = [1, 2]
+landmarkIDs = [1, 2, 3, 4]
 landmarks = {
-    1: (0.0, 0.0),          # Coordinates for landmark 1 (RED)
-    2: (300.0, 0.0)         # Coordinates for landmark 2 (GREEN)
+    1: (0.0, 0.0),              # Coordinates for landmark 1 (RED)
+    2: (0.0, 300.0),             # Coordinates for landmark 2 (GREEN)
+    3: (400.0, 0.0),             # Coordinates for landmark 3 (BLUE)
+    4: (400.0, 300.0)             # Coordinates for landmark 4 (BLACK)
 }
 
-# General parameters 
-num_particles = 1000        # The number of particles 
+# General parameters
+num_particles = 10        # The number of particles
 WIN_RF1 = "Robot view"      # The name of the Arlo window
-WIN_World = "World view"    # The name of the particle window 
+WIN_World = "World view"    # The name of the particle window
 
 # Driving parameters
 velocity = 0.0              # cm/sec
 angular_velocity = 0.0      # radians/sec
 
-# Spread parameters  
-spread_dist = 25.0          # The spread for the distance 
-spread_angle = 2.0          # The spread for the orientation 
+# Spread parameters
+spread_dist = 15.0          # The spread for the distance
+spread_angle = 1.0          # The spread for the orientation
 
 
 def jet(x):
     """frame map for drawing particles. This function determines the frame of 
     a particle from its weight."""
-    r = (x >= 3.0 / 8.0 and x < 5.0 / 8.0) * (4.0 * x - 3.0 / 2.0) + (x >= 5.0 / 8.0 and x < 7.0 / 8.0) + (x >= 7.0 / 8.0) * (-4.0 * x + 9.0 / 2.0)
-    g = (x >= 1.0 / 8.0 and x < 3.0 / 8.0) * (4.0 * x - 1.0 / 2.0) + (x >= 3.0 / 8.0 and x < 5.0 / 8.0) + (x >= 5.0 / 8.0 and x < 7.0 / 8.0) * (-4.0 * x + 7.0 / 2.0)
-    b = (x < 1.0 / 8.0) * (4.0 * x + 1.0 / 2.0) + (x >= 1.0 / 8.0 and x < 3.0 / 8.0) + (x >= 3.0 / 8.0 and x < 5.0 / 8.0) * (-4.0 * x + 5.0 / 2.0)
+    r = (x >= 3.0 / 8.0 and x < 5.0 / 8.0) * (4.0 * x - 3.0 / 2.0) + (x >=
+                                                                      5.0 / 8.0 and x < 7.0 / 8.0) + (x >= 7.0 / 8.0) * (-4.0 * x + 9.0 / 2.0)
+    g = (x >= 1.0 / 8.0 and x < 3.0 / 8.0) * (4.0 * x - 1.0 / 2.0) + (x >= 3.0 /
+                                                                      8.0 and x < 5.0 / 8.0) + (x >= 5.0 / 8.0 and x < 7.0 / 8.0) * (-4.0 * x + 7.0 / 2.0)
+    b = (x < 1.0 / 8.0) * (4.0 * x + 1.0 / 2.0) + (x >= 1.0 / 8.0 and x <
+                                                   3.0 / 8.0) + (x >= 3.0 / 8.0 and x < 5.0 / 8.0) * (-4.0 * x + 5.0 / 2.0)
 
     return (255.0 * r, 255.0 * g, 255.0 * b)
+
 
 def draw_world(est_pose, particles, world):
     """Visualization.
     This functions draws robots position in the world coordinate system."""
 
     # Fix the origin of the coordinate system
-    offsetX = 100
-    offsetY = 250
+    offsetX = 25
+    offsetY = 125
 
     # Constant needed for transforming from world coordinates to screen coordinates (flip the y-axis)
     ymax = world.shape[0]
 
-    world[:] = CWHITE # Clear background to white
+    world[:] = CWHITE  # Clear background to white
 
     # Find largest weight
     max_weight = 0
@@ -95,42 +107,45 @@ def draw_world(est_pose, particles, world):
         x = int(particle.getX() + offsetX)
         y = ymax - (int(particle.getY() + offsetY))
         frame = jet(particle.getWeight() / max_weight)
-        cv2.circle(world, (x,y), 2, frame, 2)
-        b = (int(particle.getX() + 15.0*np.cos(particle.getTheta()))+offsetX, 
-                                     ymax - (int(particle.getY() + 15.0*np.sin(particle.getTheta()))+offsetY))
-        cv2.line(world, (x,y), b, frame, 2)
+        cv2.circle(world, (x, y), 2, frame, 2)
+        b = (int(particle.getX() + 15.0*np.cos(particle.getTheta()))+offsetX,
+             ymax - (int(particle.getY() + 15.0*np.sin(particle.getTheta()))+offsetY))
+        cv2.line(world, (x, y), b, frame, 2)
 
     # Draw landmarks
     for i in range(len(landmarkIDs)):
         ID = landmarkIDs[i]
-        lm = (int(landmarks[ID][0] + offsetX), int(ymax - (landmarks[ID][1] + offsetY)))
+        lm = (int(landmarks[ID][0] + offsetX),
+              int(ymax - (landmarks[ID][1] + offsetY)))
         cv2.circle(world, lm, 5, landmark_colors[i], 2)
 
     # Draw estimated robot pose
     a = (int(est_pose.getX())+offsetX, ymax-(int(est_pose.getY())+offsetY))
-    b = (int(est_pose.getX() + 15.0*np.cos(est_pose.getTheta()))+offsetX, 
-                                 ymax-(int(est_pose.getY() + 15.0*np.sin(est_pose.getTheta()))+offsetY))
+    b = (int(est_pose.getX() + 15.0*np.cos(est_pose.getTheta()))+offsetX,
+         ymax-(int(est_pose.getY() + 15.0*np.sin(est_pose.getTheta()))+offsetY))
     cv2.circle(world, a, 5, CMAGENTA, 2)
     cv2.line(world, a, b, CMAGENTA, 2)
+
 
 def initialize_particles(num_particles):
     '''
     Initialize a set of particles in a numpy array. 
     '''
-    particles = np.empty(num_particles, dtype = type(particle.Particle))
-    
-    # Random starting points for each particle 
+    particles = np.empty(num_particles, dtype=type(particle.Particle))
+
+    # Random starting points for each particle
     for i in range(num_particles):
         p = particle.Particle(
-            600.0 * np.random.ranf() - 100.0, 
-            600.0 * np.random.ranf() - 250.0, 
-            np.mod(2.0 * np.pi * np.random.ranf(), 2.0 * np.pi), 
+            600.0 * np.random.ranf() - 100.0,
+            600.0 * np.random.ranf() - 250.0,
+            np.mod(2.0 * np.pi * np.random.ranf(), 2.0 * np.pi),
             1.0 / num_particles
         )
-        
+
         particles[i] = p
 
     return particles
+
 
 def open_windows():
     '''
@@ -140,10 +155,11 @@ def open_windows():
         # Open Arlos window
         cv2.namedWindow(WIN_RF1)
         cv2.moveWindow(WIN_RF1, 50, 50)
-        
-        # Open the particle world 
+
+        # Open the particle world
         cv2.namedWindow(WIN_World)
         cv2.moveWindow(WIN_World, 500, 50)
+
 
 def update_windows(est_pose, particles, world, frame):
     '''
@@ -155,28 +171,31 @@ def update_windows(est_pose, particles, world, frame):
         cv2.imshow(WIN_RF1, frame)                  # Show frame
         cv2.imshow(WIN_World, world)                # Show world
 
+
 def compute_center():
     '''
     Compute the target of Arlo which is the center between the two landmarks. 
     '''
     center_x = (landmarks[1][0] + landmarks[2][0]) / 2
     center_y = (landmarks[1][1] + landmarks[2][1]) / 2
-    
+
     return (center_x, center_y)
+
 
 def get_cam():
     '''
     Initialize the right camera. 
     '''
     if isRunningOnArlo():
-        return camera.Camera(0, 'arlo', useCaptureThread = True)
+        return camera.Camera(0, 'arlo', useCaptureThread=True)
     else:
-        return camera.Camera(0, 'macbookpro', useCaptureThread = True)
+        return camera.Camera(0, 'macbookpro', useCaptureThread=True)
+
 
 def control_with_input(action, velocity, angular_velocity):
     '''
     Update the particles according to input from the keyboard. 
-    ''' 
+    '''
     if not isRunningOnArlo():
         if action == ord('w'):          # Forward
             velocity += 4.0
@@ -190,29 +209,35 @@ def control_with_input(action, velocity, angular_velocity):
         elif action == ord('d'):        # Right
             angular_velocity -= 0.2
 
+
 def compute_weight(objectIDs, i, p, dists, angles):
     '''
     Compute each particles weight. 
     '''
-    # Compute weights for each particle by using their distance 
-    x = landmarks[objectIDs[i]][0] - p.getX() # XXX 
-    y = landmarks[objectIDs[i]][1] - p.getY() # XXX 
-    
+    # Compute weights for each particle by using their distance
+    x = landmarks[objectIDs[i]][0] - p.getX()  # XXX
+    y = landmarks[objectIDs[i]][1] - p.getY()  # XXX
+
     dist = np.sqrt(pow(x, 2) + pow(y, 2))
-    dist_weight = np.exp(-(pow(dists[i] - dist, 2) / (2 * pow(spread_dist, 2)))) # XXX 
+    # XXX
+    dist_weight = np.exp(-(pow(dists[i] - dist,
+                         2) / (2 * pow(spread_dist, 2))))
 
     # Compute weights for each particle by using their orientation
     orientation_vector = np.array([np.cos(p.getTheta()), np.sin(p.getTheta())])
-    orthogonal_vector = np.array([-orientation_vector[1], orientation_vector[0]])
+    orthogonal_vector = np.array(
+        [-orientation_vector[1], orientation_vector[0]])
     pointing_vector = np.array([x, y]) / dist
 
     orientation_sign = np.sign(np.dot(pointing_vector, orthogonal_vector))
     inverse_cos = np.arccos(np.dot(pointing_vector, orientation_vector))
     angle_landmark = orientation_sign * inverse_cos
-    orientation = angles[i] - angle_landmark # XXX 
-    orientation_weight = np.exp(-(pow(orientation, 2) / (2 * pow(spread_angle, 2))))
-    
+    orientation = angles[i] - angle_landmark  # XXX
+    orientation_weight = np.exp(-(pow(orientation, 2) /
+                                (2 * pow(spread_angle, 2))))
+
     return (dist_weight * orientation_weight)
+
 
 def resample(particles, weights):
     '''
@@ -220,12 +245,14 @@ def resample(particles, weights):
     '''
     return np.random.choice(particles, num_particles, True, weights)
 
+
 def copy_resampling_references(resampling):
     '''
     Copy the references for each particle in the resampling.
     '''
-    for i in range(len(resampling)): 
+    for i in range(len(resampling)):
         resampling[i] = copy.deepcopy(resampling[i])
+
 
 def clean_up(cam):
     '''
@@ -239,203 +266,153 @@ def delete_duplicates(objectIDs, dists, angles):
     '''
     Find and delete the duplicates and choose the right ones depending on angle. 
     '''
-    # TODO: Delete the duplicate which have the wrong angle from Arlo. 
-    # Find the dupplicate indexes and reverse the order for deletion 
-    duplicate_idx = [idx for idx, item in enumerate(objectIDs) if item in objectIDs[:idx]]
-    duplicate_idx_sorted = sorted(duplicate_idx, reverse = True)
+    # TODO: Delete the duplicate which have the wrong angle from Arlo.
+    # Find the dupplicate indexes and reverse the order for deletion
+    duplicate_idx = [idx for idx, item in enumerate(
+        objectIDs) if item in objectIDs[:idx]]
+    duplicate_idx_sorted = sorted(duplicate_idx, reverse=True)
 
-    # Remove the duplicated landmarks at random 
+    # Remove the duplicated landmarks at random
     if duplicate_idx_sorted:
         for idx in duplicate_idx_sorted:
-            objectIDs = np.delete(objectIDs, idx) 
-            dists = np.delete(dists, idx) 
-            angles = np.delete(angles, idx) 
-            
+            objectIDs = np.delete(objectIDs, idx)
+            dists = np.delete(dists, idx)
+            angles = np.delete(angles, idx)
+
     return objectIDs, dists, angles
-                    
+
+
 def compute_center_parameters(center, arlo_pose):
     '''
     Compute the distance and angle from Arlo to the center point between the landmarks. 
-    '''                    
-    
-    # Compute the distance between the center point and Arlo 
+    '''
+
+    # Compute the distance between the center point and Arlo
     x = center[0] - arlo_pose.getX()
     y = center[1] - arlo_pose.getY()
     dist = np.sqrt(pow(x, 2) + pow(y, 2))
-    
-    # Compute the angle between the center point and Arlo and absolute angle  
+
+    # Compute the angle between the center point and Arlo and absolute angle
     angle = (arlo_pose.getTheta() - np.arccos(y / dist)) * 180 / np.pi
     abs_angle = np.abs(angle)
-    
-    # Compute the sign so we knoew if we should move right or left 
+
+    # Compute the sign so we knoew if we should move right or left
     sign = np.sign(angle)
-    
-    return dist, abs_angle, sign 
 
-def new_position(angle, dist, x, y, theta):
-    '''
-    Computes the new x, y and theta value for a particle. 
-    '''
-    
-    # Compute the unit vector of our orientation in radians 
-    cos_x = np.cos(angle)
-    sin_y = np.sin(angle)
-    
-    # Compute the new values for each particle 
-    updated_x = x - (dist * cos_x)
-    updated_y = y - (dist * sin_y)
-    updated_theta = angle + theta
-    
-    # particle.move_particle(particle, updated_x, updated_y, updated_theta)
-    
-    return updated_x, updated_y, updated_theta
+    return dist, abs_angle, sign
 
-def move_all_particles(particles, dist, angle): 
-    '''
-    '''
-    for p in particles:
-        p_x = p.getX()
-        p_y = p.getY()
-        p_theta = p.getTheta()
-        p_w = p.getWeight()
-        
-        x, y, theta = new_position(angle, dist, p_x, p_y, p_theta)
-        particle.move_particle(p, x, y, theta)
-    
 
 ### MAIN PROGRAM ###
 try:
-    
-    # Open windows 
+
+    # Open windows
     open_windows()
 
     # Initialize particles
     particles = initialize_particles(num_particles)
 
     # The estimate of the robots current pose
-    est_pose = particle.estimate_pose(particles) 
-    
+    est_pose = particle.estimate_pose(particles)
+
     # Middlepoint between the two landmarks (GOAL)
     # XXX: center_point = compute_center()
 
-    # Initialize Arlo  
-    arlo = robot.Robot()
+    # Initialize Arlo
+    # arlo = robot.Robot()
 
     # Allocate space for world map
-    world = np.zeros((500, 500, 3), dtype = np.uint8)
+    world = np.zeros((500, 500, 3), dtype=np.uint8)
 
     # Draw map
     draw_world(est_pose, particles, world)
 
     print("Opening and initializing camera")
     
-    # Check which camera we want to use 
+    # Check which camera we want to use
     cam = get_cam()
-    
-    # Try to selflocalize and get to the center point using the particle filter 
-    while 1:
-        
-        print("x: {}".format(est_pose.getX()))
-        print("y: {}".format(est_pose.getY()))
-        print("t: {}".format(est_pose.getTheta()))
 
-        # Get a pressed key if any for 10 ms. Maybe if removed could boost performance? 
+    # Try to selflocalize and get to the center point using the particle filter
+    while 1:
+
+        # Get a pressed key if any for 10 ms. Maybe if removed could boost performance?
         action = cv2.waitKey(10)
-        
-        # Quit if we press q 
-        if action == ord('q'): 
+
+        # Quit if we press q
+        if action == ord('q'):
             break
-        
-        if action == ord('d'):
-            arlo_x = est_pose.getX()
-            arlo_y = est_pose.getY()
-            arlo_theta = est_pose.getTheta()
-            
-            print(arlo_theta)
-            
-            commands.rotate(arlo, 3.14159)
-            commands.drive(arlo, 100.0)
-            x, y, theta = new_position(3.14159, 100.0, arlo_x, arlo_y, arlo_theta)
-            particle.move_particle(est_pose, x, y, theta)
-            #move_all_particles(particles, 100.0, 3.14159)
-            
-            
-        # TODO: Add uncertainity after moving (more uncertainity than normal)
-        
+
         # Move the robot according to user input (only for testing)
         # control_with_input(action, velocity, angular_velocity)
-        
+
         # TODO: Use motor controls to update particles.
-        # TODO: Compute a driving strategy for making sure to see both landmarks. 
-        # XXX: Make the robot drive 
+        # TODO: Compute a driving strategy for making sure to see both landmarks.
+        # XXX: Make the robot drive
         # [particle.move_particle(p, velocity, velocity, angular_velocity) for p in particles]
-        
-        # Step 1. Keep turning the robot until it can see both landmarks. 
-        # Step 2. If Arlo makes a full turn and have not seen both landmarks, 
-        # one of the landmarks is probably behind the other. Make Arlo drive x, 
-        # amount of meters to either left or right. 
-        # Step 3. Self localize by estimating Arlos position using the 
-        # landmarks and the particle filter. 
+
+        # Step 1. Keep turning the robot until it can see both landmarks.
+        # Step 2. If Arlo makes a full turn and have not seen both landmarks,
+        # one of the landmarks is probably behind the other. Make Arlo drive x,
+        # amount of meters to either left or right.
+        # Step 3. Self localize by estimating Arlos position using the
+        # landmarks and the particle filter.
         # Step 4. Pinpoint the location of the center point, Arlos distance and angle.
-        # Step 5. Use the angle to turn towards the center point. 
-        # Step 6. Use the distance to move Arlo towards the center point. 
+        # Step 5. Use the angle to turn towards the center point.
+        # Step 6. Use the distance to move Arlo towards the center point.
         # Step 7. Remember to update the particles position.
         # Step 8. Check if the distance is within a certain tolerance level
-        # of the center point. GOAL. 
-        
-        
+        # of the center point. GOAL.
+
         # Fetch next frame
         frame = cam.get_next_frame()
-        
+
         # Detect objects
         objectIDs, dists, angles = cam.detect_aruco_objects(frame)
-        
-        # We detected atleast one landmark 
+
+        # We detected atleast one landmark
         if not isinstance(objectIDs, type(None)):
-            
-            #commands.rotate(arlo, angles[0])
-            #break
-            
+
             # The total sum of all weigths
             weight_sum = 0.0
-            
-            # Delete the duplicate if we see the same landmark in one frame 
-            # objectIDs, dists, angles = delete_duplicates(objectIDs, dists, angles)
-            
-            # Reset the weights 
+
+            # Delete the duplicate if we see the same landmark in one frame
+            objectIDs, dists, angles = delete_duplicates(
+                objectIDs, dists, angles)
+
+            # Reset the weights
             [p.setWeight(0) for p in particles]
 
             # List detected objects
             for i in range(len(objectIDs)):
-                print("Object ID = ", objectIDs[i], ", Distance = ", dists[i], ", angle = ", angles[i])
-                
-                # Compute the unnormalized weight for each particle in the i'th objectID  
+                print(
+                    "Object ID = ", objectIDs[i], ", Distance = ", dists[i], ", angle = ", angles[i])
+
+                # Compute the unnormalized weight for each particle in the i'th objectID
                 for p in particles:
-                    
-                    # Weights of particles 
+
+                    # Weights of particles
                     weight = compute_weight(objectIDs, i, p, dists, angles)
 
-                    # Set the particles new weight alongside its former weights 
+                    # Set the particles new weight alongside its former weights
                     p.setWeight(p.getWeight() + weight)
-                
+
                     # Add to the sum of weights
                     weight_sum += weight
-            
-            # Store normalized weights of each particle for probability purposes 
+
+            # Store normalized weights of each particle for probability purposes
             weights = [(p.getWeight() / weight_sum) for p in particles]
-            
-            # Resample the particles 
+
+            # Resample the particles
             resampling = resample(particles, weights)
-            
+
             # Copy the new references of resampling
             copy_resampling_references(resampling)
-                
-            # Replace our particles with the resampling particles 
+
+            # Replace our particles with the resampling particles
             particles = resampling
-            
-            # Add uncertainity to each particle 
+
+            # Add uncertainity to each particle
             particle.add_uncertainty(particles, 1.0, 0.01)
-            
+
             # Draw detected objects
             cam.draw_aruco_objects(frame)
         else:
@@ -444,11 +421,11 @@ try:
                 p.setWeight(1.0 / num_particles)
 
         # The estimate of the robots current pose
-        # est_pose = particle.estimate_pose(particles) 
+        est_pose = particle.estimate_pose(particles)
 
-        # Update the windows 
+        # Update the world map
         update_windows(est_pose, particles, world, frame)
-  
+
 # Make sure to clean up even if an exception occurred
-finally: 
+finally:
     clean_up(cam)

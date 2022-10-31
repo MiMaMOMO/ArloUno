@@ -1,10 +1,7 @@
-import robot
-import time
-
-from settings import * 
-
 import numpy as np 
 from Timer import Timer
+
+from rally.settings import * 
 
 
 def rotate(arlo, angle) -> None:
@@ -78,4 +75,26 @@ def scan(arlo) -> None:
     '''
     Scan for Aruco landmarks by rotating tiny amounts.
     '''
-    pass
+    
+    # Rotate a full turn until we find some Aruco landmarks 
+    for _ in range(FULL_ROTATION):
+        rotate(DEGREES_30)
+        detected = detect(arlo)
+        
+        # If anything was detected return the information 
+        if detected:
+            return detected
+
+def detect(arlo, cam) -> None: 
+    '''
+    Arlo tries to detect landmarks.
+    '''
+    
+    # 1. Start by taking an image
+    frame = cam.get_next_frame()
+    
+    # 2. Get information form the image 
+    objectIDs, dists, angles = cam.detect_aruco_objects(frame) 
+    
+    # 3. Do something with that information 
+    return objectIDs, dists, angles
