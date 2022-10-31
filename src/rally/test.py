@@ -3,11 +3,11 @@ from settings import *
 
 angle_x = 3.14159
 angle_y = 1.57079
-_test = 0.785398
+_test = 1.39626
 dist = 100.0
-ori = 0.0
-x = 0.0
-y = 0.0
+ori = 2.79252
+x = -76.9
+y = 132.0
 
 def test(angle, dist, current_x, current_y):
     
