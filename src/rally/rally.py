@@ -4,7 +4,6 @@ import particle
 import camera
 import numpy as np
 import sys
-from robot import robot
 
 
 # Flags
