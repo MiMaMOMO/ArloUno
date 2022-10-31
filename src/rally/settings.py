@@ -46,6 +46,7 @@ DEGREES_90 = 1.57175                # 90 degrees in radions
 DEGREES_180 = 3.14255               # 180 degrees in radions
 DEGREES_270 = 4.72234               # 270 degrees in radions
 DEGREES_360 = 6.28414               # 360 degrees in radions
+RANDOM = 1.58824
 
 ### DISTANCES ### 
 HALF_METER = 50.0                   # 0.5 meter in cm 
