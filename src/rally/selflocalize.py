@@ -314,25 +314,25 @@ def new_position(angle, dist, current_x, current_y, orientation):
     theta = np.mod(angle + orientation, 2.0 * np.pi)
     
     # Compute the new values for each particle 
-    # if theta < DEGREES_90 and theta > 0:
-    #     x = current_x - (-dist * cos_x)
-    #     y = current_y + (dist * sin_y)
-    # elif theta > DEGREES_90 and theta < DEGREES_180:
-    #     x = current_x - (-dist * cos_x)
-    #     y = current_y + (dist * sin_y)
-    # elif theta > DEGREES_180 and theta < DEGREES_270:
-    #     x = current_x - (-dist * cos_x)
-    #     y = current_y - (-dist * sin_y)
-    # elif theta > DEGREES_270 and theta < DEGREES_360:
-    #     x = current_x + (dist * cos_x)
-    #     y = current_y - (-dist * sin_y)
-        
-    if angle <= DEGREES_180 and angle >= 0:
+    if theta < DEGREES_90 and theta > 0:
         x = current_x - (-dist * cos_x)
         y = current_y + (dist * sin_y)
-    elif angle > DEGREES_180 and angle <= DEGREES_360:
+    elif theta > DEGREES_90 and theta < DEGREES_180:
+        x = current_x - (-dist * cos_x)
+        y = current_y + (dist * sin_y)
+    elif theta > DEGREES_180 and theta < DEGREES_270:
+        x = current_x - (-dist * cos_x)
+        y = current_y - (-dist * sin_y)
+    elif theta > DEGREES_270 and theta < DEGREES_360:
         x = current_x + (dist * cos_x)
         y = current_y - (-dist * sin_y)
+        
+    # if angle <= DEGREES_180 and angle >= 0:
+    #     x = current_x - (-dist * cos_x)
+    #     y = current_y + (dist * sin_y)
+    # elif angle > DEGREES_180 and angle <= DEGREES_360:
+    #     x = current_x + (dist * cos_x)
+    #     y = current_y - (-dist * sin_y)
     
     return x, y, theta
 
@@ -394,6 +394,7 @@ try:
             break
         
         if action == ord('d'):
+            est_pose.setTheta(3.121)
             arlo_x = est_pose.getX()
             arlo_y = est_pose.getY()
             arlo_theta = est_pose.getTheta()
