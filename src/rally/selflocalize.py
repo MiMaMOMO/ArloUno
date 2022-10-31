@@ -314,25 +314,25 @@ def new_position(angle, dist, current_x, current_y, orientation):
     theta = np.mod(angle + orientation, 2.0 * np.pi)
     
     # Compute the new values for each particle 
-    if theta < DEGREES_90 and theta > 0:
-        x = current_x - (-dist * cos_x)
-        y = current_y + (dist * sin_y)
-    elif theta > DEGREES_90 and theta < DEGREES_180:
-        x = current_x - (-dist * cos_x)
-        y = current_y + (dist * sin_y)
-    elif theta > DEGREES_180 and theta < DEGREES_270:
-        x = current_x - (-dist * cos_x)
-        y = current_y - (-dist * sin_y)
-    elif theta > DEGREES_270 and theta < DEGREES_360:
-        x = current_x + (dist * cos_x)
-        y = current_y - (-dist * sin_y)
-        
-    # if theta <= DEGREES_180 and theta >= 0:
+    # if theta < DEGREES_90 and theta > 0:
     #     x = current_x - (-dist * cos_x)
     #     y = current_y + (dist * sin_y)
-    # elif theta > DEGREES_180 and theta <= DEGREES_360:
+    # elif theta > DEGREES_90 and theta < DEGREES_180:
+    #     x = current_x - (-dist * cos_x)
+    #     y = current_y + (dist * sin_y)
+    # elif theta > DEGREES_180 and theta < DEGREES_270:
+    #     x = current_x - (-dist * cos_x)
+    #     y = current_y - (-dist * sin_y)
+    # elif theta > DEGREES_270 and theta < DEGREES_360:
     #     x = current_x + (dist * cos_x)
     #     y = current_y - (-dist * sin_y)
+        
+    if theta <= DEGREES_180 and theta >= 0:
+        x = current_x - (-dist * cos_x)
+        y = current_y + (dist * sin_y)
+    elif theta > DEGREES_180 and theta <= DEGREES_360:
+        x = current_x + (dist * cos_x)
+        y = current_y - (-dist * sin_y)
     
     return x, y, theta
 
