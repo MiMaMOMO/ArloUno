@@ -379,6 +379,8 @@ try:
     # Check which camera we want to use 
     cam = get_cam()
     
+    est_pose.setTheta(3.121)
+    
     # Try to selflocalize and get to the center point using the particle filter 
     while 1:
         
@@ -394,7 +396,6 @@ try:
             break
         
         if action == ord('d'):
-            est_pose.setTheta(3.121)
             arlo_x = est_pose.getX()
             arlo_y = est_pose.getY()
             arlo_theta = est_pose.getTheta()
