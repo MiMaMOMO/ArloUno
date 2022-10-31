@@ -315,15 +315,11 @@ def new_position(angle, dist, current_x, current_y, orientation):
     
     # Compute the new values for each particle 
     if theta <= DEGREES_180 and theta >= 0:
-        print(current_y)
-        print(y)
         print(-dist)
         print(sin_y)
         x = current_x - (-dist * cos_x)
         y = current_y + (dist * sin_y)
     elif theta > DEGREES_180 and theta <= DEGREES_360:
-        print(current_y)
-        print(y)
         print(-dist)
         print(sin_y)
         x = current_x + (dist * cos_x)
