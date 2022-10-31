@@ -335,7 +335,7 @@ def move_all_particles(particles, dist, angle):
     
     # TODO: Numpy this 
     for p in particles:
-        x, y, theta = new_position(angle, dist, p.getX(), p.getY, p.getTheta())
+        x, y, theta = new_position(angle, dist, p.getX(), p.getY(), p.getTheta())
         
         # Move the particle to its new coordinate with a new orientation 
         particle.move_particle(p, x, y, theta)
