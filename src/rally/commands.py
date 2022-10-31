@@ -1,5 +1,5 @@
 import numpy as np 
-from Timer import Timer
+from rally.timer import Timer
 
 from rally.settings import * 
 
@@ -51,7 +51,7 @@ def drive(arlo, dist, landmark_range = 0.0) -> None:
 
     scaled_dist = dist / 100                    # Scale the distance down to meters  
     drive_time = scaled_dist * METER            # How long in seconds it takes Arlo to drive dist
-    timer = Timer()                             # Timer used to measure a countdown for Arlo
+    timer = timer.Timer()                             # Timer used to measure a countdown for Arlo
 
     # TODO: Try to initialize the timer after giving the go command to arlo  
 
