@@ -7,7 +7,7 @@ import sys
 
 
 # Flags
-showGUI = True  # Whether or not to open GUI windows
+showGUI = True      # Whether or not to open GUI windows
 onRobot = False  # Whether or not we are running on the Arlo robot
 
 
