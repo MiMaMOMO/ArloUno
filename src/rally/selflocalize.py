@@ -49,7 +49,7 @@ landmarks = {
 }
 
 # General parameters 
-num_particles = 1000        # The number of particles 
+num_particles = 1           # The number of particles 
 WIN_RF1 = "Robot view"      # The name of the Arlo window
 WIN_World = "World view"    # The name of the particle window 
 
