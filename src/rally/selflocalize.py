@@ -6,7 +6,7 @@ import camera
 import numpy as np
 import sys
 
-from robot.commands import rotate, drive
+# from robot.commands import rotate, drive
 
 # from robot import robot
 
@@ -22,11 +22,12 @@ def isRunningOnArlo():
     return onRobot
 
 if isRunningOnArlo():
-    sys.path.append("../robot/")
+    sys.path.append("../robot")
 
 # Try to import robot module 
 try:
-    import robot 
+    import robot
+    import commands 
     onRobot = True
 except ImportError:
     print("selflocalize.py: robot module not present - forcing not running on Arlo!")
@@ -390,8 +391,8 @@ try:
             arlo_theta = est_pose.getTheta()
             
             # Tell Arlo to rotate and drive 
-            rotate(arlo, DEGREES_180)
-            drive(arlo, METER_1)
+            commands.rotate(arlo, DEGREES_180)
+            commands.drive(arlo, METER_1)
             
             # Compute the new position of Arlo 
             x, y, theta = new_position(DEGREES_180, METER_1, arlo_x, arlo_y, arlo_theta)
