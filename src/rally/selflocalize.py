@@ -409,11 +409,11 @@ try:
             particle.move_particle(est_pose, x, y, theta)
             
             # Move all particles in the digital world 
-            move_all_particles(particles, METER_1, DEGREES_180)
+            # move_all_particles(particles, METER_1, DEGREES_180)
             
             # TODO: Tweak the values of uncertainity. Keep them high compared to normal 
             # Add uncertainty to each particles 
-            particle.add_uncertainty(particles, 5.0, 0.05)
+            # particle.add_uncertainty(particles, 5.0, 0.05)
         
         # TODO: Use motor controls to update particles.
         # TODO: Compute a driving strategy for making sure to see both landmarks. 
