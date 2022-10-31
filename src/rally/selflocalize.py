@@ -315,6 +315,10 @@ def new_position(angle, dist, current_x, current_y, orientation):
     
     # Compute the new values for each particle 
     if theta <= DEGREES_180 and theta >= 0:
+        print(current_y)
+        print(y)
+        print(-dist)
+        print(sin_y)
         x = current_x - (-dist * cos_x)
         y = current_y + (dist * sin_y)
     elif theta > DEGREES_180 and theta <= DEGREES_360:
@@ -373,9 +377,9 @@ try:
     # Try to selflocalize and get to the center point using the particle filter 
     while 1:
         
-        print("x: {}".format(est_pose.getX()))
-        print("y: {}".format(est_pose.getY()))
-        print("t: {}".format(est_pose.getTheta()))
+        # print("x: {}".format(est_pose.getX()))
+        # print("y: {}".format(est_pose.getY()))
+        # print("t: {}".format(est_pose.getTheta()))
 
         # Get a pressed key if any for 10 ms. Maybe if removed could boost performance? 
         action = cv2.waitKey(10)
