@@ -314,16 +314,16 @@ def new_position(theta, dist, current_x, current_y, orientation):
     theta = np.mod(theta + orientation, 2.0 * np.pi)
     
     # Compute the new values for each particle 
-    if theta < 1.570 and theta > 0:
+    if theta <= 1.570 and theta > 0:
         x = current_x - (-dist * cos_x)
         y = current_y + (dist * sin_y)
-    elif theta > 1.570 and theta < 3.141:
+    elif theta > 1.570 and theta <= 3.141:
         x = current_x - (-dist * cos_x)
         y = current_y + (dist * sin_y)
-    elif theta > 3.141 and theta < 4.711:
+    elif theta > 3.141 and theta <= 4.711:
         x = current_x - (-dist * cos_x)
         y = current_y - (-dist * sin_y)
-    elif theta > 4.711 and theta < 6.282:
+    elif theta > 4.711 and theta <= 6.282:
         x = current_x + (dist * cos_x)
         y = current_y - (-dist * sin_y)
         
