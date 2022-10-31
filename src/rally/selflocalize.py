@@ -327,10 +327,10 @@ def new_position(angle, dist, current_x, current_y, orientation):
     #     x = current_x + (dist * cos_x)
     #     y = current_y - (-dist * sin_y)
         
-    if theta <= DEGREES_180 and theta >= 0:
+    if angle <= DEGREES_180 and angle >= 0:
         x = current_x - (-dist * cos_x)
         y = current_y + (dist * sin_y)
-    elif theta > DEGREES_180 and theta <= DEGREES_360:
+    elif angle > DEGREES_180 and angle <= DEGREES_360:
         x = current_x + (dist * cos_x)
         y = current_y - (-dist * sin_y)
     
