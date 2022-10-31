@@ -3,9 +3,10 @@ from settings import *
 
 angle_x = 3.14159
 angle_y = 1.57079
+_test = 0.785398
 dist = 100.0
 ori = 0.0
-x = -100.0
+x = 0.0
 y = 0.0
 
 def test(angle, dist, current_x, current_y):
@@ -47,10 +48,10 @@ def new_position(angle, dist, x, y):
     return updated_x, updated_y
 
 
-cos_x = np.cos(angle_x)
-sin_y = np.sin(angle_x)
+cos_x = np.cos(_test)
+sin_y = np.sin(_test)
 
-updated_t = angle_x + angle_x
+updated_t = _test + ori
 theta = np.mod(updated_t, 2.0 * np.pi)
 
 updated_x, updated_y = test(theta, dist, x, y)
