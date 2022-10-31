@@ -94,7 +94,7 @@ def drive(arlo, dist, landmark_range = 0.0) -> None:
             arlo.stop()
             break    
         
-def scan(arlo) -> None:
+def scan(arlo, landmark = None):
     '''
     Scan for Aruco landmarks by rotating tiny amounts.
     '''
@@ -105,8 +105,9 @@ def scan(arlo) -> None:
         detected = detect(arlo)
         
         # If anything was detected return the information 
-        if detected:
-            return detected
+        if not isinstance(detected[0], type(None)):
+            if landmark in detected[0]:
+                return detected
 
 def detect(arlo, cam) -> None: 
     '''

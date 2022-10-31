@@ -380,8 +380,6 @@ try:
     # Check which camera we want to use 
     cam = get_cam()
     
-    est_pose.setTheta(3.121)
-    
     # Try to selflocalize and get to the center point using the particle filter 
     while 1:
         
