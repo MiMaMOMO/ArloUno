@@ -1,7 +1,6 @@
 import copy
 import cv2
-from rally.settings import DEGREES_270, DEGREES_90
-from settings import DEGREES_180, DEGREES_360, METER_1
+from settings import *
 import particle
 import camera
 import numpy as np
