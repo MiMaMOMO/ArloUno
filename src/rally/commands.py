@@ -1,6 +1,6 @@
 import numpy as np 
 
-from rally.timer import Timer
+import Timer
 from settings import * 
 
 
