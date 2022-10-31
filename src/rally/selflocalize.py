@@ -9,7 +9,7 @@ import commands
 
 # Flags
 showGUI = True  # Whether or not to open GUI windows
-onRobot = True  # Whether or not we are running on the Arlo robot
+onRobot = False  # Whether or not we are running on the Arlo robot
 
 def isRunningOnArlo():
     """Return True if we are running on Arlo, otherwise False.
@@ -306,12 +306,13 @@ def new_position(angle, dist, current_x, current_y, orientation):
     Computes the new x, y and theta value for a particle after movement.  
     '''
     
-    # Compute the unit vector of the angle in radians 
-    cos_x = np.cos(angle)
-    sin_y = np.sin(angle)
-    
     # Compute the new orientation 
     theta = np.mod(angle + orientation, 2.0 * np.pi)
+    
+    # Compute the unit vector of the angle in radians 
+    cos_x = np.cos(theta)
+    sin_y = np.sin(theta)
+    
     
     # Compute the new values for each particle 
     if theta < DEGREES_90 and theta > 0:
@@ -366,7 +367,7 @@ try:
     # XXX: center_point = compute_center()
 
     # Initialize Arlo  
-    arlo = robot.Robot()
+    # arlo = robot.Robot()
 
     # Allocate space for world map
     world = np.zeros((500, 500, 3), dtype = np.uint8)
@@ -400,21 +401,12 @@ try:
             arlo_y = est_pose.getY()
             arlo_theta = est_pose.getTheta()
             
-            print(arlo_theta)
-            print(arlo_x)
-            print(arlo_y)
-            
             # Tell Arlo to rotate and drive 
-            commands.rotate(arlo, RANDOM)
-            commands.drive(arlo, METER_1)
+            #commands.rotate(arlo, RANDOM)
+            #commands.drive(arlo, METER_1)
             
             # Compute the new position of Arlo 
-            x, y, theta = new_position(
-                RANDOM, METER_1, arlo_x, arlo_y, arlo_theta)
-            
-            print(theta)
-            print(x)
-            print(y)
+            x, y, theta = new_position(DEGREES_180, METER_1, arlo_x, arlo_y, arlo_theta)
             
             # Move arlo in the digital world 
             particle.move_particle(est_pose, x, y, theta)
