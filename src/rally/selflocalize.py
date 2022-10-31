@@ -5,11 +5,7 @@ import particle
 import camera
 import numpy as np
 import sys
-
-# from robot.commands import rotate, drive
-
-# from robot import robot
-
+import commands
 
 # Flags
 showGUI = True  # Whether or not to open GUI windows
