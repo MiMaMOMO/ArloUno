@@ -315,17 +315,17 @@ def new_position(theta, dist, current_x, current_y, orientation):
     
     # Compute the new values for each particle 
     if theta < 1.570 and theta > 0:
-        x = x - (-dist * cos_x)
-        y = y + (dist * sin_y)
+        x = current_x - (-dist * cos_x)
+        y = current_y + (dist * sin_y)
     elif theta > 1.570 and theta < 3.141:
-        x = x - (-dist * cos_x)
-        y = y + (dist * sin_y)
+        x = current_x - (-dist * cos_x)
+        y = current_y + (dist * sin_y)
     elif theta > 3.141 and theta < 4.711:
-        x = x - (-dist * cos_x)
-        y = y - (-dist * sin_y)
+        x = current_x - (-dist * cos_x)
+        y = current_y - (-dist * sin_y)
     elif theta > 4.711 and theta < 6.282:
-        x = x + (dist * cos_x)
-        y = y - (-dist * sin_y)
+        x = current_x + (dist * cos_x)
+        y = current_y - (-dist * sin_y)
         
     # if theta <= DEGREES_180 and theta >= 0:
     #     x = current_x - (-dist * cos_x)
