@@ -407,7 +407,8 @@ try:
             commands.drive(arlo, METER_1)
             
             # Compute the new position of Arlo 
-            x, y, theta = new_position(RANDOM, METER_1, arlo_x, arlo_y, arlo_theta)
+            x, y, theta = new_position(
+                RANDOM, METER_1, arlo_x, arlo_y, arlo_theta)
             
             print(theta)
             print(x)
