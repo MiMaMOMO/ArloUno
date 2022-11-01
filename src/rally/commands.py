@@ -122,4 +122,4 @@ def detect(cam) -> None:
     objectIDs, dists, angles = cam.detect_aruco_objects(frame) 
     
     # Do something with that information 
-    return objectIDs, dists, angles
+    return objectIDs, dists, angles, frame

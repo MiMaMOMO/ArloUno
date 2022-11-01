@@ -51,7 +51,7 @@ def run() -> None:
             # Press f to start the brute program
             # The first iteration should detect the first landmark first 
             if action == ord('d'):
-                objectIDs, dists, angles = commands.detect(arlo, cam)
+                objectIDs, dists, angles, frame = commands.detect(arlo, cam)
             
             # We detected atleast one landmark
             if not isinstance(objectIDs, type(None)):
@@ -115,7 +115,7 @@ def run() -> None:
                 cam.draw_aruco_objects(frame)
                 
                 # Scan for the next landmark 
-                objectIDs, dists, angles = commands.scan(arlo, visited[-1] + 1)
+                objectIDs, dists, angles, frame = commands.scan(arlo, visited[-1] + 1)
             else:
                 # No observation - reset weights to uniform distribution
                 for p in particles:
