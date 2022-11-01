@@ -1,3 +1,4 @@
+from numpy import angle
 import commands
 import cv2
 import auxiliary
@@ -130,7 +131,13 @@ def run() -> None:
                 cam.draw_aruco_objects(frame)
                 
                 # Scan for the next landmark 
-                objectIDs, dists, angles, frame = commands.scan(arlo, cam, 2)
+                c = commands.scan(arlo, cam, 2)
+                
+                # objectIDs, dists, angles, frame = commands.scan(arlo, cam, 2)
+                objectIDs = c[0]
+                dists = c[1]
+                angles = c[2]
+                frame = c[3]
             else:
                 # No observation - reset weights to uniform distribution
                 for p in particles:

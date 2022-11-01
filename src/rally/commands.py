@@ -113,7 +113,7 @@ def drive(arlo, dist, landmark_range = 0.0) -> None:
             break    
         
         
-def scan(arlo, camera, landmark = None):
+def scan(arlo, cam, landmark = None):
     '''
     Scan for Aruco landmarks by rotating tiny amounts.
     '''
@@ -122,7 +122,7 @@ def scan(arlo, camera, landmark = None):
     # Rotate a full turn until we find some Aruco landmarks 
     for _ in range(36):
         rotate(arlo, DEGREES_10)
-        detected = detect(camera)
+        detected = detect(cam)
         
         # If anything was detected return the information 
         if not isinstance(detected[0], type(None)):
