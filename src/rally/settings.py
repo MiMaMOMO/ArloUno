@@ -41,7 +41,7 @@ SIGMA_UNCERTAINITY = 1.0            # Uncertainity added to sigma for distance
 THETA_UNCERTAINITY = 0.01           # Uncertainity added to theta for orientation 
 
 ### VELOCITY ###
-RIGHT_VELOCITY = 66                 # Arlos right wheel speed
+RIGHT_VELOCITY = 68                 # Arlos right wheel speed
 LEFT_VELOCITY = 61                  # Arlos left wheel speed
 RIGHT_ROT_VELOCITY = 64             # Arlos right wheel rotation speed
 LEFT_ROT_VELOCITY = 64              # Arlos left wheel rotation speed
