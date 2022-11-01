@@ -42,7 +42,7 @@ cam = auxiliary.get_cam(camera)
 visited = []
 
 # Start value for IDS, distances and angles 
-objectIDs, dists, angles = 0
+objectIDs, dists, angles = (None, None, None)
 
 def run() -> None: 
     '''
