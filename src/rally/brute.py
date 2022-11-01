@@ -59,6 +59,8 @@ def run() -> None:
             if action == ord('q'): 
                 break
             
+            print("! ")
+            
             # Press f to start the brute program
             # The first iteration should detect the first landmark first 
             # if action == ord('d'):
