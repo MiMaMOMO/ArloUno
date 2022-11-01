@@ -99,8 +99,9 @@ def run() -> None:
                         # Add to the sum of weights
                         weight_sum += weight
                         
-                    # Rotate and drive towards the seen landmark within 30 cm range  
-                    commands.rotate(arlo, angles[i])
+                    # Rotate and drive towards the seen landmark within 30 cm range 
+                    if angles[i] > 0.33: 
+                        commands.rotate(arlo, angles[i])
                     commands.drive(arlo, dists[i], 0.3)
                     
                     # TODO: Move all particles here otherwise move them after resampling 
