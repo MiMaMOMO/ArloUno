@@ -101,8 +101,8 @@ def run() -> None:
                         weight_sum += weight
                         
                     # Rotate and drive towards the seen landmark within 30 cm range 
-                    # if angles[i] > 0.21: 
-                    #commands.rotate(arlo, angles[i])
+                    if angles[i] > 0.19: 
+                        commands.rotate(arlo, angles[i])
                     commands.drive(arlo, dists[i], 0.3)
                     
                     # TODO: Move all particles here otherwise move them after resampling 
@@ -110,7 +110,7 @@ def run() -> None:
                     # particle.move_all_particles(particles, dists[i], angles[i])
                     
                     # We visited the ith landmark 
-                    # visited.append(objectIDs[i])
+                    visited.append(objectIDs[i])
                 
                 # Store normalized weights of each particle for probability purposes
                 weights = [(p.getWeight() / weight_sum) for p in particles]
