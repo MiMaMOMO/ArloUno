@@ -18,9 +18,9 @@ except ImportError:
     onRobot = False
 
 # Start value for IDS, distances and angles 
-objectIDs = None 
-dists = None 
-angles = None 
+# objectIDs = None 
+# dists = None 
+# angles = None 
 
 def run() -> None: 
     '''
@@ -64,12 +64,11 @@ def run() -> None:
             
             # Press f to start the brute program
             # The first iteration should detect the first landmark first 
-            if action == ord('f'):
-                objectIDs, dists, angles, frame = commands.detect(cam)
+            #if action == ord('f'):
+            objectIDs, dists, angles, frame = commands.detect(cam)
             
             # We detected atleast one landmark
-            if objectIDs: 
-            # if not isinstance(objectIDs, type(None)):
+            if not isinstance(objectIDs, type(None)):
                 
                 # The total sum of all weigths
                 weight_sum = 0.0
