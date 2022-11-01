@@ -1,5 +1,6 @@
 import numpy as np 
 import time
+import camera
 
 from settings import * 
 
@@ -93,7 +94,7 @@ def drive(arlo, dist, landmark_range = 0.0) -> None:
             break    
         
         
-def scan(arlo, landmark = None):
+def scan(arlo, camera, landmark = None):
     '''
     Scan for Aruco landmarks by rotating tiny amounts.
     '''
@@ -102,7 +103,7 @@ def scan(arlo, landmark = None):
     # Rotate a full turn until we find some Aruco landmarks 
     for _ in range(FULL_ROTATION):
         rotate(arlo, DEGREES_30)
-        detected = detect(arlo)
+        detected = detect(camera)
         
         # If anything was detected return the information 
         if not isinstance(detected[0], type(None)):
@@ -119,7 +120,7 @@ def detect(cam) -> None:
     frame = cam.get_next_frame()
     
     # Get information form the image 
-    objectIDs, dists, angles = cam.detect_aruco_objects(frame) 
+    objectIDs, dists, angles = cam.detect_aruco_objects(frame)
     
     # Do something with that information 
     return objectIDs, dists, angles, frame
