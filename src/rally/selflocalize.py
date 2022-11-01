@@ -83,6 +83,16 @@ def copy_resampling_references(resampling) -> None:
     for i in range(len(resampling)): 
         resampling[i] = copy.deepcopy(resampling[i])
     
+    
+def get_cam():
+    '''
+    Initialize the right camera. 
+    '''
+    if isRunningOnArlo():
+        return camera.Camera(0, 'arlo', useCaptureThread = True)
+    else:
+        return camera.Camera(0, 'macbookpro', useCaptureThread = True)
+
 
 ### MAIN PROGRAM ###
 try:
@@ -111,7 +121,7 @@ try:
     print("Opening and initializing camera")
     
     # Check which camera we want to use 
-    cam = auxiliary.get_cam(camera)
+    cam = get_cam()
     
     # Try to selflocalize and get to the center point using the particle filter 
     while 1:
