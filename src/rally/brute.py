@@ -1,6 +1,7 @@
 import commands
 import cv2
 import auxiliary
+import camera
 
 from brute_settings import * 
 from selflocalize import * 
@@ -35,7 +36,7 @@ world = np.zeros((500, 500, 3), dtype = np.uint8)
 auxiliary.draw_world(est_pose, particles, world)
 
 # Check which camera we want to use
-cam = auxiliary.get_cam()
+cam = auxiliary.get_cam(camera)
 
 # Visted landmarks 
 visited = []
