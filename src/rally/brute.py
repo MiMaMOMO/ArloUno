@@ -68,7 +68,8 @@ def run() -> None:
                 objectIDs, dists, angles, frame = commands.detect(cam)
             
             # We detected atleast one landmark
-            if not isinstance(objectIDs, type(None)):
+            if objectIDs: 
+            # if not isinstance(objectIDs, type(None)):
                 
                 # The total sum of all weigths
                 weight_sum = 0.0
