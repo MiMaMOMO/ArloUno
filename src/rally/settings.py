@@ -48,7 +48,7 @@ LEFT_ROT_VELOCITY = 64              # Arlos left wheel rotation speed
 
 ### ROTATIONS ### 
 FULL_ROTATION = 12                  # How many times it take Arlo to do a 360 degree rotation
-DEGREES_10 = 0.174532               # 20 degrees in radions
+DEGREES_15 = 0.261799               # 15 degrees in radions
 DEGREES_30 = 0.523598               # 30 degrees in radions 
 DEGREES_90 = 1.57175                # 90 degrees in radions 
 DEGREES_180 = 3.14255               # 180 degrees in radions
@@ -82,6 +82,6 @@ LANDMARK_COLORS = [                 # Colors of the known landmarks
 ]
 
 ### TIME ### 
-TIME_ERROR = 0.0                    # Error in computing time 
+TIME_ERROR = 0.55                   # Error in computing time 
 METER = 2.52                        # How long it takes Arlo to drive one meter in seconds
 ORIENTATION = 0.728                 # How long it takes Arlo to rotate 90 degrees
