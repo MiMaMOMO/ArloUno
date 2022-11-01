@@ -63,8 +63,8 @@ def rotate(arlo, angle) -> None:
     t = Timer()                                     # Timer to measure a countdown for the rotation
     
     # Find the direction we should rotate 
-    left_dir = 1 if sign == 1 else 0
-    right_dir = 1 if sign == -1 else 0
+    left_dir = 1 if sign == -1 else 0
+    right_dir = 1 if sign == 1 else 0
     
     # TODO: Test what happens if we multiply with the sign and get -1. Will it count as a 0? 
     
