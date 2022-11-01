@@ -48,6 +48,7 @@ LEFT_ROT_VELOCITY = 64              # Arlos left wheel rotation speed
 
 ### ROTATIONS ### 
 FULL_ROTATION = 12                  # How many times it take Arlo to do a 360 degree rotation
+DEGREES_10 = 0.174532               # 10 degrees in radions
 DEGREES_30 = 0.523598               # 30 degrees in radions 
 DEGREES_90 = 1.57175                # 90 degrees in radions 
 DEGREES_180 = 3.14255               # 180 degrees in radions
