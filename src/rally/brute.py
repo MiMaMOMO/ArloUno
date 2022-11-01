@@ -65,7 +65,8 @@ def run() -> None:
             # Press f to start the brute program
             # The first iteration should detect the first landmark first 
             #if action == ord('f'):
-            objectIDs, dists, angles, frame = commands.detect(cam)
+            for _ in range(10):
+                objectIDs, dists, angles, frame = commands.detect(cam)
             
             # We detected atleast one landmark
             if not isinstance(objectIDs, type(None)):
@@ -100,7 +101,7 @@ def run() -> None:
                         weight_sum += weight
                         
                     # Rotate and drive towards the seen landmark within 30 cm range 
-                    if angles[i] > 0.33: 
+                    if angles[i] > 0.21: 
                         commands.rotate(arlo, angles[i])
                     commands.drive(arlo, dists[i], 0.3)
                     
