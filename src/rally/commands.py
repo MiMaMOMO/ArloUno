@@ -145,7 +145,7 @@ def detect(cam) -> tuple:
     return objectIDs, dists, angles, frame
 
 
-arlo = robot.Robot()
+# arlo = robot.Robot()
 
-rotate(arlo, 3.13)
-drive(arlo, 100.0)
+# rotate(arlo, 3.13)
+# drive(arlo, 100.0)
