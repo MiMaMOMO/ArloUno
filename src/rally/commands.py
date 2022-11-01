@@ -120,7 +120,7 @@ def scan(arlo, cam, landmark = None):
     
     # TODO: Numpy this 
     # Rotate a full turn until we find some Aruco landmarks 
-    for _ in range(18):
+    for _ in range(36):
         rotate(arlo, DEGREES_10)
         detected = detect(cam)
         
