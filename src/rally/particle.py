@@ -39,22 +39,23 @@ class Particle(object):
         self.weight = val
 
 
-def estimate_pose(particles_list) -> Particle:
+def estimate_pose(particles) -> Particle:
     '''
     Estimate the pose from particles by computing the average position and orientation over all particles. This is not done using the particle weights, but just the sample distribution.
     
     Parameters:
-        particle_list(array)    :   Numpy array of particles. 
+        particle(array)    :   Numpy array of particles. 
     '''
     
     x_sum = 0.0                     # The sum of all x positions
     y_sum = 0.0                     # The sum of all y positions
     cos_sum = 0.0                   # The sum of all cosinus of the orientation 
     sin_sum = 0.0                   # The sum of all sinus of the orientation 
-    flen = len(particles_list)      # The length of our particle array 
+    flen = len(particles)           # The length of our particle array 
     
-    # TODO: Numpy this by using np.sum or something 
-    for particle in particles_list:
+    # TODO: Try to optimize this function. Either by doing these summation other places and pass them in or by using numpy sum 
+    # Find the sum for x, y and orientation 
+    for particle in particles:
         x_sum += particle.getX()
         y_sum += particle.getY()
         cos_sum += np.cos(particle.getTheta())
@@ -85,12 +86,12 @@ def move_particle(particle, delta_x, delta_y, delta_theta) -> None:
     '''
     
     # Update the particles values 
-    particle.x = delta_x
-    particle.y = delta_y
-    particle.theta = delta_theta
+    particle.setX(delta_x)
+    particle.setY(delta_y)
+    particle.setTheta(delta_theta)
     
     
-def add_uncertainty(particles_list, sigma, sigma_theta) -> None:
+def add_uncertainty(particles, sigma, sigma_theta) -> None:
     '''
     Add some noise to each particle in the list.
     
@@ -100,9 +101,10 @@ def add_uncertainty(particles_list, sigma, sigma_theta) -> None:
         sigma_theta(float)      : Noise variance for orientation. 
     '''
     
-    # TODO: Numpy this 
+    # TODO: Numpy this or add the noise inside another loop for constant time. 
+    # TODO: Check what happens if we += to theta instead of assigning it a new val 
     # Add random noise between values 
-    for particle in particles_list:
+    for particle in particles:
         particle.x += rn.randn(0.0, sigma)
         particle.y += rn.randn(0.0, sigma)
         particle.theta = np.mod(particle.theta + rn.randn(0.0, sigma_theta), 2.0 * np.pi) 
@@ -172,7 +174,7 @@ def move_all_particles(particles, dist, angle) -> None:
         angle(float)            : The angle Arlo used.
     '''
     
-    # TODO: Numpy this 
+    # TODO: Numpy this or do the computations in another loop 
     # Compute each particles new x, y and theta value 
     for p in particles:
         x, y, theta = new_position(p, angle, dist)

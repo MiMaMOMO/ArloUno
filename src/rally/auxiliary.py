@@ -1,4 +1,5 @@
 import cv2
+import camera
 
 import numpy as np
 
@@ -142,12 +143,9 @@ def compute_center_parameters(center, arlo_pose) -> tuple:
     return dist, abs_angle, sign 
 
 
-def get_cam(camera) -> object:
+def get_cam() -> object:
     '''
     Get the right camera. 
-    
-    Parameters:
-        camera(obj)     : The camera module.
     '''
     
     # Tell the program which camera we want to use 

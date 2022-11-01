@@ -2,29 +2,28 @@ import copy
 import cv2
 from settings import *
 import particle
-import camera
 import numpy as np
 import sys
 import commands
 import auxiliary
 
 
-def isRunningOnArlo():
-    """Return True if we are running on Arlo, otherwise False.
-      You can use this flag to switch the code from running on you laptop to Arlo - you need to do the programming here!
-    """
-    return ON_ROBOT
+# def isRunningOnArlo():
+#     """Return True if we are running on Arlo, otherwise False.
+#       You can use this flag to switch the code from running on you laptop to Arlo - you need to do the programming here!
+#     """
+#     return ON_ROBOT
 
-if isRunningOnArlo():
-    sys.path.append("../robot")
+# if isRunningOnArlo():
+#     sys.path.append("../robot")
 
-# Try to import robot module 
-try:
-    import robot
-    onRobot = True
-except ImportError:
-    print("selflocalize.py: robot module not present - forcing not running on Arlo!")
-    onRobot = False
+# # Try to import robot module 
+# try:
+#     import robot
+#     ON_ROBOT = True
+# except ImportError:
+#     print("selflocalize.py: robot module not present - forcing not running on Arlo!")
+#     ON_ROBOT = False
 
 
 def compute_weight(objectIDs, i, p, dists, angles) -> float:
@@ -82,19 +81,9 @@ def copy_resampling_references(resampling) -> None:
     # Make sure we copy the reference and still resample into a new array
     for i in range(len(resampling)): 
         resampling[i] = copy.deepcopy(resampling[i])
-    
-    
-def get_cam():
-    '''
-    Initialize the right camera. 
-    '''
-    if isRunningOnArlo():
-        return camera.Camera(0, 'arlo', useCaptureThread = True)
-    else:
-        return camera.Camera(0, 'macbookpro', useCaptureThread = True)
 
 
-### MAIN PROGRAM ###
+# ### MAIN PROGRAM ###
 # try:
     
 #     # Open windows 
@@ -121,7 +110,7 @@ def get_cam():
 #     print("Opening and initializing camera")
     
 #     # Check which camera we want to use 
-#     cam = get_cam()
+#     cam = auxiliary.get_cam()
     
 #     # Try to selflocalize and get to the center point using the particle filter 
 #     while 1:
@@ -187,9 +176,6 @@ def get_cam():
         
 #         # We detected atleast one landmark 
 #         if not isinstance(objectIDs, type(None)):
-            
-#             for i in range(len(dists)): 
-#                 dists[i] = dists[i] * 2
             
 #             # The total sum of all weigths
 #             weight_sum = 0.0

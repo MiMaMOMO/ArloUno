@@ -4,7 +4,7 @@ from cv2 import aruco
 
 ### SETTINGS ###
 SHOW_GUI = True          # Whether or not to open GUI windows
-ON_ROBOT = True          # Whether or not we are running on the Arlo robot
+ON_ROBOT = False          # Whether or not we are running on the Arlo robot
 
 ### ARUCO ### 
 ARUCO_DICT = aruco.getPredefinedDictionary(aruco.DICT_6X6_250)
@@ -47,12 +47,16 @@ RIGHT_ROT_VELOCITY = 64             # Arlos right wheel rotation speed
 LEFT_ROT_VELOCITY = 64              # Arlos left wheel rotation speed
 
 ### ROTATIONS ### 
-FULL_ROTATION = 12                  # How many times it take Arlo to do a 360 degree rotation
+FULL_ROTATION = 24                  # How many times it take Arlo to do a 360 degree rotation
 DEGREES_15 = 0.261799               # 15 degrees in radions
 DEGREES_30 = 0.523598               # 30 degrees in radions 
+DEGREES_45 = 0.785398               # 45 degrees in radions
 DEGREES_90 = 1.57175                # 90 degrees in radions 
+DEGREES_120 = 2.09439               # 120 degrees in radions 
 DEGREES_180 = 3.14255               # 180 degrees in radions
+DEGREES_240 = 4.18879               # 240 degrees in radions
 DEGREES_270 = 4.72234               # 270 degrees in radions
+DEGREES_310 = 5.41052               # 310 degrees in radions
 DEGREES_360 = 6.28414               # 360 degrees in radions
 
 ### DISTANCES ### 
@@ -60,6 +64,7 @@ HALF_METER = 50.0                   # 0.5 meter in cm
 METER_1 = 100.0                     # 1 meter in cm 
 METER_2 = 200.0                     # 2 meter in cm 
 METER_3 = 300.0                     # 3 meter in cm
+LANDMARK_RANGE = 0.3                # Arlo should always try to come within 30 cm of a landmark
 
 ### SPREADS ###
 SPREAD_DIST = 25.0                  # The spread used when computing distance weights 

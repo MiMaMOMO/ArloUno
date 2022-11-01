@@ -1,51 +1,8 @@
 import numpy as np 
 import time
-import camera 
-import sys 
 
 from settings import * 
-
-
-def isRunningOnArlo():
-    """Return True if we are running on Arlo, otherwise False.
-      You can use this flag to switch the code from running on you laptop to Arlo - you need to do the programming here!
-    """
-    return ON_ROBOT
-
-if isRunningOnArlo():
-    sys.path.append("../robot")
-
-# Try to import robot module
-try:
-    import robot
-    ON_ROBOT = True
-except ImportError:
-    print("selflocalize.py: robot module not present - forcing not running on Arlo!")
-    ON_ROBOT = False
-
-
-# TODO: Remove this and learn to fucking import a class 
-class Timer:
-    def __init__(self) -> None:
-        self.start_time = time.perf_counter()
-
-    def elapsed_time(self) -> float:
-        '''
-        The elapsed time since we initialized this object. 
-        
-        Returns:
-            The elapsed time between initializen and now. 
-        '''
-        return (time.perf_counter() - self.start_time)
-
-    def sleep(self, val) -> None:
-        '''
-        Sleeps a certain amount of time. 
-        '''
-
-        # Sleep val time in seconds
-        time.sleep(val)
-
+from custom_timer import Timer
 
 
 def rotate(arlo, angle) -> None:
@@ -67,18 +24,18 @@ def rotate(arlo, angle) -> None:
     right_dir = 1 if sign == 1 else 0
     
     # TODO: Test what happens if we multiply with the sign and get -1. Will it count as a 0? 
+    # TODO: Try to initialize the timer after giving the go command to arlo
     
     # Make Arlo rotate in the right direction 
     arlo.go_diff(LEFT_ROT_VELOCITY, RIGHT_ROT_VELOCITY, left_dir, right_dir) 
-    t.sleep(0.01)
-    
-    # TODO: Try to initialize the timer after giving the go command to arlo
+    t.sleep(0.01)   # XXX: Does this affect our timer? 
     
     # Control what happens while Arlo rotates 
     while 1: 
 
+        # TODO: Test if this is more accurate. We stop a bit earliere for the rotation 
         # Break when Arlo have spent the seconds needed to perform the rotation 
-        if t.elapsed_time() > rot_time:
+        if t.elapsed_time() > rot_time - 0.04:
             arlo.stop()
             break
 
@@ -97,58 +54,69 @@ def drive(arlo, dist, landmark_range = 0.0) -> None:
     drive_time = scaled_dist * METER            # How long in seconds it takes Arlo to drive dist
     t = Timer()                                 # Timer used to measure a countdown for Arlo
 
+    # TODO: Try to initialize the timer after giving the go command to arlo  
+    # TODO: Arlo should only be able to drive 100 cm at a time, at max 
     # Make Arlo drive forward 
     arlo.go_diff(LEFT_VELOCITY, RIGHT_VELOCITY, 1, 1) 
     t.sleep(0.01)
     
-    # TODO: Try to initialize the timer after giving the go command to arlo  
-    
     # Control what happens while Arlo drives
     while 1:
+        
+        # TODO: Test this 
+        # Arlo is close enough to the landmark 
+        if arlo.read_front_ping_sensor() <= 300:
+            arlo.stop()
 
         # If Arlo wants to go near a box we account for that by a certain tolerance 
         # otherwise let Arlo drive the full dist
         if t.elapsed_time() > (drive_time - (METER * landmark_range)):
             arlo.stop()
-            break    
+            break
         
         
-def scan(arlo, cam, landmark = None):
+def scan(arlo, frame, landmark = None):
     '''
     Scan for Aruco landmarks by rotating tiny amounts.
+    
+    Parameters:
+        arlo(obj)       : The Arlo robot. 
+        cam(obj)        : The camera used. 
+        landmark(int)   : The landmark ID we are searching for. 
     '''
     
     # TODO: Numpy this 
     # Rotate a full turn until we find some Aruco landmarks 
-    for _ in range(136):
+    for _ in range(FULL_ROTATION):
         rotate(arlo, DEGREES_15)
         time.sleep(0.6)
-        detected = detect(cam)
+        detected = detect(frame)
         
-        print(detected[0])
+        print("ID:      {}".format(detected[0]))
+        print("Dists:   {}".format(detected[1]))
+        print("Agnles:  {}".format(detected[2]))
         
-        # If anything was detected return the information 
+        # If we saw an ID 
         if not isinstance(detected[0], type(None)):
+            
+            # If the ID we saw was the landmark we were searching for 
             if landmark in detected[0]:
                 return detected
+            
+        # TODO: What should happen in the case that we do not detect anything? 
 
 
-def detect(cam) -> tuple: 
+def detect(cam, frame) -> tuple: 
     '''
     Take a frame and try to detect if any landmarks exist in the frame. 
+    
+    Parameters:
+        cam(obj)        : The camera object. 
+        frame(img)      : The image we are looking at.
     '''
     
-    # Start by taking an image
-    frame = cam.get_next_frame()
-    
-    # Get information form the image 
+    # Get information from the image 
     objectIDs, dists, angles = cam.detect_aruco_objects(frame)
     
-    # Do something with that information 
-    return objectIDs, dists, angles, frame
-
-
-# arlo = robot.Robot()
-
-# rotate(arlo, 3.13)
-# drive(arlo, 100.0)
+    # Return the found values. Will be None if no landmarks was detected 
+    return objectIDs, dists, angles

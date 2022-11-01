@@ -1,11 +1,14 @@
-from numpy import angle
 import commands
 import cv2
 import auxiliary
-import camera
+import sys
+import particle
 
-from brute_settings import * 
-from selflocalize import * 
+import numpy as np
+
+from selflocalize import compute_weight, resample, copy_resampling_references
+
+from settings import * 
 
 if ON_ROBOT:
     sys.path.append("../robot")
@@ -16,22 +19,13 @@ try:
     ON_ROBOT = True
 except ImportError:
     print("selflocalize.py: robot module not present - forcing not running on Arlo!")
-    onRobot = False
+    ON_ROBOT = False
 
 # Start value for IDS, distances and angles 
 # objectIDs = None 
 # dists = None 
 # angles = None 
 
-
-def get_cam():
-    '''
-    Initialize the right camera. 
-    '''
-    if isRunningOnArlo():
-        return camera.Camera(0, 'arlo', useCaptureThread=True)
-    else:
-        return camera.Camera(0, 'macbookpro', useCaptureThread=True)
 
 def run() -> None: 
     '''
@@ -58,25 +52,27 @@ def run() -> None:
         auxiliary.draw_world(est_pose, particles, world)
 
         # Check which camera we want to use
-        cam = get_cam()
+        cam = auxiliary.get_cam()
 
         # Visted landmarks
         visited = []
         
-        objectIDs, dists, angles, frame = commands.detect(cam)
-        
         while 1: 
             
-            # Get a pressed key if any for 10 ms. Maybe if removed could boost performance?
+            # TODO: Remove this since we wont be pressing any keys to the rally 
+            # Get a pressed key if any for 10 ms
             action = cv2.waitKey(10)
             
+            # TODO: Remove this since we wont be pressing any keys to the rally
             # Quit if we press q 
             if action == ord('q'): 
                 break
             
-            # Press f to start the brute program
-            # The first iteration should detect the first landmark first 
-            #if action == ord('f'):
+            # Get the first frame 
+            frame = cam.get_next_frame()
+        
+            # Try and detect the first landmark upon starting 
+            objectIDs, dists, angles = commands.detect(cam, frame)
             
             # We detected atleast one landmark
             if not isinstance(objectIDs, type(None)):
@@ -84,8 +80,10 @@ def run() -> None:
                 # The total sum of all weigths
                 weight_sum = 0.0
 
+                # TODO: Maybe dont reset to 0, but to uniform distribution instead 
+                # TODO: Maybe do this in another loop 
                 # Reset the weights
-                [p.setWeight(0) for p in particles]
+                [p.setWeight(0.0) for p in particles]
                 
                 # List detected objects
                 for i in range(len(objectIDs)):
@@ -110,10 +108,31 @@ def run() -> None:
                         # Add to the sum of weights
                         weight_sum += weight
                         
-                    # Rotate and drive towards the seen landmark within 30 cm range 
-                    if np.abs(angles[i]) > 0.19: 
-                        commands.rotate(arlo, angles[i])
-                    commands.drive(arlo, dists[i], 0.3)
+                    # Rotating and driving towards the found landmark within a certain range 
+                    while 1:
+                        
+                        # Rotate towards the landmark if the angle is bigger than 13 degrees 
+                        if np.abs(angles[i]) > 0.226892:
+                            #commands.rotate(arlo, angles[i])
+                            pass
+                            
+                        # Find the minimum betwen the distance and 1m 
+                        dist = np.minimum(dists[i], METER_1)
+                        
+                        # Drive within 30cm of the landmark if the dist < 1m, 
+                        # otherwise drive the full length 
+                        if dist < METER_1:
+                            commands.drive(arlo, dist, LANDMARK_RANGE)
+                            break
+                        else: 
+                            commands.drive(arlo, dist)
+                            pass
+                        
+                        # Get the next frame 
+                        frame = cam.get_next_frame()
+        
+                        # Try and detect the landmark Arlo are focusing on  
+                        objectIDs, dists, angles = commands.detect(cam, frame)
                     
                     # TODO: Move all particles here otherwise move them after resampling 
                     # Move all particles according to what we actually drove 
@@ -122,6 +141,7 @@ def run() -> None:
                     # We visited the ith landmark 
                     visited.append(objectIDs[i])
                 
+                # TODO: Use numpy to normalize the weights? 
                 # Store normalized weights of each particle for probability purposes
                 weights = [(p.getWeight() / weight_sum) for p in particles]
 
@@ -140,14 +160,14 @@ def run() -> None:
                 # Draw detected objects
                 cam.draw_aruco_objects(frame)
                 
+                # TODO: Find out how we can do a full turn 
                 # Scan for the next landmark 
-                c = commands.scan(arlo, cam, visited[-1] + 1)
+                c = commands.scan(arlo, frame, visited[-1] + 1)
                 
                 # objectIDs, dists, angles, frame = commands.scan(arlo, cam, 2)
                 objectIDs = c[0]
                 dists = c[1]
                 angles = c[2]
-                frame = c[3]
             else:
                 # No observation - reset weights to uniform distribution
                 for p in particles:
@@ -164,4 +184,6 @@ def run() -> None:
         auxiliary.clean_up(cam)
 
 
-run()
+### STARTING POINT OF THE PROGRAM ### 
+if __name__ == '__main__':
+    run()
