@@ -147,4 +147,5 @@ def detect(cam) -> tuple:
 
 arlo = robot.Robot()
 
+rotate(arlo, 3.13)
 drive(arlo, 100.0)
