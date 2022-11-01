@@ -23,6 +23,16 @@ except ImportError:
 # dists = None 
 # angles = None 
 
+
+def get_cam():
+    '''
+    Initialize the right camera. 
+    '''
+    if isRunningOnArlo():
+        return camera.Camera(0, 'arlo', useCaptureThread=True)
+    else:
+        return camera.Camera(0, 'macbookpro', useCaptureThread=True)
+
 def run() -> None: 
     '''
     Run a brute program where we assume no obstacles. 
@@ -48,7 +58,7 @@ def run() -> None:
         auxiliary.draw_world(est_pose, particles, world)
 
         # Check which camera we want to use
-        cam = auxiliary.get_cam(camera)
+        cam = get_cam()
 
         # Visted landmarks
         visited = []
@@ -67,8 +77,6 @@ def run() -> None:
             # Press f to start the brute program
             # The first iteration should detect the first landmark first 
             #if action == ord('f'):
-            
-            frame = cam.get_next_frame()
             
             # We detected atleast one landmark
             if not isinstance(objectIDs, type(None)):
