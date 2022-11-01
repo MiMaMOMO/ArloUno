@@ -24,8 +24,11 @@ def fun_two():
     cos_sum = np.sum(np.fromiter((np.cos(p.getTheta()) for p in particles), float))
     sin_sum = np.sum(np.fromiter((np.sin(p.getTheta()) for p in particles), float))
 
+
+# Initiate a timer 
 st = time.time()
  
+ # Call the functions 
 fun_one()
 fun_two()
 
