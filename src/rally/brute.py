@@ -17,30 +17,6 @@ except ImportError:
     print("selflocalize.py: robot module not present - forcing not running on Arlo!")
     onRobot = False
 
-# Open windows
-auxiliary.open_windows()
-
-# Initialize particles
-particles = particle.initialize_particles(NUM_OF_PARTICLES)
-
-# The first estimate of the robots current pose
-est_pose = particle.estimate_pose(particles)
-
-# Initialize Arlo
-arlo = robot.Robot()
-
-# Allocate space for world map
-world = np.zeros((500, 500, 3), dtype = np.uint8)
-
-# Draw map
-auxiliary.draw_world(est_pose, particles, world)
-
-# Check which camera we want to use
-cam = auxiliary.get_cam(camera)
-
-# Visted landmarks 
-visited = []
-
 # Start value for IDS, distances and angles 
 # objectIDs, dists, angles = (None, None, None)
 
@@ -50,6 +26,31 @@ def run() -> None:
     '''
     
     try:
+        # Open windows
+        auxiliary.open_windows()
+
+        # Initialize particles
+        particles = particle.initialize_particles(NUM_OF_PARTICLES)
+
+        # The first estimate of the robots current pose
+        est_pose = particle.estimate_pose(particles)
+
+        # Initialize Arlo
+        arlo = robot.Robot()
+
+        # Allocate space for world map
+        world = np.zeros((500, 500, 3), dtype=np.uint8)
+
+        # Draw map
+        auxiliary.draw_world(est_pose, particles, world)
+
+        # Check which camera we want to use
+        cam = auxiliary.get_cam(camera)
+
+        # Visted landmarks
+        visited = []
+        
+        
         while 1: 
             
             # Get a pressed key if any for 10 ms. Maybe if removed could boost performance?
