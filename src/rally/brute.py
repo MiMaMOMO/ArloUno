@@ -55,9 +55,13 @@ def run() -> None:
         cam = auxiliary.get_cam()
 
         # Visted landmarks
-        visited = []
+        rute_idx = 0
         
         while 1: 
+            
+            # When we are back at landmark 1 stop the program 
+            if rute_idx >= 5:
+                break
             
             # TODO: Remove this since we wont be pressing any keys to the rally 
             # Get a pressed key if any for 10 ms
@@ -123,6 +127,7 @@ def run() -> None:
                         # otherwise drive the full length 
                         if dist < METER_1:
                             commands.drive(arlo, dist, LANDMARK_RANGE)
+                            rute_idx += 1
                             break
                         else: 
                             commands.drive(arlo, dist)
@@ -137,9 +142,6 @@ def run() -> None:
                     # TODO: Move all particles here otherwise move them after resampling 
                     # Move all particles according to what we actually drove 
                     # particle.move_all_particles(particles, dists[i], angles[i])
-                    
-                    # We visited the ith landmark 
-                    visited.append(objectIDs[i])
                 
                 # TODO: Use numpy to normalize the weights? 
                 # Store normalized weights of each particle for probability purposes
@@ -162,7 +164,7 @@ def run() -> None:
                 
                 # TODO: Find out how we can do a full turn 
                 # Scan for the next landmark 
-                c = commands.scan(arlo, frame, visited[-1] + 1)
+                c = commands.scan(arlo, frame, RUTE[rute_idx])
                 
                 # objectIDs, dists, angles, frame = commands.scan(arlo, cam, 2)
                 objectIDs = c[0]
