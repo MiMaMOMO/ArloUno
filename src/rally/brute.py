@@ -62,8 +62,8 @@ def run() -> None:
             
             # Press f to start the brute program
             # The first iteration should detect the first landmark first 
-            # if action == ord('d'):
-            objectIDs, dists, angles, frame = commands.detect(cam)
+            if action == ord('f'):
+                objectIDs, dists, angles, frame = commands.detect(cam)
             
             # We detected atleast one landmark
             if not isinstance(objectIDs, type(None)):
