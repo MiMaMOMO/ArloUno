@@ -41,7 +41,7 @@ def run() -> None:
         arlo = robot.Robot()
 
         # Allocate space for world map
-        world = np.zeros((500, 500, 3), dtype=np.uint8)
+        world = np.zeros((500, 500, 3), dtype = np.uint8)
 
         # Draw map
         auxiliary.draw_world(est_pose, particles, world)
@@ -105,10 +105,10 @@ def run() -> None:
                     
                     # TODO: Move all particles here otherwise move them after resampling 
                     # Move all particles according to what we actually drove 
-                    particle.move_all_particles(particles, dists[i], angles[i])
+                    # particle.move_all_particles(particles, dists[i], angles[i])
                     
                     # We visited the ith landmark 
-                    visited.append(objectIDs[i])
+                    # visited.append(objectIDs[i])
                 
                 # Store normalized weights of each particle for probability purposes
                 weights = [(p.getWeight() / weight_sum) for p in particles]

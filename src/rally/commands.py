@@ -111,7 +111,7 @@ def scan(arlo, camera, landmark = None):
                 return detected
 
 
-def detect(cam) -> None: 
+def detect(cam) -> tuple: 
     '''
     Take a frame and try to detect if any landmarks exist in the frame. 
     '''
