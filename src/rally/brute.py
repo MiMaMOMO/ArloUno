@@ -50,7 +50,7 @@ def run() -> None:
             
             # Press f to start the brute program
             # The first iteration should detect the first landmark first 
-            if action == ord('f'):
+            if action == ord('d'):
                 objectIDs, dists, angles = commands.detect(arlo, cam)
             
             # We detected atleast one landmark
