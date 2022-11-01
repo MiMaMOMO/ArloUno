@@ -4,6 +4,7 @@ import time
 from settings import * 
 
 
+# TODO: Remove this and learn to fucking import a class 
 class Timer:
     def __init__(self) -> None:
         self.start_time = time.perf_counter()
@@ -41,8 +42,6 @@ def rotate(arlo, angle) -> None:
     rot_time = scaled_angle * (ORIENTATION / 90)    # Seconds it takes Arlo to rotate angle amount 
     t = Timer()                                     # Timer to measure a countdown for the rotation
     
-    # TODO: Try to initialize the timer after giving the go command to arlo
-    
     # Find the direction we should rotate 
     left_dir = 1 if sign == 1 else 0
     right_dir = 1 if sign == -1 else 0
@@ -53,14 +52,16 @@ def rotate(arlo, angle) -> None:
     arlo.go_diff(LEFT_ROT_VELOCITY, RIGHT_ROT_VELOCITY, left_dir, right_dir) 
     t.sleep(0.01)
     
+    # TODO: Try to initialize the timer after giving the go command to arlo
+    
+    # Control what happens while Arlo rotates 
     while 1: 
-        #print("Real time    : {}".format(time.perf_counter()))
-        #print("Elapsed time : {}".format(timer.elapsed_time()))
 
         # Break when Arlo have spent the seconds needed to perform the rotation 
         if t.elapsed_time() > rot_time:
             arlo.stop()
             break
+
 
 def drive(arlo, dist, landmark_range = 0.0) -> None:
     '''
@@ -76,29 +77,28 @@ def drive(arlo, dist, landmark_range = 0.0) -> None:
     drive_time = scaled_dist * METER            # How long in seconds it takes Arlo to drive dist
     t = Timer()                                 # Timer used to measure a countdown for Arlo
 
-    # TODO: Try to initialize the timer after giving the go command to arlo  
-
     # Make Arlo drive forward 
     arlo.go_diff(LEFT_VELOCITY, RIGHT_VELOCITY, 1, 1) 
     t.sleep(0.01)
     
-    # Control what happens while Arlo drives with the program 
-    # If the amount of time have passed, stop Arlo 
+    # TODO: Try to initialize the timer after giving the go command to arlo  
+    
+    # Control what happens while Arlo drives
     while 1:
-        #print("Real time    : {}".format(time.perf_counter()))
-        #print("Elapsed time : {}".format(timer.elapsed_time()))
 
         # If Arlo wants to go near a box we account for that by a certain tolerance 
-        # Otherwise let Arlo drive the full dist
+        # otherwise let Arlo drive the full dist
         if t.elapsed_time() > (drive_time - (METER * landmark_range)):
             arlo.stop()
             break    
+        
         
 def scan(arlo, landmark = None):
     '''
     Scan for Aruco landmarks by rotating tiny amounts.
     '''
     
+    # TODO: Numpy this 
     # Rotate a full turn until we find some Aruco landmarks 
     for _ in range(FULL_ROTATION):
         rotate(DEGREES_30)
@@ -109,16 +109,17 @@ def scan(arlo, landmark = None):
             if landmark in detected[0]:
                 return detected
 
-def detect(arlo, cam) -> None: 
+
+def detect(cam) -> None: 
     '''
-    Arlo tries to detect landmarks.
+    Take a frame and try to detect if any landmarks exist in the frame. 
     '''
     
-    # 1. Start by taking an image
+    # Start by taking an image
     frame = cam.get_next_frame()
     
-    # 2. Get information form the image 
+    # Get information form the image 
     objectIDs, dists, angles = cam.detect_aruco_objects(frame) 
     
-    # 3. Do something with that information 
+    # Do something with that information 
     return objectIDs, dists, angles

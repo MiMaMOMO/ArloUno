@@ -1,5 +1,11 @@
 from cv2 import aruco
 
+# TODO: Spread this information out after testing and project end 
+
+### SETTINGS ###
+SHOW_GUI = True          # Whether or not to open GUI windows
+ON_ROBOT = False         # Whether or not we are running on the Arlo robot
+
 ### ARUCO ### 
 ARUCO_DICT = aruco.getPredefinedDictionary(aruco.DICT_6X6_250)
 ARUCO_MARKER_LENGTH = 0.15
@@ -9,7 +15,7 @@ ARUCO_MARKER_LENGTH = 0.15
 
 ### TITLES ###
 WIN_RF1 = "Robot view"              # The title for Arlos window 
-WIN_World = "World view"            # The title for the worlds window
+WIN_WORLD = "World view"            # The title for the worlds window
 
 ### WINDOWS ###
 ARLO_WIN_X = 50                     # X-coordinate for Arlos window 
@@ -18,7 +24,7 @@ WORLD_WIN_X = 500                   # X-coordinate for the world window
 WORLD_WIN_Y = 50                    # Y-coordinate for the world window
 
 ### LANDMARKS ###
-GOALS = [1, 2, 3, 4, 1]             # The rute we wanna take 
+RUTE = [1, 2, 3, 4, 1]              # The rute we wanna take 
 LANDMARK_IDS = [1, 2, 3, 4]         # The ID of each landmark we know  
 LANDMARKS = {
     1: (0.0, 0.0),                  # Coordinates for landmark 1 (RED)
@@ -67,6 +73,12 @@ CYELLOW = (0, 255, 255)             # The color yellow
 CMAGENTA = (255, 0, 255)            # The color magenta
 CWHITE = (255, 255, 255)            # The color white 
 CBLACK = (0, 0, 0)                  # The color black 
+LANDMARK_COLORS = [                 # Colors of the known landmarks 
+    CRED, 
+    CGREEN,
+    CBLUE,
+    CCYAN
+]
 
 ### TIME ### 
 TIME_ERROR = 0.55                   # Error in computing time 

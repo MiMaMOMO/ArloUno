@@ -6,6 +6,7 @@ import threading
 import framebuffer
 from pkg_resources import parse_version
 
+# TODO: Change this file to only fit Arlo 
 
 gstreamerCameraFound = False
 piCameraFound = False

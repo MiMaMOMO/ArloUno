@@ -1,11 +1,16 @@
 import numpy as np
 
 
-def randn(mu, sigma):
-    """Normal random number generator
-    mean mu, standard deviation sigma"""
-    return sigma * np.random.randn() + mu
+def randn(mu, sigma) -> float:
+    '''
+    Normal random number generator with
+    mean mu and standard deviation sigma.
+    '''
     
+    # Compute the random number 
+    return sigma * np.random.randn() + mu
+  
+# TODO: Remove this function   
 def rand_von_mises(mu, kappa):
     """Generate random samples from the Von Mises distribution"""
     if kappa < 1e-6:
@@ -32,7 +37,7 @@ def rand_von_mises(mu, kappa):
 
     return theta
 
-
+# TODO: Remove this 
 if __name__ == '__main__':
     
     # Tests
@@ -43,11 +48,3 @@ if __name__ == '__main__':
         
     print("True mean 1.0 == Estimated mean ", np.mean(r))
     print("True std 2.0 == Estimated std ", np.std(r))
-    
-    print("Von Mises distribution:")
-    
-    t = np.zeros(1000)
-    for i in range(1000):
-        t[i] = rand_von_mises(1.0, 8)
-        
-    print("True mean 1.0 == Estimated mean ", np.mean(t))

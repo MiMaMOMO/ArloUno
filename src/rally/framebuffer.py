@@ -2,16 +2,21 @@ import threading
 
 
 class FrameBuffer(object):
-    """This class represents a framebuffer with a front and back buffer storing frames. 
-    Access to the class is thread safe (controlled via an internal lock)."""
+    '''
+    This class represents a framebuffer with a front and back buffer storing frames. 
+    Access to the class is thread safe (controlled via an internal lock).
+    '''
     
-    def __init__(self):
-        self.frameBuffer = [None, None]  # Initialize the framebuffer with None references
-        self.currentBufferIndex = 0 
-        self.lock = threading.Lock()
-        
+    def __init__(self) -> None:
+        self.frameBuffer = [None, None]     # Initialize the framebuffer with None references
+        self.currentBufferIndex = 0         # The index of the current buffer 
+        self.lock = threading.Lock()        # The internal lock 
+      
+    # TODO: Tweak this with tests   
     def get_frame(self):
-        """Return latest frame from the framebuffer"""
+        '''
+        Return latest frame from the framebuffer.
+        '''
         
         # Obtain lock and release it when done
         with self.lock:
@@ -20,7 +25,8 @@ class FrameBuffer(object):
                 return self.frameBuffer[self.currentBufferIndex]
             else:
                 return None
-                
+            
+    # TODO: Tweak this with tests 
     def new_frame(self, frame):
         """Add a new frame to the frame buffer"""
         # self.frameBuffer[int(not self.currentBufferIndex)] = copy.deepcopy(frame)

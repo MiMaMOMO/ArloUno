@@ -14,12 +14,12 @@ def test(angle, dist, current_x, current_y):
     cos_x = np.cos(angle)
     sin_y = np.sin(angle)
     
-    if theta <= DEGREES_180 and theta >= 0:
-        x = current_x - (-dist * cos_x)
-        y = current_y + (dist * sin_y)
-    elif theta > DEGREES_180 and theta <= DEGREES_360:
-        x = current_x + (dist * cos_x)
-        y = current_y - (-dist * sin_y)
+    # if angle <= DEGREES_180 and angle >= 0:
+    #     x = particle.getX() - (-dist * cos_x)
+    #     y = particle.getY() + (dist * sin_y)
+    # elif angle > DEGREES_180 and angle <= DEGREES_360:
+    #     x = particle.getX() + (dist * cos_x)
+    #     y = particle.getY() - (-dist * sin_y)
         
     return x, y 
 

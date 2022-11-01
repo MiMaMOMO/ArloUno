@@ -1,15 +1,16 @@
 import commands
 import cv2
+import auxiliary
 
 from brute_settings import * 
 from selflocalize import * 
 
 
 # Open windows
-open_windows()
+auxiliary.open_windows()
 
 # Initialize particles
-particles = initialize_particles(num_particles)
+particles = particle.initialize_particles(NUM_OF_PARTICLES)
 
 # The first estimate of the robots current pose
 est_pose = particle.estimate_pose(particles)
@@ -18,13 +19,13 @@ est_pose = particle.estimate_pose(particles)
 arlo = robot.Robot()
 
 # Allocate space for world map
-world = np.zeros((500, 500, 3), dtype=np.uint8)
+world = np.zeros((500, 500, 3), dtype = np.uint8)
 
 # Draw map
-draw_world(est_pose, particles, world)
+auxiliary.draw_world(est_pose, particles, world)
 
 # Check which camera we want to use
-cam = get_cam()
+cam = auxiliary.get_cam()
 
 # Visted landmarks 
 visited = []
@@ -34,7 +35,7 @@ objectIDs, dists, angles = None
 
 def run() -> None: 
     '''
-    Run brute program.
+    Run a brute program where we assume no obstacles. 
     '''
     
     try:
@@ -47,6 +48,8 @@ def run() -> None:
             if action == ord('q'): 
                 break
             
+            # Press f to start the brute program
+            # The first iteration should detect the first landmark first 
             if action == ord('f'):
                 objectIDs, dists, angles = commands.detect(arlo, cam)
             
@@ -82,9 +85,13 @@ def run() -> None:
                         # Add to the sum of weights
                         weight_sum += weight
                         
-                    # Rotate and drive towards the seen landmark 
+                    # Rotate and drive towards the seen landmark within 30 cm range  
                     commands.rotate(arlo, angles[i])
                     commands.drive(arlo, dists[i], 0.3)
+                    
+                    # TODO: Move all particles here otherwise move them after resampling 
+                    # Move all particles according to what we actually drove 
+                    particle.move_all_particles(particles, dists[i], angles[i])
                     
                     # We visited the ith landmark 
                     visited.append(objectIDs[i])
@@ -112,14 +119,14 @@ def run() -> None:
             else:
                 # No observation - reset weights to uniform distribution
                 for p in particles:
-                    p.setWeight(1.0 / num_particles)
+                    p.setWeight(1.0 / NUM_OF_PARTICLES)
                     
             # The estimate of the robots current pose
             est_pose = particle.estimate_pose(particles) 
                     
             # Update the windows
-            update_windows(est_pose, particles, world, frame)
+            auxiliary.update_windows(est_pose, particles, world, frame)
 
     # Make sure to clean up even if an exception occurred
     finally: 
-        clean_up(cam)
+        auxiliary.clean_up(cam)
