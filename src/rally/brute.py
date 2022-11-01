@@ -5,6 +5,8 @@ import auxiliary
 from brute_settings import * 
 from selflocalize import * 
 
+if ON_ROBOT:
+    sys.path.append("../robot")
 
 # Open windows
 auxiliary.open_windows()
