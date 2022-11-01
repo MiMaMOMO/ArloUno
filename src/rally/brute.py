@@ -101,7 +101,7 @@ def run() -> None:
                         weight_sum += weight
                         
                     # Rotate and drive towards the seen landmark within 30 cm range 
-                    if angles[i] > 0.19: 
+                    if angles[i] > 0.19 or angles[i] < -0.19: 
                         commands.rotate(arlo, angles[i])
                     commands.drive(arlo, dists[i], 0.3)
                     
