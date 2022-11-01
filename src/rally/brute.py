@@ -7,7 +7,14 @@ from selflocalize import *
 
 if ON_ROBOT:
     sys.path.append("../robot")
-    import robot 
+    
+# Try to import robot module
+try:
+    import robot
+    ON_ROBOT = True
+except ImportError:
+    print("selflocalize.py: robot module not present - forcing not running on Arlo!")
+    onRobot = False
 
 # Open windows
 auxiliary.open_windows()
