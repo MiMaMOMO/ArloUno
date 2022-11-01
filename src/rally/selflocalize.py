@@ -182,7 +182,7 @@ try:
         # Detect objects
         objectIDs, dists, angles = cam.detect_aruco_objects(frame)
         
-        for i in dists: 
+        for i in range(len(dists)): 
             dists[i] = dists[i] * 2
         
         if action == ord('f'):
