@@ -131,7 +131,7 @@ def run() -> None:
                 cam.draw_aruco_objects(frame)
                 
                 # Scan for the next landmark 
-                c = commands.scan(arlo, cam, 3)
+                c = commands.scan(arlo, cam, 2)
                 
                 # objectIDs, dists, angles, frame = commands.scan(arlo, cam, 2)
                 objectIDs = c[0]
