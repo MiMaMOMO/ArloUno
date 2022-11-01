@@ -143,3 +143,6 @@ def run() -> None:
     # Make sure to clean up even if an exception occurred
     finally: 
         auxiliary.clean_up(cam)
+
+
+run()
