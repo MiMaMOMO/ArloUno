@@ -182,14 +182,14 @@ try:
         # Detect objects
         objectIDs, dists, angles = cam.detect_aruco_objects(frame)
         
-        for i in range(len(dists)): 
-            dists[i] = dists[i] * 2
-        
         if action == ord('f'):
             commands.drive(arlo, dists[0], 0.3)
         
         # We detected atleast one landmark 
         if not isinstance(objectIDs, type(None)):
+            
+            for i in range(len(dists)): 
+                dists[i] = dists[i] * 2
             
             # The total sum of all weigths
             weight_sum = 0.0
