@@ -18,7 +18,9 @@ except ImportError:
     onRobot = False
 
 # Start value for IDS, distances and angles 
-objectIDs, dists, angles = (None, None, None)
+objectIDs = None 
+dists = None 
+angles = None 
 
 def run() -> None: 
     '''
