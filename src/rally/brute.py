@@ -68,6 +68,8 @@ def run() -> None:
             # The first iteration should detect the first landmark first 
             #if action == ord('f'):
             
+            frame = cam.get_next_frame()
+            
             # We detected atleast one landmark
             if not isinstance(objectIDs, type(None)):
                 
