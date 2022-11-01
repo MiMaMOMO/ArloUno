@@ -1,8 +1,27 @@
 import numpy as np 
 import time
 import camera
+import sys 
 
 from settings import * 
+
+
+def isRunningOnArlo():
+    """Return True if we are running on Arlo, otherwise False.
+      You can use this flag to switch the code from running on you laptop to Arlo - you need to do the programming here!
+    """
+    return ON_ROBOT
+
+if isRunningOnArlo():
+    sys.path.append("../robot")
+
+# Try to import robot module
+try:
+    import robot
+    ON_ROBOT = True
+except ImportError:
+    print("selflocalize.py: robot module not present - forcing not running on Arlo!")
+    ON_ROBOT = False
 
 
 # TODO: Remove this and learn to fucking import a class 
@@ -124,3 +143,8 @@ def detect(cam) -> tuple:
     
     # Do something with that information 
     return objectIDs, dists, angles, frame
+
+
+arlo = robot.Robot()
+
+drive(arlo, 100.0)

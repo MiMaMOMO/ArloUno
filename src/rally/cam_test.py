@@ -1,9 +1,6 @@
-import copy
 import cv2
 from settings import *
-import particle
 import camera
-import numpy as np
 import sys
 import commands
 import auxiliary
