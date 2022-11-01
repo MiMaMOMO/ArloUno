@@ -131,7 +131,7 @@ def run() -> None:
                 cam.draw_aruco_objects(frame)
                 
                 # Scan for the next landmark 
-                objectIDs, dists, angles, frame = commands.scan(arlo, cam, visited[-1] + 1)
+                objectIDs, dists, angles, frame = commands.scan(arlo, cam)
             else:
                 # No observation - reset weights to uniform distribution
                 for p in particles:
