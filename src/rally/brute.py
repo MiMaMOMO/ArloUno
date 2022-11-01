@@ -42,7 +42,7 @@ cam = auxiliary.get_cam(camera)
 visited = []
 
 # Start value for IDS, distances and angles 
-objectIDs, dists, angles = (None, None, None)
+# objectIDs, dists, angles = (None, None, None)
 
 def run() -> None: 
     '''
@@ -61,8 +61,8 @@ def run() -> None:
             
             # Press f to start the brute program
             # The first iteration should detect the first landmark first 
-            if action == ord('d'):
-                objectIDs, dists, angles, frame = commands.detect(arlo, cam)
+            # if action == ord('d'):
+            objectIDs, dists, angles, frame = commands.detect(arlo, cam)
             
             # We detected atleast one landmark
             if not isinstance(objectIDs, type(None)):
