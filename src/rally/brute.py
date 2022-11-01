@@ -7,6 +7,8 @@ from selflocalize import *
 
 if ON_ROBOT:
     sys.path.append("../robot")
+    
+import robot 
 
 # Open windows
 auxiliary.open_windows()
