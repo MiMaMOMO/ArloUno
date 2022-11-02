@@ -77,6 +77,11 @@ def run() -> None:
         
             # Try and detect the first landmark upon starting 
             objectIDs, dists, angles, frame = commands.detect(cam)
+            objectIDs, dists, angles = auxiliary.delete_duplicates(objectIDs, dists, angles)
+            
+            print(objectIDs)
+            print(dists)
+            print(angles)
             
             # We detected atleast one landmark
             if not isinstance(objectIDs, type(None)):
@@ -120,6 +125,8 @@ def run() -> None:
 
                         # Try and detect the landmark Arlo are focusing on
                         objectIDs, dists, angles, frame = commands.detect(cam)
+                        objectIDs, dists, angles = auxiliary.delete_duplicates(
+                            objectIDs, dists, angles)
 
                         # Break if we cannot see anything
                         if isinstance(angles, type(None)):
@@ -159,6 +166,9 @@ def run() -> None:
                     dists = c[1]
                     angles = c[2]
                     frame = c[3]
+                    
+                    objectIDs, dists, angles = auxiliary.delete_duplicates(
+                        objectIDs, dists, angles)
 
                     print(objectIDs)
                     print(dists)
