@@ -48,7 +48,7 @@ RIGHT_ROT_VELOCITY = 64             # Arlos right wheel rotation speed
 LEFT_ROT_VELOCITY = 64              # Arlos left wheel rotation speed
 
 ### ROTATIONS ### 
-FULL_ROTATION = 24                  # How many times it take Arlo to do a 360 degree rotation
+FULL_ROTATION = 50                  # How many times it take Arlo to do a 360 degree rotation
 DEGREES_15 = 0.261799               # 15 degrees in radions
 DEGREES_30 = 0.523598               # 30 degrees in radions 
 DEGREES_45 = 0.785398               # 45 degrees in radions
