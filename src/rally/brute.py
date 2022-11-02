@@ -73,10 +73,10 @@ def run() -> None:
                 break
             
             # Get the first frame 
-            frame = cam.get_next_frame()
+            # frame = cam.get_next_frame()
         
             # Try and detect the first landmark upon starting 
-            objectIDs, dists, angles = commands.detect(cam, frame)
+            objectIDs, dists, angles, frame = commands.detect(cam)
             
             # We detected atleast one landmark
             if not isinstance(objectIDs, type(None)):
