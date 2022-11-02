@@ -118,3 +118,7 @@ def detect(cam, frame) -> tuple:
     
     # Return the found values. Will be None if no landmarks was detected 
     return objectIDs, dists, angles
+
+
+
+
