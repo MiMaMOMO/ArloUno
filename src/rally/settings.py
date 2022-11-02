@@ -69,7 +69,7 @@ METER_3 = 300.0                     # 3 meter in cm
 LANDMARK_RANGE = 0.3                # Arlo should always try to come within 30 cm of a landmark
 
 ### SPREADS ###
-SPREAD_DIST = 25.0                  # The spread used when computing distance weights 
+SPREAD_DIST = 15.0                  # The spread used when computing distance weights 
 SPREAD_ANGLE = 2.0                  # The spread used when computing orientation weights 
 
 ### COLORS ### 
