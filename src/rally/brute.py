@@ -132,7 +132,7 @@ def run() -> None:
                         
                         # Drive within 30cm of the landmark if the dist < 1m, 
                         # otherwise drive the full length 
-                        if dist < METER_1:
+                        if dist <= METER_1:
                             print("Starting landmark drive.")
                             commands.drive(arlo, dist, LANDMARK_RANGE)
                             rute_idx += 1
