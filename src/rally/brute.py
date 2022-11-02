@@ -100,6 +100,18 @@ def run() -> None:
                         ", angle = ", 
                         angles[i]    
                     )
+                        
+                    # Compute the unnormalized weight for each particle in the i'th objectID
+                    for p in particles:
+
+                        # Weights of particles
+                        weight = compute_weight(objectIDs, i, p, dists, angles)
+
+                        # Set the particles new weight alongside its former weights
+                        p.setWeight(p.getWeight() + weight)
+
+                        # Add to the sum of weights
+                        weight_sum += weight
                     
                     # Rotating and driving towards the found landmark within a certain range
                     while 1:
@@ -149,18 +161,6 @@ def run() -> None:
                     print(objectIDs)
                     print(dists)
                     print(angles)
-                        
-                    # Compute the unnormalized weight for each particle in the i'th objectID
-                    for p in particles:
-
-                        # Weights of particles
-                        weight = compute_weight(objectIDs, i, p, dists, angles)
-
-                        # Set the particles new weight alongside its former weights
-                        p.setWeight(p.getWeight() + weight)
-
-                        # Add to the sum of weights
-                        weight_sum += weight
                     
                     # TODO: Move all particles here otherwise move them after resampling 
                     # Move all particles according to what we actually drove 
