@@ -112,6 +112,8 @@ def run() -> None:
 
                         # Add to the sum of weights
                         weight_sum += weight
+                        
+                        print(weight_sum)
                     
                     # Rotating and driving towards the found landmark within a certain range
                     while 1:
