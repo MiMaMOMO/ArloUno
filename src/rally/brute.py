@@ -120,7 +120,7 @@ def run() -> None:
                         #     break
                         
                         # Rotate towards the landmark if the angle is bigger than 13 degrees 
-                        if np.abs(angles[i]) > 0.176892:
+                        if np.abs(angles[i]) > 0.126892:
                             print("Starting rotation.")
                             commands.rotate(arlo, angles[i])
                             
@@ -140,7 +140,9 @@ def run() -> None:
                         else: 
                             print("Starting normal drive.")
                             commands.drive(arlo, dist)
-                            
+                        
+                        # We are still far off 
+                        if dists[i] - dist > 50: 
                             # Get the next frame 
                             frame = cam.get_next_frame()
                         
