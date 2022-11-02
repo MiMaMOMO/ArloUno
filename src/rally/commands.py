@@ -3,6 +3,8 @@ import numpy as np
 from settings import * 
 from custom_timer import Timer
 
+import time 
+
 
 def rotate(arlo, angle) -> None:
     '''
@@ -26,7 +28,8 @@ def rotate(arlo, angle) -> None:
     
     # Make Arlo rotate in the right direction 
     arlo.go_diff(LEFT_ROT_VELOCITY, RIGHT_ROT_VELOCITY, left_dir, right_dir) 
-    t.custom_sleep(0.01)   
+    #t.custom_sleep(0.01)   
+    time.sleep(0.01)
     
     # Control what happens while Arlo rotates 
     while 1: 
@@ -55,7 +58,8 @@ def drive(arlo, dist, landmark_range = 0.0) -> None:
     
     # Make Arlo drive forward 
     arlo.go_diff(LEFT_VELOCITY, RIGHT_VELOCITY, 1, 1) 
-    t.custom_sleep(0.01)
+    # t.custom_sleep(0.01)
+    time.sleep(0.01)
     
     # Control what happens while Arlo drives
     while 1:
@@ -87,7 +91,8 @@ def scan(arlo, frame, landmark = None):
     # Rotate a full turn until we find some Aruco landmarks 
     for _ in range(FULL_ROTATION):
         rotate(arlo, DEGREES_15)
-        Timer.custom_sleep(0.6)
+        #Timer.custom_sleep(0.6)
+        time.sleep(0.6)
         detected = detect(frame)
         
         print("ID:      {}".format(detected[0]))
