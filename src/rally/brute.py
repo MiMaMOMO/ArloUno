@@ -148,8 +148,8 @@ def run() -> None:
 
                     print("I broke out of the loop.")
                     print(rute_idx)
-                    
-                    # Scan 
+
+                    # Scan
                     c = commands.scan(arlo, cam, RUTE[rute_idx])
 
                     # objectIDs, dists, angles, frame = commands.scan(arlo, cam, 2)
@@ -157,7 +157,7 @@ def run() -> None:
                     dists = c[1]
                     angles = c[2]
                     frame = c[3]
-                    
+
                     print(objectIDs)
                     print(dists)
                     print(angles)
