@@ -35,7 +35,7 @@ def rotate(arlo, angle) -> None:
     while 1: 
 
         # Break when Arlo have spent the seconds needed to perform the rotation 
-        if t.elapsed_time() > rot_time - 0.04:
+        if t.elapsed_time() > rot_time:
             arlo.stop()
             break
 
@@ -77,7 +77,7 @@ def drive(arlo, dist, landmark_range = 0.0) -> None:
             break
         
         
-def scan(arlo, cam, frame, landmark = None):
+def scan(arlo, cam, landmark = None):
     '''
     Scan for Aruco landmarks by rotating tiny amounts.
     
@@ -93,7 +93,7 @@ def scan(arlo, cam, frame, landmark = None):
         rotate(arlo, DEGREES_15)
         #Timer.custom_sleep(0.6)
         time.sleep(0.6)
-        detected = detect(cam, frame)
+        detected = detect(cam)
         
         print("ID:      {}".format(detected[0]))
         print("Dists:   {}".format(detected[1]))
@@ -109,7 +109,7 @@ def scan(arlo, cam, frame, landmark = None):
     # TODO: If Arlo does not detect anything, move Arlo to a new position and try again 
 
 
-def detect(cam, frame) -> tuple: 
+def detect(cam) -> tuple: 
     '''
     Take a frame and try to detect if any landmarks exist in the frame. 
     
@@ -117,6 +117,9 @@ def detect(cam, frame) -> tuple:
         cam(obj)        : The camera object. 
         frame(img)      : The image we are looking at.
     '''
+    
+    # Get an image 
+    frame = cam.get_next_frame()
     
     # Get information from the image 
     objectIDs, dists, angles = cam.detect_aruco_objects(frame)

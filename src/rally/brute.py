@@ -143,11 +143,9 @@ def run() -> None:
                         
                         # We are still far off 
                         if dists[i] - dist > 20: 
-                            # Get the next frame 
-                            frame = cam.get_next_frame()
                         
                             # Try and detect the landmark Arlo are focusing on  
-                            objectIDs, dists, angles = commands.detect(cam, frame)
+                            objectIDs, dists, angles, frame = commands.detect(cam)
                     
                     print("I broke out of the loop.")
                     
@@ -177,12 +175,13 @@ def run() -> None:
                 
                 # TODO: Find out how we can do a full turn 
                 # Scan for the next landmark 
-                c = commands.scan(arlo, cam, frame, RUTE[rute_idx])
+                c = commands.scan(arlo, cam, RUTE[rute_idx])
                 
                 # objectIDs, dists, angles, frame = commands.scan(arlo, cam, 2)
                 objectIDs = c[0]
                 dists = c[1]
                 angles = c[2]
+                frame = c[3]
             else:
                 # No observation - reset weights to uniform distribution
                 for p in particles:
