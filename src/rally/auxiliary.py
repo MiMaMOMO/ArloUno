@@ -170,7 +170,8 @@ def clean_up(cam) -> None:
 
 def delete_duplicates(objectIDs, dists, angles) -> tuple:
     '''
-    Find and delete the duplicates and choose the right ones depending on angle.
+    Find and delete the duplicates and choose the right ones depending on 
+    the shortest distance.
     
     Parameters:
         objectIDs(array)        : Found landmarks.
@@ -180,11 +181,14 @@ def delete_duplicates(objectIDs, dists, angles) -> tuple:
     
     # Find the dupplicate indexes and reverse the order for deletion
     duplicate_idx = [idx for idx, item in enumerate(objectIDs) if item in objectIDs[:idx]]
-    duplicate_idx_sorted = sorted(duplicate_idx, reverse=True)
+    duplicate_idx_des_sorted = sorted(duplicate_idx, reverse = True)
+    
+    print(duplicate_idx)
 
     # Remove the duplicated landmarks at random
-    if duplicate_idx_sorted:
-        for idx in duplicate_idx_sorted:
+    if duplicate_idx_des_sorted:
+        for idx in duplicate_idx_des_sorted:
+            print(duplicate_idx_des_sorted)
             objectIDs = np.delete(objectIDs, idx)
             dists = np.delete(dists, idx)
             angles = np.delete(angles, idx)
