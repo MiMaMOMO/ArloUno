@@ -125,4 +125,4 @@ def detect(cam) -> tuple:
     objectIDs, dists, angles = cam.detect_aruco_objects(frame)
     
     # Return the found values. Will be None if no landmarks was detected 
-    return objectIDs, dists, angles
+    return objectIDs, dists, angles, frame
