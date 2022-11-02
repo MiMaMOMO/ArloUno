@@ -120,7 +120,7 @@ def run() -> None:
                             break
                         
                         # Rotate towards the landmark if the angle is bigger than 13 degrees 
-                        if np.abs(angles[i]) > 0.226892:
+                        if np.abs(angles[i]) > 0.176892:
                             commands.rotate(arlo, angles[i])
                             
                         # Find the minimum betwen the distance and 1m 
