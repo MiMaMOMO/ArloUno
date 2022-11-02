@@ -135,16 +135,20 @@ def run() -> None:
                             commands.drive(arlo, dist)
 
                     print("I broke out of the loop.")
+                    print(rute_idx)
                     
                     # Scan 
-                    while 1:
-                        c = commands.scan(arlo, cam, RUTE[rute_idx])
+                    c = commands.scan(arlo, cam, RUTE[rute_idx])
 
-                        # objectIDs, dists, angles, frame = commands.scan(arlo, cam, 2)
-                        objectIDs = c[0]
-                        dists = c[1]
-                        angles = c[2]
-                        frame = c[3]
+                    # objectIDs, dists, angles, frame = commands.scan(arlo, cam, 2)
+                    objectIDs = c[0]
+                    dists = c[1]
+                    angles = c[2]
+                    frame = c[3]
+                    
+                    print(objectIDs)
+                    print(dists)
+                    print(angles)
                         
                     # Compute the unnormalized weight for each particle in the i'th objectID
                     for p in particles:
