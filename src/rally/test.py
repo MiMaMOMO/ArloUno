@@ -74,6 +74,9 @@ updated_x, updated_y = test(theta, dist, x, y)
 #     updated_y =  -1 * y + (dist * sin_y)
 
 
+for i in range(1):
+    print(i)
+
 print("Cos(x):  {}".format(cos_x))
 print("Sin(y):  {}".format(sin_y))
 print("x:       {}".format(updated_x))
