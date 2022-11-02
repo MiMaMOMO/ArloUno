@@ -2,27 +2,25 @@ import timeit
 import numpy as np
 import time
 import particle
+import random_numbers as rn
 
 particles = particle.initialize_particles(5000)
 
+def vec():
+    x_sum = np.sum(np.fromiter((p.getX() for p in particles), float))
+    y_sum = np.sum(np.fromiter((p.getY() for p in particles), float))
+    cos_sum = np.sum(np.fromiter((np.cos(p.getTheta())
+                     for p in particles), float))
+    sin_sum = np.sum(np.fromiter((np.sin(p.getTheta())
+                     for p in particles), float))
+
 def fun_one():
-    x_sum = 0.0
-    y_sum = 0.0
-    cos_sum = 0.0
-    sin_sum = 0.0
-    
-    for particle in particles:
-        x_sum += particle.getX()
-        y_sum += particle.getY()
-        cos_sum += np.cos(particle.getTheta())
-        sin_sum += np.sin(particle.getTheta())
+    for p in particles:
+        p.setWeight(1.0 / len(particles))
 
 
 def fun_two():
-    x_sum = np.sum(np.fromiter((p.getX() for p in particles), float))
-    y_sum = np.sum(np.fromiter((p.getY() for p in particles), float))
-    cos_sum = np.sum(np.fromiter((np.cos(p.getTheta()) for p in particles), float))
-    sin_sum = np.sum(np.fromiter((np.sin(p.getTheta()) for p in particles), float))
+    [p.setWeight(1.0 / len(particles)) for p in particles]
 
 
 # Initiate a timer 
@@ -34,9 +32,9 @@ fun_two()
 
 # Measure the execution speed
 fun_one_time = np.average(timeit.repeat(
-    'fun_one()', number=1, repeat=1, setup='from __main__ import fun_one'))
+    'fun_one()', number=10, repeat=1, setup='from __main__ import fun_one'))
 fun_two_time = np.average(timeit.repeat(
-    'fun_two()', number=1, repeat=1, setup='from __main__ import fun_two'))
+    'fun_two()', number=10, repeat=1, setup='from __main__ import fun_two'))
 
 print(f'Function one:       {fun_one_time} seconds')
 print(f'Function two:       {fun_two_time} seconds')

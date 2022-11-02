@@ -1,6 +1,7 @@
 from cv2 import aruco
 
-# TODO: Spread this information out after testing and project end 
+# TODO: Spread this information out after testing and project end
+# TODO: Consider using other data structures for storing data  
 
 ### SETTINGS ###
 SHOW_GUI = True          # Whether or not to open GUI windows

@@ -54,12 +54,12 @@ def run() -> None:
         # Check which camera we want to use
         cam = auxiliary.get_cam()
 
-        # Visted landmarks
+        # Which known landmark Arlo will search for 
         rute_idx = 0
         
         while 1: 
             
-            # When we are back at landmark 1 stop the program 
+            # We are back at landmark 1 stop the program 
             if rute_idx >= 5:
                 break
             
@@ -150,6 +150,7 @@ def run() -> None:
                 # Resample the particles
                 resampling = resample(particles, weights)
 
+                # TODO: Try copying the reference another way 
                 # Copy the new references of resampling
                 copy_resampling_references(resampling)
 

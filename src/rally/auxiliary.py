@@ -178,10 +178,8 @@ def delete_duplicates(objectIDs, dists, angles) -> tuple:
         angles(array)           : Aruco landmarks angles. 
     '''
     
-    # TODO: Delete the duplicate which have the wrong angle from Arlo.
     # Find the dupplicate indexes and reverse the order for deletion
-    duplicate_idx = [idx for idx, item in enumerate(
-        objectIDs) if item in objectIDs[:idx]]
+    duplicate_idx = [idx for idx, item in enumerate(objectIDs) if item in objectIDs[:idx]]
     duplicate_idx_sorted = sorted(duplicate_idx, reverse=True)
 
     # Remove the duplicated landmarks at random
@@ -206,7 +204,6 @@ def remove_unknown(objectIDs, dists, angles, landmarks) -> tuple:
         landmarks(array)        : The landmarks we know on the map. 
     '''
     
-    # TODO: Comment this code 
     if objectIDs is not None:
         known_dists = [dist for dist, id in zip(
             dists, objectIDs) if id in landmarks]
@@ -232,7 +229,6 @@ def remove_known(objectIDs, dists, angles, landmarks) -> tuple:
         landmarks(array)        : The landmarks we know on the map.
     '''
     
-    # TODO: Comment this code 
     if objectIDs is not None:
         known_dists = [dist for dist, id in zip(
             dists, objectIDs) if id not in landmarks]

@@ -1,5 +1,4 @@
 import numpy as np 
-import time
 
 from settings import * 
 from custom_timer import Timer
@@ -23,17 +22,15 @@ def rotate(arlo, angle) -> None:
     left_dir = 1 if sign == -1 else 0
     right_dir = 1 if sign == 1 else 0
     
-    # TODO: Test what happens if we multiply with the sign and get -1. Will it count as a 0? 
     # TODO: Try to initialize the timer after giving the go command to arlo
     
     # Make Arlo rotate in the right direction 
     arlo.go_diff(LEFT_ROT_VELOCITY, RIGHT_ROT_VELOCITY, left_dir, right_dir) 
-    t.sleep(0.01)   # XXX: Does this affect our timer? 
+    t.sleep(0.01)   
     
     # Control what happens while Arlo rotates 
     while 1: 
 
-        # TODO: Test if this is more accurate. We stop a bit earliere for the rotation 
         # Break when Arlo have spent the seconds needed to perform the rotation 
         if t.elapsed_time() > rot_time - 0.04:
             arlo.stop()
@@ -55,7 +52,7 @@ def drive(arlo, dist, landmark_range = 0.0) -> None:
     t = Timer()                                 # Timer used to measure a countdown for Arlo
 
     # TODO: Try to initialize the timer after giving the go command to arlo  
-    # TODO: Arlo should only be able to drive 100 cm at a time, at max 
+    
     # Make Arlo drive forward 
     arlo.go_diff(LEFT_VELOCITY, RIGHT_VELOCITY, 1, 1) 
     t.sleep(0.01)
@@ -89,7 +86,7 @@ def scan(arlo, frame, landmark = None):
     # Rotate a full turn until we find some Aruco landmarks 
     for _ in range(FULL_ROTATION):
         rotate(arlo, DEGREES_15)
-        time.sleep(0.6)
+        Timer.sleep(0.6)
         detected = detect(frame)
         
         print("ID:      {}".format(detected[0]))
@@ -102,8 +99,8 @@ def scan(arlo, frame, landmark = None):
             # If the ID we saw was the landmark we were searching for 
             if landmark in detected[0]:
                 return detected
-            
-        # TODO: What should happen in the case that we do not detect anything? 
+    
+    # TODO: If Arlo does not detect anything, move Arlo to a new position and try again 
 
 
 def detect(cam, frame) -> tuple: 
