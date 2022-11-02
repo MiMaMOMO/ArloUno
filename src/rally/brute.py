@@ -90,7 +90,7 @@ def run() -> None:
                 [p.setWeight(0.0) for p in particles]
                 
                 # List detected objects
-                for i in range(len(objectIDs)):
+                for i in range(len(objectIDs) - 1):
                     print(i)
                     print(
                         "Object ID = ", 
