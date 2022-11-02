@@ -53,7 +53,6 @@ def estimate_pose(particles) -> Particle:
     sin_sum = 0.0                   # The sum of all sinus of the orientation 
     flen = len(particles)           # The length of our particle array 
     
-    # TODO: Try to optimize this function. Either by doing these summation other places and pass them in or by using numpy sum 
     # Find the sum for x, y and orientation 
     for particle in particles:
         x_sum += particle.getX()
@@ -101,8 +100,6 @@ def add_uncertainty(particles, sigma, sigma_theta) -> None:
         sigma_theta(float)      : Noise variance for orientation. 
     '''
     
-    # TODO: Numpy this or add the noise inside another loop for constant time. 
-    # TODO: Check what happens if we += to theta instead of assigning it a new val 
     # Add random noise between values 
     for particle in particles:
         particle.x += rn.randn(0.0, sigma)
@@ -121,7 +118,7 @@ def initialize_particles(num_particles) -> np.ndarray:
     # Initialize empty numpy array with enough space and proper data type 
     particles = np.empty(num_particles, dtype = type(Particle))
 
-    # TODO: Numpy this loop. The numbers 100 and 250 should maybe change to offset 
+    # TODO: The numbers 100 and 250 should maybe change to offset 
     # Random starting points for each particle
     for i in range(num_particles):
         p = Particle(
@@ -174,7 +171,6 @@ def move_all_particles(particles, dist, angle) -> None:
         angle(float)            : The angle Arlo used.
     '''
     
-    # TODO: Numpy this or do the computations in another loop 
     # Compute each particles new x, y and theta value 
     for p in particles:
         x, y, theta = new_position(p, angle, dist)
