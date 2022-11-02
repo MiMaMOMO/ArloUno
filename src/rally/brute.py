@@ -115,6 +115,10 @@ def run() -> None:
                     # Rotating and driving towards the found landmark within a certain range 
                     while 1:
                         
+                        # Break if we cannot see anything 
+                        if isinstance(angles, type(None)):
+                            break
+                        
                         # Rotate towards the landmark if the angle is bigger than 13 degrees 
                         if np.abs(angles[i]) > 0.226892:
                             commands.rotate(arlo, angles[i])
