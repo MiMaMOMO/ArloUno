@@ -139,7 +139,7 @@ try:
             x, y, theta = particle.new_position(est_pose, DEGREES_180, METER_1)
             
             # Move arlo in the digital world 
-            particle.move_particle(est_pose, x, y, theta)
+            # particle.move_particle(est_pose, x, y, theta)
             
             # Move all particles in the digital world 
             particle.move_all_particles(particles, METER_1, DEGREES_180)
