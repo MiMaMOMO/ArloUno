@@ -168,7 +168,7 @@ def run() -> None:
                 
                 # TODO: Find out how we can do a full turn 
                 # Scan for the next landmark 
-                c = commands.scan(arlo, frame, RUTE[rute_idx])
+                c = commands.scan(arlo, cam, frame, RUTE[rute_idx])
                 
                 # objectIDs, dists, angles, frame = commands.scan(arlo, cam, 2)
                 objectIDs = c[0]

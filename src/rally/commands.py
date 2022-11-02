@@ -77,7 +77,7 @@ def drive(arlo, dist, landmark_range = 0.0) -> None:
             break
         
         
-def scan(arlo, frame, landmark = None):
+def scan(arlo, cam, frame, landmark = None):
     '''
     Scan for Aruco landmarks by rotating tiny amounts.
     
@@ -93,7 +93,7 @@ def scan(arlo, frame, landmark = None):
         rotate(arlo, DEGREES_15)
         #Timer.custom_sleep(0.6)
         time.sleep(0.6)
-        detected = detect(frame)
+        detected = detect(cam, frame)
         
         print("ID:      {}".format(detected[0]))
         print("Dists:   {}".format(detected[1]))
