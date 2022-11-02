@@ -18,7 +18,7 @@ class Timer:
         # Return the elapsed time between intialization and now 
         return (time.perf_counter() - self.start_time)
     
-    def sleep(val) -> None:
+    def custom_sleep(val) -> None:
         '''
         Sleeps a certain amount of time. 
         '''
