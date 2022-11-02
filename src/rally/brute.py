@@ -100,6 +100,41 @@ def run() -> None:
                         ", angle = ", 
                         angles[i]    
                     )
+                    
+                    # Rotating and driving towards the found landmark within a certain range
+                    while 1:
+
+                        # Try and detect the landmark Arlo are focusing on
+                        objectIDs, dists, angles, frame = commands.detect(cam)
+
+                        # Break if we cannot see anything
+                        if isinstance(angles, type(None)):
+                            rute_idx += 1
+                            break
+
+                        # Rotate towards the landmark if the angle is bigger than 13 degrees
+                        if np.abs(angles[i]) > 0.156892:
+                            print("Starting rotation.")
+                            commands.rotate(arlo, angles[i])
+
+                        # Find the minimum betwen the distance and 1m
+                        dist = np.minimum(dists[i], METER_1)
+
+                        print(dists[i])
+                        print(dist)
+
+                        # Drive within 30cm of the landmark if the dist < 1m,
+                        # otherwise drive the full length
+                        if dist < METER_1:
+                            print("Starting landmark drive.")
+                            commands.drive(arlo, dist, LANDMARK_RANGE)
+                            rute_idx += 1
+                            break
+                        else:
+                            print("Starting normal drive.")
+                            commands.drive(arlo, dist)
+
+                    print("I broke out of the loop.")
 
                     # Compute the unnormalized weight for each particle in the i'th objectID
                     for p in particles:
@@ -112,41 +147,6 @@ def run() -> None:
 
                         # Add to the sum of weights
                         weight_sum += weight
-                        
-                    # Rotating and driving towards the found landmark within a certain range 
-                    while 1:
-                        
-                        # Try and detect the landmark Arlo are focusing on  
-                        objectIDs, dists, angles, frame = commands.detect(cam)
-                        
-                        # Break if we cannot see anything 
-                        if isinstance(angles, type(None)):
-                            rute_idx += 1
-                            break
-                        
-                        # Rotate towards the landmark if the angle is bigger than 13 degrees 
-                        if np.abs(angles[i]) > 0.156892:
-                            print("Starting rotation.")
-                            commands.rotate(arlo, angles[i])
-                            
-                        # Find the minimum betwen the distance and 1m 
-                        dist = np.minimum(dists[i], METER_1)
-                        
-                        print(dists[i])
-                        print(dist)
-                        
-                        # Drive within 30cm of the landmark if the dist < 1m, 
-                        # otherwise drive the full length 
-                        if dist < METER_1:
-                            print("Starting landmark drive.")
-                            commands.drive(arlo, dist, LANDMARK_RANGE)
-                            rute_idx += 1
-                            break
-                        else: 
-                            print("Starting normal drive.")
-                            commands.drive(arlo, dist)
-                    
-                    print("I broke out of the loop.")
                     
                     # TODO: Move all particles here otherwise move them after resampling 
                     # Move all particles according to what we actually drove 
