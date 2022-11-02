@@ -91,14 +91,14 @@ def run() -> None:
                 
                 # List detected objects
                 for i in range(len(objectIDs)):
-                    print(
-                        "Object ID = ", 
-                        objectIDs[i], 
-                        ", Distance = ", 
-                        dists[i], 
-                        ", angle = ", 
-                        angles[i]    
-                    )
+                    # # print(
+                    #     "Object ID = ", 
+                    #     objectIDs[i], 
+                    #     ", Distance = ", 
+                    #     dists[i], 
+                    #     ", angle = ", 
+                    #     angles[i]    
+                    # )
 
                     # Compute the unnormalized weight for each particle in the i'th objectID
                     for p in particles:
