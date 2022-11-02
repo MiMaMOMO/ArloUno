@@ -115,9 +115,13 @@ def run() -> None:
                     # Rotating and driving towards the found landmark within a certain range 
                     while 1:
                         
+                        # Try and detect the landmark Arlo are focusing on  
+                        objectIDs, dists, angles, frame = commands.detect(cam)
+                        
                         # Break if we cannot see anything 
-                        # if isinstance(angles, type(None)):
-                        #     break
+                        if isinstance(angles, type(None)):
+                            rute_idx += 1
+                            break
                         
                         # Rotate towards the landmark if the angle is bigger than 13 degrees 
                         if np.abs(angles[i]) > 0.156892:
@@ -140,12 +144,6 @@ def run() -> None:
                         else: 
                             print("Starting normal drive.")
                             commands.drive(arlo, dist)
-                        
-                        # We are still far off 
-                        if dists[i] - dist > 20: 
-                        
-                            # Try and detect the landmark Arlo are focusing on  
-                            objectIDs, dists, angles, frame = commands.detect(cam)
                     
                     print("I broke out of the loop.")
                     
