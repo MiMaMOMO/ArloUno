@@ -91,14 +91,14 @@ def run() -> None:
                 
                 # List detected objects
                 for i in range(len(objectIDs)):
-                    # # print(
-                    #     "Object ID = ", 
-                    #     objectIDs[i], 
-                    #     ", Distance = ", 
-                    #     dists[i], 
-                    #     ", angle = ", 
-                    #     angles[i]    
-                    # )
+                    print(
+                        "Object ID = ", 
+                        objectIDs[i], 
+                        ", Distance = ", 
+                        dists[i], 
+                        ", angle = ", 
+                        angles[i]    
+                    )
 
                     # Compute the unnormalized weight for each particle in the i'th objectID
                     for p in particles:
@@ -134,13 +134,12 @@ def run() -> None:
                             break
                         else: 
                             commands.drive(arlo, dist)
-                            pass
+                            
+                            # Get the next frame 
+                            frame = cam.get_next_frame()
                         
-                        # Get the next frame 
-                        frame = cam.get_next_frame()
-        
-                        # Try and detect the landmark Arlo are focusing on  
-                        objectIDs, dists, angles = commands.detect(cam, frame)
+                            # Try and detect the landmark Arlo are focusing on  
+                            objectIDs, dists, angles = commands.detect(cam, frame)
                     
                     # TODO: Move all particles here otherwise move them after resampling 
                     # Move all particles according to what we actually drove 
