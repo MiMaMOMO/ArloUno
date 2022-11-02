@@ -91,6 +91,7 @@ def run() -> None:
                 
                 # List detected objects
                 for i in range(len(objectIDs)):
+                    print(i)
                     print(
                         "Object ID = ", 
                         objectIDs[i], 
