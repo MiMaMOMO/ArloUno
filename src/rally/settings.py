@@ -5,7 +5,7 @@ from cv2 import aruco
 
 ### SETTINGS ###
 SHOW_GUI = True          # Whether or not to open GUI windows
-ON_ROBOT = False          # Whether or not we are running on the Arlo robot
+ON_ROBOT = True          # Whether or not we are running on the Arlo robot
 
 ### ARUCO ### 
 ARUCO_DICT = aruco.getPredefinedDictionary(aruco.DICT_6X6_250)
