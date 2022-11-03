@@ -179,21 +179,45 @@ def delete_duplicates(objectIDs, dists, angles) -> tuple:
         angles(array)           : Aruco landmarks angles. 
     '''
     
-    # Find the dupplicate indexes and reverse the order for deletion
-    duplicate_idx = [idx for idx, item in enumerate(objectIDs) if item in objectIDs[:idx]]
-    duplicate_idx_des_sorted = sorted(duplicate_idx, reverse = True)
-    
-    print(duplicate_idx)
+    # Find the dupplicate items
+    duplicates = [ID for idx, ID in enumerate(objectIDs) if ID in objectIDs[:idx]]
 
-    # Remove the duplicated landmarks at random
-    if duplicate_idx_des_sorted:
-        for idx in duplicate_idx_des_sorted:
-            print(duplicate_idx_des_sorted)
-            objectIDs = np.delete(objectIDs, idx)
-            dists = np.delete(dists, idx)
-            angles = np.delete(angles, idx)
+    # We found some duplicates. Traverse them 
+    if duplicates:
+        for duplicate in duplicates:
+
+            # Find all index values of the duplicates
+            duplicate_indexes = np.where(objectIDs == duplicate)
+            idx_to_delete = 0
+
+            # Find shortest distance between the two duplicates
+            if dists[duplicate_indexes[0][0]] < dists[duplicate_indexes[0][1]]:
+                idx_to_delete = duplicate_indexes[0][1]
+            else:
+                idx_to_delete = duplicate_indexes[0][0]
+
+            # Delete the further distance values found
+            objectIDs = np.delete(objectIDs, idx_to_delete)
+            dists = np.delete(dists, idx_to_delete)
+            angles = np.delete(angles, idx_to_delete)
 
     return objectIDs, dists, angles
+    
+    # # Find the dupplicate indexes and reverse the order for deletion
+    # duplicate_idx = [idx for idx, item in enumerate(objectIDs) if item in objectIDs[:idx]]
+    # duplicate_idx_des_sorted = sorted(duplicate_idx, reverse = True)
+    
+    # print(duplicate_idx)
+
+    # # Remove the duplicated landmarks at random
+    # if duplicate_idx_des_sorted:
+    #     for idx in duplicate_idx_des_sorted:
+    #         print(duplicate_idx_des_sorted)
+    #         objectIDs = np.delete(objectIDs, idx)
+    #         dists = np.delete(dists, idx)
+    #         angles = np.delete(angles, idx)
+
+    # return objectIDs, dists, angles
 
 
 def remove_unknown(objectIDs, dists, angles, landmarks) -> tuple:
