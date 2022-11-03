@@ -99,7 +99,7 @@ try:
     # XXX: center_point = compute_center()
 
     # Initialize Arlo  
-    arlo = robot.Robot()
+    # arlo = robot.Robot()
 
     # Allocate space for world map
     world = np.zeros((500, 500, 3), dtype = np.uint8)
@@ -172,7 +172,8 @@ try:
         objectIDs, dists, angles = cam.detect_aruco_objects(frame)
         
         if action == ord('f'):
-            commands.drive(arlo, dists[0], 0.3)
+            pass
+            # commands.drive(arlo, dists[0], 0.3)
         
         # We detected atleast one landmark 
         if not isinstance(objectIDs, type(None)):

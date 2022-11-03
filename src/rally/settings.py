@@ -5,7 +5,7 @@ from cv2 import aruco
 
 ### SETTINGS ###
 SHOW_GUI = True          # Whether or not to open GUI windows
-ON_ROBOT = True          # Whether or not we are running on the Arlo robot
+ON_ROBOT = False          # Whether or not we are running on the Arlo robot
 
 ### ARUCO ### 
 ARUCO_DICT = aruco.getPredefinedDictionary(aruco.DICT_6X6_250)
@@ -24,14 +24,14 @@ ARLO_WIN_Y = 50                     # Y-coordinate for Arlos window
 WORLD_WIN_X = 500                   # X-coordinate for the world window
 WORLD_WIN_Y = 50                    # Y-coordinate for the world window
 
-### LANDMARKS ###
-RUTE = [1, 2, 3, 4, 1]              # The rute we wanna take 
-LANDMARK_IDS = [1, 2, 3, 4]         # The ID of each landmark we know  
+### LANDMARKS ### TODO: Remember to write 4 back in 
+RUTE = [1, 2, 3, 1]              # The rute we wanna take 
+LANDMARK_IDS = [1, 2, 3]            # The ID of each landmark we know  
 LANDMARKS = {
     1: (0.0, 0.0),                  # Coordinates for landmark 1 (RED)
     2: (0.0, 300.0),                # Coordinates for landmark 2 (GREEN)
-    3: (400.0, 0.0),                # Coordinates for landmark 3 (BLUE)
-    4: (400.0, 300.0)               # Coordinates for landmark 4 (BLACK)
+    3: (400.0, 0.0)                # Coordinates for landmark 3 (BLUE)
+    # 4: (400.0, 300.0)               # Coordinates for landmark 4 (BLACK)
 }
 
 ### PARTICLES ###
@@ -66,7 +66,7 @@ HALF_METER = 50.0                   # 0.5 meter in cm
 METER_1 = 100.0                     # 1 meter in cm 
 METER_2 = 200.0                     # 2 meter in cm 
 METER_3 = 300.0                     # 3 meter in cm
-LANDMARK_RANGE = 0.3                # Arlo should always try to come within 30 cm of a landmark
+LANDMARK_RANGE = 0.4                # Arlo should always try to come within 30 cm of a landmark
 
 ### SPREADS ###
 SPREAD_DIST = 15.0                  # The spread used when computing distance weights 
