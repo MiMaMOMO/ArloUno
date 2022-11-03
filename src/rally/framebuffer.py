@@ -12,7 +12,7 @@ class FrameBuffer(object):
         self.currentBufferIndex = 0         # The index of the current buffer 
         self.lock = threading.Lock()        # The internal lock 
       
-    # TODO: Tweak this with tests   
+ 
     def get_frame(self):
         '''
         Return latest frame from the framebuffer.
@@ -26,7 +26,7 @@ class FrameBuffer(object):
             else:
                 return None
             
-    # TODO: Tweak this with tests 
+
     def new_frame(self, frame):
         """Add a new frame to the frame buffer"""
         # self.frameBuffer[int(not self.currentBufferIndex)] = copy.deepcopy(frame)

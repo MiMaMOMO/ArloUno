@@ -107,25 +107,25 @@ def update_windows(est_pose, particles, world, frame) -> None:
         cv2.imshow(WIN_WORLD, world)                # Update world
 
 
-# TODO: Does not work. Needs to work with any two combination of landmarks 
-def compute_center() -> tuple:
+def compute_center(fst_landmark_idx, sec_landmark_idx) -> tuple:
     '''
     Compute the center point between two known landmarks.
     '''
-    center_x = (LANDMARKS[1][0] + LANDMARKS[2][0]) / 2
-    center_y = (LANDMARKS[1][1] + LANDMARKS[2][1]) / 2
+    
+    # Compute the virtual center points x and y coordinate 
+    center_x = (LANDMARKS[fst_landmark_idx][0] + LANDMARKS[sec_landmark_idx][0]) / 2
+    center_y = (LANDMARKS[fst_landmark_idx][1] + LANDMARKS[sec_landmark_idx][1]) / 2
 
     return (center_x, center_y)
 
 
-# TODO: Optimize this function 
 def compute_center_parameters(center, arlo_pose) -> tuple:
     '''
     Compute the distance and angle from Arlo to the center point between the landmarks.
     
     Parameters:
-        center(???)             : The not visual point in the center.
-        arlo_pose(Particle)     : The Arlo particles. 
+        center(tuple)           : The not visual point in the center.
+        arlo_pose(Particle)     : The Arlo particle. 
     '''                    
     
     # Compute the distance between the center point and Arlo 
@@ -202,22 +202,6 @@ def delete_duplicates(objectIDs, dists, angles) -> tuple:
             angles = np.delete(angles, idx_to_delete)
 
     return objectIDs, dists, angles
-    
-    # # Find the dupplicate indexes and reverse the order for deletion
-    # duplicate_idx = [idx for idx, item in enumerate(objectIDs) if item in objectIDs[:idx]]
-    # duplicate_idx_des_sorted = sorted(duplicate_idx, reverse = True)
-    
-    # print(duplicate_idx)
-
-    # # Remove the duplicated landmarks at random
-    # if duplicate_idx_des_sorted:
-    #     for idx in duplicate_idx_des_sorted:
-    #         print(duplicate_idx_des_sorted)
-    #         objectIDs = np.delete(objectIDs, idx)
-    #         dists = np.delete(dists, idx)
-    #         angles = np.delete(angles, idx)
-
-    # return objectIDs, dists, angles
 
 
 def remove_unknown(objectIDs, dists, angles, landmarks) -> tuple:

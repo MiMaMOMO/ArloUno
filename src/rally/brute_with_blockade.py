@@ -147,14 +147,14 @@ def run() -> None:
                                 commands.rotate(arlo, angles[i])
 
                             # Find the minimum betwen the distance and 1m
-                            dist = np.minimum(dists[i], METER_1)
+                            dist = np.minimum(dists[i], ONE_METER)
 
                             print(dists[i])
                             print(dist)
 
                             # Drive within 30cm of the landmark if the dist < 1m,
                             # otherwise drive the full length
-                            if dist < METER_1:
+                            if dist < ONE_METER:
                                 print("Starting landmark drive.")
                                 commands.drive(arlo, dist, LANDMARK_RANGE)
                                 rute_idx += 1

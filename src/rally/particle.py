@@ -118,12 +118,11 @@ def initialize_particles(num_particles) -> np.ndarray:
     # Initialize empty numpy array with enough space and proper data type 
     particles = np.empty(num_particles, dtype = type(Particle))
 
-    # TODO: The numbers 100 and 250 should maybe change to offset 
     # Random starting points for each particle
     for i in range(num_particles):
         p = Particle(
-            600.0 * np.random.ranf() - 100.0,
-            600.0 * np.random.ranf() - 250.0,
+            600.0 * np.random.ranf() - 25.0,
+            600.0 * np.random.ranf() - 125.0,
             np.mod(2.0 * np.pi * np.random.ranf(), 2.0 * np.pi),
             1.0 / num_particles
         )
