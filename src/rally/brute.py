@@ -230,4 +230,5 @@ def run() -> None:
 
 ### STARTING POINT OF THE PROGRAM ### 
 if __name__ == '__main__':
-    run()
+    # run()
+    pass
