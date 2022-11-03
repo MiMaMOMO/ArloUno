@@ -77,6 +77,10 @@ def run() -> None:
         
             # Try and detect the first landmark upon starting 
             objectIDs, dists, angles, frame = commands.detect(cam)
+            print(objectIDs)
+            print(dists)
+            print(angles)
+            
             if not isinstance(objectIDs, type(None)):
                 objectIDs, dists, angles = auxiliary.delete_duplicates(objectIDs, dists, angles)
             
