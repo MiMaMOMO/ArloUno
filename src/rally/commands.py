@@ -112,8 +112,6 @@ def scan(arlo, cam, landmark = None):
             # If the ID we saw was the landmark we were searching for 
             if landmark in detected[0]:
                 return detected
-    
-    # TODO: If Arlo does not detect anything, move Arlo to a new position and try again 
 
 
 def scan_enviroment(arlo, cam):
@@ -161,7 +159,8 @@ def detect(cam) -> tuple:
     '''
     
     # Get an image 
-    frame = cam.get_next_frame()
+    for _ in range(10):
+        frame = cam.get_next_frame()
     
     # Draw the Aruco detection on the image  
     # cam.draw_aruco_objects(frame)

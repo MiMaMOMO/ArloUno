@@ -203,9 +203,6 @@ import sys
 import particle
 
 import numpy as np
-
-from selflocalize import compute_weight, resample, copy_resampling_references
-
 from settings import *
 
 if ON_ROBOT:
@@ -292,14 +289,6 @@ def run() -> None:
             # We detected atleast one landmark
             if not isinstance(objectIDs, type(None)):
 
-                # The total sum of all weigths
-                # weight_sum = 0.0
-
-                # # TODO: Maybe dont reset to 0, but to uniform distribution instead
-                # # TODO: Maybe do this in another loop
-                # # Reset the weights
-                # [p.setWeight(0.0) for p in particles]
-
                 # List detected objects
                 for i in range(len(objectIDs)):
                     print(i)
@@ -312,22 +301,9 @@ def run() -> None:
                         angles[i]
                     )
 
-                    # # Compute the unnormalized weight for each particle in the i'th objectID
-                    # for p in particles:
-
-                    #     # Weights of particles
-                    #     weight = compute_weight(objectIDs, i, p, dists, angles)
-
-                    #     # Set the particles new weight alongside its former weights
-                    #     p.setWeight(p.getWeight() + weight)
-
-                    #     # Add to the sum of weights
-                    #     weight_sum += weight
-
                     print(RUTE[rute_idx])
                     print(objectIDs[i])
 
-                    # if RUTE[rute_idx] == objectIDs:
                     # Rotating and driving towards the found landmark within a certain range
                     while 1:
                         print("!!!!!")
@@ -351,11 +327,6 @@ def run() -> None:
                         if np.abs(angles[i]) > 0.156892:
                             print("Starting rotation.")
                             commands.rotate(arlo, angles[i])
-                            # objectIDs, dists, angles, _ = commands.detect(cam)
-                            
-                            # if not isinstance(objectIDs, type(None)):
-                            #     objectIDs, dists, angles = auxiliary.delete_duplicates(
-                            #         objectIDs, dists, angles)
 
                         # Find the minimum betwen the distance and 1m
                         dist = np.minimum(dists[i], ONE_METER)
@@ -393,49 +364,11 @@ def run() -> None:
                     print(dists)
                     print(angles)
 
-                # TODO: Move all particles here otherwise move them after resampling
-                # Move all particles according to what we actually drove
-                # particle.move_all_particles(particles, dists[i], angles[i])
-
-                # TODO: Use numpy to normalize the weights?
-                # Store normalized weights of each particle for probability purposes
-                # weights = [(p.getWeight() / weight_sum) for p in particles]
-
-                # # Resample the particles
-                # resampling = resample(particles, weights)
-
-                # # TODO: Try copying the reference another way
-                # # Copy the new references of resampling
-                # copy_resampling_references(resampling)
-
-                # # Replace our particles with the resampling particles
-                # particles = resampling
-
-                # # Add uncertainity to each particle
-                # particle.add_uncertainty(particles, 1.0, 0.01)
-
                 # Draw detected objects
                 cam.draw_aruco_objects(frame)
 
-                # TODO: Find out how we can do a full turn
-                # Scan for the next landmark
-                # c = commands.scan(arlo, cam, RUTE[rute_idx])
-
-                # # objectIDs, dists, angles, frame = commands.scan(arlo, cam, 2)
-                # objectIDs = c[0]
-                # dists = c[1]
-                # angles = c[2]
-                # frame = c[3]
-            # else:
-            #     # No observation - reset weights to uniform distribution
-            #     for p in particles:
-            #         p.setWeight(1.0 / NUM_OF_PARTICLES)
-
-            # The estimate of the robots current pose
-            #est_pose = particle.estimate_pose(particles)
-
             # Update the windows
-            auxiliary.update_windows(est_pose, particles, world, frame)
+            # auxiliary.update_windows(est_pose, particles, world, frame)
 
     # Make sure to clean up even if an exception occurred
     finally:
