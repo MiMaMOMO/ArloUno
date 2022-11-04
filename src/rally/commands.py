@@ -54,7 +54,7 @@ def drive(arlo, dist, landmark_range = 0.0) -> None:
     '''
 
     scaled_dist = dist / 100                        # Scale the distance down to meters  
-    tolerance_time = landmark_range * TIME_METER    # How close we want Arlo to get to the landmark 
+    # tolerance_time = landmark_range * TIME_METER    # How close we want Arlo to get to the landmark 
     drive_time = scaled_dist * TIME_METER           # How long it takes Arlo to drive dist (cm)
 
     # TODO: Try to initialize the timer after giving the go command to arlo  
@@ -78,7 +78,7 @@ def drive(arlo, dist, landmark_range = 0.0) -> None:
 
         # If Arlo wants to go near a box we account for that by a certain tolerance 
         # otherwise let Arlo drive the full dist
-        if t.elapsed_time() > (drive_time - tolerance_time):
+        if t.elapsed_time() > (drive_time - (TIME_METER * landmark_range)):
             arlo.stop()
             break
         
