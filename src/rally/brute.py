@@ -257,6 +257,8 @@ def run() -> None:
         
         # Get the first frame
         # frame = cam.get_next_frame()
+        
+        print(RUTE[rute_idx])
 
         # Try and detect the first landmark upon starting
         objectIDs, dists, angles, frame = commands.scan(arlo, cam, RUTE[rute_idx])
