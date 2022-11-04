@@ -360,26 +360,26 @@ def run() -> None:
 
                     print(rute_idx)
 
-                    # Scan
-                    c = commands.scan(arlo, cam, RUTE[rute_idx])
+                # Scan
+                c = commands.scan(arlo, cam, RUTE[rute_idx])
 
-                    # objectIDs, dists, angles, frame = commands.scan(arlo, cam, 2)
-                    objectIDs = c[0]
-                    dists = c[1]
-                    angles = c[2]
-                    frame = c[3]
+                # objectIDs, dists, angles, frame = commands.scan(arlo, cam, 2)
+                objectIDs = c[0]
+                dists = c[1]
+                angles = c[2]
+                frame = c[3]
 
-                    if not isinstance(objectIDs, type(None)):
-                        objectIDs, dists, angles = auxiliary.delete_duplicates(
-                            objectIDs, dists, angles)
+                if not isinstance(objectIDs, type(None)):
+                    objectIDs, dists, angles = auxiliary.delete_duplicates(
+                        objectIDs, dists, angles)
 
-                    print(objectIDs)
-                    print(dists)
-                    print(angles)
+                print(objectIDs)
+                print(dists)
+                print(angles)
 
-                    # TODO: Move all particles here otherwise move them after resampling
-                    # Move all particles according to what we actually drove
-                    # particle.move_all_particles(particles, dists[i], angles[i])
+                # TODO: Move all particles here otherwise move them after resampling
+                # Move all particles according to what we actually drove
+                # particle.move_all_particles(particles, dists[i], angles[i])
 
                 # TODO: Use numpy to normalize the weights?
                 # Store normalized weights of each particle for probability purposes
