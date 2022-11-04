@@ -85,6 +85,7 @@ def run_brute() -> None:
                 
                 # List detected objects
                 for i in range(len(objectIDs)):
+                    print(i)
                     print(
                         "Object ID = ", objectIDs[i],
                         ", Distance = ", dists[i], 
@@ -141,18 +142,18 @@ def run_brute() -> None:
                             print("Starting normal drive with dist = {}".format(dist))
                             commands.drive(arlo, dist)
 
-                    # Scan
-                    c = commands.scan(arlo, cam, RUTE[rute_idx])
+                # Scan
+                c = commands.scan(arlo, cam, RUTE[rute_idx])
 
-                    # objectIDs, dists, angles, frame = commands.scan(arlo, cam, 2)
-                    objectIDs = c[0]
-                    dists = c[1]
-                    angles = c[2]
-                    frame = c[3]
-                    
-                    if not isinstance(objectIDs, type(None)):
-                        objectIDs, dists, angles = auxiliary.delete_duplicates(
-                            objectIDs, dists, angles)
+                # objectIDs, dists, angles, frame = commands.scan(arlo, cam, 2)
+                objectIDs = c[0]
+                dists = c[1]
+                angles = c[2]
+                frame = c[3]
+                
+                if not isinstance(objectIDs, type(None)):
+                    objectIDs, dists, angles = auxiliary.delete_duplicates(
+                        objectIDs, dists, angles)
                 
                 # Store normalized weights of each particle for probability purposes
                 weights = [(p.getWeight() / weight_sum) for p in particles]
