@@ -4,7 +4,7 @@ import time
 import numpy as np 
 
 from Ex4.Timer import Timer
-from Ex4.settings import *
+from settings_alt import *
 
 
 # Initialize the robot 
