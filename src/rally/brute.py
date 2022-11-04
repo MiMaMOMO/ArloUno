@@ -1,25 +1,25 @@
-import commands
-import cv2
-import auxiliary
-import sys
-import particle
+# import commands
+# import cv2
+# import auxiliary
+# import sys
+# import particle
 
-import numpy as np
+# import numpy as np
 
-from selflocalize import compute_weight, resample, copy_resampling_references
+# from selflocalize import compute_weight, resample, copy_resampling_references
 
-from settings import * 
+# from settings import * 
 
-if ON_ROBOT:
-    sys.path.append("../robot")
+# if ON_ROBOT:
+#     sys.path.append("../robot")
     
-# Try to import robot module
-try:
-    import robot
-    ON_ROBOT = True
-except ImportError:
-    print("selflocalize.py: robot module not present - forcing not running on Arlo!")
-    ON_ROBOT = False
+# # Try to import robot module
+# try:
+#     import robot
+#     ON_ROBOT = True
+# except ImportError:
+#     print("selflocalize.py: robot module not present - forcing not running on Arlo!")
+#     ON_ROBOT = False
     
 
 # def run_brute() -> None:
@@ -259,7 +259,7 @@ def run() -> None:
         # frame = cam.get_next_frame()
 
         # Try and detect the first landmark upon starting
-        objectIDs, dists, angles, frame = commands.detect(cam)
+        objectIDs, dists, angles, frame = commands.scan(cam, RUTE[rute_idx])
         print(objectIDs)
         print(dists)
         print(angles)
@@ -322,43 +322,49 @@ def run() -> None:
                     #     # Add to the sum of weights
                     #     weight_sum += weight
 
-                    # Rotating and driving towards the found landmark within a certain range
-                    while 1:
+                    if RUTE[rute_idx] == objectIDs[i]: 
+                        # Rotating and driving towards the found landmark within a certain range
+                        while 1:
 
-                        # Try and detect the landmark Arlo are focusing on
-                        objectIDs, dists, angles, frame = commands.detect(cam)
-                        if not isinstance(objectIDs, type(None)):
-                            objectIDs, dists, angles = auxiliary.delete_duplicates(
-                                objectIDs, dists, angles)
+                            # Try and detect the landmark Arlo are focusing on
+                            temp_objectIDs, temp_dists, temp_angles, _ = commands.detect(cam)
+                            if not isinstance(temp_objectIDs, type(None)):
+                                temp_objectIDs, temp_dists, temp_angles = auxiliary.delete_duplicates(
+                                    temp_objectIDs, temp_dists, temp_angles)
 
-                        # Break if we cannot see anything
-                        if isinstance(angles, type(None)):
-                            rute_idx += 1
-                            break
+                            # Break if we cannot see anything
+                            if isinstance(temp_objectIDs, type(None)):
+                                rute_idx += 1
+                                break
 
-                        # Rotate towards the landmark if the angle is bigger than 13 degrees
-                        if np.abs(angles[i]) > 0.156892:
-                            print("Starting rotation.")
-                            commands.rotate(arlo, angles[i])
+                            # Rotate towards the landmark if the angle is bigger than 13 degrees
+                            if np.abs(temp_angles[i]) > 0.156892:
+                                print("Starting rotation.")
+                                commands.rotate(arlo, temp_angles[i])
+                                temp_objectIDs, temp_dists, temp_angles, _ = commands.detect(
+                                    cam)
+                                
+                                if not isinstance(temp_objectIDs, type(None)):
+                                    temp_objectIDs, temp_dists, temp_angles = auxiliary.delete_duplicates(temp_objectIDs, temp_dists, temp_angles)
 
-                        # Find the minimum betwen the distance and 1m
-                        dist = np.minimum(dists[i], ONE_METER)
+                            # Find the minimum betwen the distance and 1m
+                            dist = np.minimum(temp_dists[i], ONE_METER + 30)
 
-                        print(dists[i])
-                        print(dist)
+                            print(temp_dists[i])
+                            print(dist)
 
-                        # Drive within 30cm of the landmark if the dist < 1m,
-                        # otherwise drive the full length
-                        if dist < ONE_METER:
-                            print("Starting landmark drive.")
-                            commands.drive(arlo, dist, LANDMARK_RANGE)
-                            rute_idx += 1
-                            break
-                        else:
-                            print("Starting normal drive.")
-                            commands.drive(arlo, dist)
+                            # Drive within 30cm of the landmark if the dist < 1m,
+                            # otherwise drive the full length
+                            if dist < ONE_METER + 30:
+                                print("Starting landmark drive.")
+                                commands.drive(arlo, dist, LANDMARK_RANGE)
+                                rute_idx += 1
+                                break
+                            else:
+                                print("Starting normal drive.")
+                                commands.drive(arlo, dist)
 
-                        print(rute_idx)
+                            print(rute_idx)
 
                 # Scan
                 c = commands.scan(arlo, cam, RUTE[rute_idx])
