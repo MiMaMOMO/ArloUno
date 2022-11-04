@@ -160,6 +160,8 @@ def detect(cam) -> tuple:
         frame(img)      : The image we are looking at.
     '''
     
+    frame = None
+    
     # Get an image 
     for _ in range(10):
         frame = cam.get_next_frame()

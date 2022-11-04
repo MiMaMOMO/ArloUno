@@ -334,12 +334,16 @@ def run() -> None:
 
                             # Try and detect the landmark Arlo are focusing on
                             objectIDs, dists, angles, _ = commands.detect(cam)
+                            
+                            print(objectIDs)
+                            
                             if not isinstance(objectIDs, type(None)):
                                 objectIDs, dists, angles = auxiliary.delete_duplicates(
                                     objectIDs, dists, angles)
 
                             # Break if we cannot see anything
                             if isinstance(objectIDs, type(None)):
+                                print("Cannot see.")
                                 rute_idx += 1
                                 break
 
