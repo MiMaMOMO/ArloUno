@@ -327,9 +327,10 @@ def run() -> None:
                     print(RUTE[rute_idx])
                     print(objectIDs[i])
 
-                    if RUTE[rute_idx] == objectIDs[i]: 
+                    if RUTE[rute_idx] == objectIDs:
                         # Rotating and driving towards the found landmark within a certain range
                         while 1:
+                            print("!!!!!")
 
                             # Try and detect the landmark Arlo are focusing on
                             objectIDs, dists, angles, _ = commands.detect(cam)
