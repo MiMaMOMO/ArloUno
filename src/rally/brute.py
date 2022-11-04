@@ -266,7 +266,7 @@ def run() -> None:
         while 1:
 
             # We are back at landmark 1 stop the program
-            if rute_idx >= 5:
+            if rute_idx > 4:
                 break
 
             # TODO: Remove this since we wont be pressing any keys to the rally
@@ -333,20 +333,21 @@ def run() -> None:
                             print("Starting normal drive.")
                             commands.drive(arlo, dist)
 
-                        print(rute_idx)
+                        print("Rute_IDX: {}".format(rute_idx))
 
                     # Scan
-                    c = commands.scan(arlo, cam, RUTE[rute_idx])
+                    if rute_idx < 5:
+                        c = commands.scan(arlo, cam, RUTE[rute_idx])
 
-                    # objectIDs, dists, angles, frame = commands.scan(arlo, cam, 2)
-                    objectIDs = c[0]
-                    dists = c[1]
-                    angles = c[2]
-                    frame = c[3]
+                        # objectIDs, dists, angles, frame = commands.scan(arlo, cam, 2)
+                        objectIDs = c[0]
+                        dists = c[1]
+                        angles = c[2]
+                        frame = c[3]
 
-                    print(objectIDs)
-                    print(dists)
-                    print(angles)
+                        print(objectIDs)
+                        print(dists)
+                        print(angles)
 
                 # Draw detected objects
                 cam.draw_aruco_objects(frame)
