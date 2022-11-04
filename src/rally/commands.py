@@ -164,7 +164,7 @@ def detect(cam) -> tuple:
     frame = cam.get_next_frame()
     
     # Draw the Aruco detection on the image  
-    cam.draw_aruco_objects(frame)
+    # cam.draw_aruco_objects(frame)
     
     # Get information from the image 
     objectIDs, dists, angles = cam.detect_aruco_objects(frame)
