@@ -1,9 +1,9 @@
-import cv2
-from settings import *
-import camera
 import sys
-import commands
-import auxiliary
+import cv2
+
+from rally.settings import *
+from rally.camera import Camera
+from rally.auxiliary import open_windows, clean_up
 
 
 def isRunningOnArlo():
@@ -24,21 +24,22 @@ except ImportError:
     print("selflocalize.py: robot module not present - forcing not running on Arlo!")
     onRobot = False
 
+
 def get_cam():
     '''
     Initialize the right camera. 
     '''
     if isRunningOnArlo():
-        return camera.Camera(0, 'arlo', useCaptureThread=True)
+        return Camera(0, 'arlo', useCaptureThread=True)
     else:
-        return camera.Camera(0, 'macbookpro', useCaptureThread=True)
+        return Camera(0, 'macbookpro', useCaptureThread=True)
 
 
 ### MAIN PROGRAM ###
 try:
 
     # Open windows
-    auxiliary.open_windows()
+    open_windows()
 
     # Initialize Arlo
     arlo = robot.Robot()
@@ -81,4 +82,4 @@ try:
 
 # Make sure to clean up even if an exception occurred
 finally:
-    auxiliary.clean_up(cam)
+    clean_up(cam)
