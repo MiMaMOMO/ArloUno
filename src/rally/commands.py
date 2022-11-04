@@ -246,7 +246,7 @@ def drive(arlo, dist, landmark_range=0.0) -> None:
     # TODO: Try to initialize the timer after giving the go command to arlo
 
     # Make Arlo drive forward
-    if arlo.read_front_ping_sensor() <= 1250.0:
+    if print(arlo.read_front_ping_sensor()) <= 1250.0:
         drive_time = scaled_dist * 1.8
     else:
         arlo.go_diff(LEFT_VELOCITY, RIGHT_VELOCITY, 1, 1)
