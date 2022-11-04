@@ -5,7 +5,7 @@ from cv2 import aruco
 # TODO: Remember that Arlo can only see up to approximatly 62 cm, below that and Arlo cannot see the landmarks which means Arlo cannot detect them.     
 
 ### SETTINGS ###
-SHOW_GUI = False          # Whether or not to open GUI windows
+SHOW_GUI = True          # Whether or not to open GUI windows
 ON_ROBOT = True          # Whether or not we are running on the Arlo robot
 
 
