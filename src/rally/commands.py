@@ -249,8 +249,8 @@ def drive(arlo, dist, landmark_range=0.0) -> None:
     print(ping)
 
     # Make Arlo drive forward
-    if ping <= 1250.0:
-        drive_time = scaled_dist * 1.4
+    # if ping <= 1250.0:
+    #     drive_time = scaled_dist * 1.4
         
     arlo.go_diff(LEFT_VELOCITY, RIGHT_VELOCITY, 1, 1)
     # Timer used to measure a countdown for Arlo
