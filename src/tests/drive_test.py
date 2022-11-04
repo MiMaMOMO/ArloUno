@@ -1,7 +1,7 @@
 import sys
 
-import commands
-from settings import * 
+from rally.commands import rotate, drive
+from rally.settings import * 
 
 if ON_ROBOT:
     sys.path.append("../robot")
@@ -16,6 +16,3 @@ except ImportError:
 
 # Create a robot object and initialize
 arlo = robot.Robot()
-
-print(arlo._power_checker(60))
-print(arlo._power_checker(64))
