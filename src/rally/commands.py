@@ -256,9 +256,9 @@ def drive(arlo, dist, landmark_range=0.0) -> None:
 
         # TODO: Test this.
         # Arlo is close enough to the landmark
-        # if arlo.read_front_ping_sensor() <= 400.0:
-        #     arlo.stop()
-        #     break
+        if arlo.read_front_ping_sensor() <= 400.0:
+            arlo.stop()
+            break
 
         # TODO: Check for obstacles here
 
@@ -347,7 +347,8 @@ def detect(cam) -> tuple:
     '''
 
     # Get an image
-    frame = cam.get_next_frame()
+    for _ in range(10):
+        frame = cam.get_next_frame()
 
     # Draw the Aruco detection on the image
     # cam.draw_aruco_objects(frame)
