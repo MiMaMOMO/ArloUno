@@ -54,16 +54,15 @@ def drive(arlo, dist, landmark_range = 0.0) -> None:
     '''
 
     scaled_dist = dist / 100                        # Scale the distance down to meters  
-    # tolerance_time = landmark_range * TIME_METER    # How close we want Arlo to get to the landmark 
     drive_time = scaled_dist * TIME_METER           # How long it takes Arlo to drive dist (cm)
+    t = Timer()                                     # Timer used to measure a countdown for Arlo
 
     # TODO: Try to initialize the timer after giving the go command to arlo  
     
     # Make Arlo drive forward 
     arlo.go_diff(LEFT_VELOCITY, RIGHT_VELOCITY, 1, 1) 
-    t = Timer()                                 # Timer used to measure a countdown for Arlo
     # t.custom_sleep(0.01)
-    # time.sleep(0.01)
+    time.sleep(0.01)
     
     # Control what happens while Arlo drives and what can happen after 
     while 1:
