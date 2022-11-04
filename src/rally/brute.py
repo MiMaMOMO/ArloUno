@@ -327,55 +327,55 @@ def run() -> None:
                     print(RUTE[rute_idx])
                     print(objectIDs[i])
 
-                    if RUTE[rute_idx] == objectIDs:
-                        # Rotating and driving towards the found landmark within a certain range
-                        while 1:
-                            print("!!!!!")
+                    # if RUTE[rute_idx] == objectIDs:
+                    # Rotating and driving towards the found landmark within a certain range
+                    while 1:
+                        print("!!!!!")
 
-                            # Try and detect the landmark Arlo are focusing on
-                            objectIDs, dists, angles, _ = commands.detect(cam)
-                            
-                            print(objectIDs)
+                        # Try and detect the landmark Arlo are focusing on
+                        objectIDs, dists, angles, _ = commands.detect(cam)
+                        
+                        print(objectIDs)
+                        
+                        if not isinstance(objectIDs, type(None)):
+                            objectIDs, dists, angles = auxiliary.delete_duplicates(
+                                objectIDs, dists, angles)
+
+                        # Break if we cannot see anything
+                        if isinstance(objectIDs, type(None)):
+                            print("Cannot see.")
+                            rute_idx += 1
+                            break
+
+                        # Rotate towards the landmark if the angle is bigger than 13 degrees
+                        if np.abs(angles[i]) > 0.156892:
+                            print("Starting rotation.")
+                            commands.rotate(arlo, angles[i])
+                            objectIDs, dists, angles, _ = commands.detect(
+                                cam)
                             
                             if not isinstance(objectIDs, type(None)):
                                 objectIDs, dists, angles = auxiliary.delete_duplicates(
                                     objectIDs, dists, angles)
 
-                            # Break if we cannot see anything
-                            if isinstance(objectIDs, type(None)):
-                                print("Cannot see.")
-                                rute_idx += 1
-                                break
+                        # Find the minimum betwen the distance and 1m
+                        dist = np.minimum(dists[i], ONE_METER)
 
-                            # Rotate towards the landmark if the angle is bigger than 13 degrees
-                            if np.abs(angles[i]) > 0.156892:
-                                print("Starting rotation.")
-                                commands.rotate(arlo, angles[i])
-                                objectIDs, dists, angles, _ = commands.detect(
-                                    cam)
-                                
-                                if not isinstance(objectIDs, type(None)):
-                                    objectIDs, dists, angles = auxiliary.delete_duplicates(
-                                        objectIDs, dists, angles)
+                        print(dists[i])
+                        print(dist)
 
-                            # Find the minimum betwen the distance and 1m
-                            dist = np.minimum(dists[i], ONE_METER)
+                        # Drive within 30cm of the landmark if the dist < 1m,
+                        # otherwise drive the full length
+                        if dist < ONE_METER:
+                            print("Starting landmark drive.")
+                            commands.drive(arlo, dist, LANDMARK_RANGE)
+                            rute_idx += 1
+                            break
+                        else:
+                            print("Starting normal drive.")
+                            commands.drive(arlo, dist)
 
-                            print(dists[i])
-                            print(dist)
-
-                            # Drive within 30cm of the landmark if the dist < 1m,
-                            # otherwise drive the full length
-                            if dist < ONE_METER:
-                                print("Starting landmark drive.")
-                                commands.drive(arlo, dist, LANDMARK_RANGE)
-                                rute_idx += 1
-                                break
-                            else:
-                                print("Starting normal drive.")
-                                commands.drive(arlo, dist)
-
-                            print(rute_idx)
+                        print(rute_idx)
 
                 # Scan
                 c = commands.scan(arlo, cam, RUTE[rute_idx])
