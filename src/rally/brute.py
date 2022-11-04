@@ -351,12 +351,11 @@ def run() -> None:
                         if np.abs(angles[i]) > 0.156892:
                             print("Starting rotation.")
                             commands.rotate(arlo, angles[i])
-                            objectIDs, dists, angles, _ = commands.detect(
-                                cam)
+                            # objectIDs, dists, angles, _ = commands.detect(cam)
                             
-                            if not isinstance(objectIDs, type(None)):
-                                objectIDs, dists, angles = auxiliary.delete_duplicates(
-                                    objectIDs, dists, angles)
+                            # if not isinstance(objectIDs, type(None)):
+                            #     objectIDs, dists, angles = auxiliary.delete_duplicates(
+                            #         objectIDs, dists, angles)
 
                         # Find the minimum betwen the distance and 1m
                         dist = np.minimum(dists[i], ONE_METER)
