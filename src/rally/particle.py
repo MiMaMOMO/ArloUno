@@ -138,11 +138,9 @@ def new_position(particle, angle, dist) -> tuple:
     Computes the new x, y and theta value for a particle after movement. 
     
     Parameters: 
+        particle(obj)           : The particle moved.
         angle(float)            : The amount of angle we want to move.
         dist(float)             : The amount of distance we want to move.  
-        current_x(float)        : The particles current x position. 
-        current_y(float)        : The particles current y position. 
-        current_theta(float)    : The particles current theta orientation. 
     '''
     
     # Compute the new orientation 

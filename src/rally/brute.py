@@ -20,16 +20,11 @@ try:
 except ImportError:
     print("selflocalize.py: robot module not present - forcing not running on Arlo!")
     ON_ROBOT = False
-
-# Start value for IDS, distances and angles 
-# objectIDs = None 
-# dists = None 
-# angles = None 
-
+    
 
 def run_brute() -> None:
     '''
-    Run a brute program where we assume no obstacles. 
+    Run the brute program where we assume no obstacles. 
     '''
     
     try:
@@ -71,22 +66,13 @@ def run_brute() -> None:
             # Quit if we press q 
             if action == ord('q'): 
                 break
-            
-            # Get the first frame 
-            # frame = cam.get_next_frame()
         
             # Try and detect the first landmark upon starting 
             objectIDs, dists, angles, frame = commands.detect(cam)
-            print(objectIDs)
-            print(dists)
-            print(angles)
             
+            # Check and remove duplicates 
             if not isinstance(objectIDs, type(None)):
                 objectIDs, dists, angles = auxiliary.delete_duplicates(objectIDs, dists, angles)
-            
-            print(objectIDs)
-            print(dists)
-            print(angles)
             
             # We detected atleast one landmark
             if not isinstance(objectIDs, type(None)):
@@ -94,21 +80,15 @@ def run_brute() -> None:
                 # The total sum of all weigths
                 weight_sum = 0.0
 
-                # TODO: Maybe dont reset to 0, but to uniform distribution instead 
-                # TODO: Maybe do this in another loop 
                 # Reset the weights
                 [p.setWeight(0.0) for p in particles]
                 
                 # List detected objects
                 for i in range(len(objectIDs)):
-                    print(i)
                     print(
-                        "Object ID = ", 
-                        objectIDs[i], 
-                        ", Distance = ", 
-                        dists[i], 
-                        ", angle = ", 
-                        angles[i]    
+                        "Object ID = ", objectIDs[i],
+                        ", Distance = ", dists[i], 
+                        ", angle = ", angles[i]    
                     )
                         
                     # Compute the unnormalized weight for each particle in the i'th objectID
@@ -128,39 +108,35 @@ def run_brute() -> None:
 
                         # Try and detect the landmark Arlo are focusing on
                         objectIDs, dists, angles, frame = commands.detect(cam)
+                        
+                        # Check and remove duplicates 
                         if not isinstance(objectIDs, type(None)):
                             objectIDs, dists, angles = auxiliary.delete_duplicates(
                                 objectIDs, dists, angles)
 
-                        # Break if we cannot see anything
-                        if isinstance(angles, type(None)):
+                        # We cannot see anything and we assume we are close to the landmark 
+                        if isinstance(objectIDs, type(None)):
                             rute_idx += 1
                             break
 
                         # Rotate towards the landmark if the angle is bigger than 13 degrees
-                        if np.abs(angles[i]) > 0.156892:
-                            print("Starting rotation.")
+                        if np.abs(angles[i]) > DEGREES_13:
+                            print("Starting rotation with angle = {}".format(angles[i]))
                             commands.rotate(arlo, angles[i])
 
                         # Find the minimum betwen the distance and 1m
                         dist = np.minimum(dists[i], ONE_METER)
 
-                        print(dists[i])
-                        print(dist)
-
-                        # Drive within 30cm of the landmark if the dist < 1m,
+                        # Drive within 40cm of the landmark if the dist < 1m,
                         # otherwise drive the full length
                         if dist < ONE_METER:
-                            print("Starting landmark drive.")
+                            print("Starting landmark drive with dist = {}".format(dist))
                             commands.drive(arlo, dist, LANDMARK_RANGE)
                             rute_idx += 1
                             break
                         else:
-                            print("Starting normal drive.")
+                            print("Starting normal drive with dist = {}".format(dist))
                             commands.drive(arlo, dist)
-
-                    print("I broke out of the loop.")
-                    print(rute_idx)
 
                     # Scan
                     c = commands.scan(arlo, cam, RUTE[rute_idx])
@@ -174,23 +150,13 @@ def run_brute() -> None:
                     if not isinstance(objectIDs, type(None)):
                         objectIDs, dists, angles = auxiliary.delete_duplicates(
                             objectIDs, dists, angles)
-
-                    print(objectIDs)
-                    print(dists)
-                    print(angles)
-                    
-                    # TODO: Move all particles here otherwise move them after resampling 
-                    # Move all particles according to what we actually drove 
-                    # particle.move_all_particles(particles, dists[i], angles[i])
                 
-                # TODO: Use numpy to normalize the weights? 
                 # Store normalized weights of each particle for probability purposes
                 weights = [(p.getWeight() / weight_sum) for p in particles]
 
                 # Resample the particles
                 resampling = resample(particles, weights)
 
-                # TODO: Try copying the reference another way 
                 # Copy the new references of resampling
                 copy_resampling_references(resampling)
 
@@ -202,16 +168,6 @@ def run_brute() -> None:
 
                 # Draw detected objects
                 cam.draw_aruco_objects(frame)
-                
-                # TODO: Find out how we can do a full turn 
-                # Scan for the next landmark 
-                # c = commands.scan(arlo, cam, RUTE[rute_idx])
-                
-                # # objectIDs, dists, angles, frame = commands.scan(arlo, cam, 2)
-                # objectIDs = c[0]
-                # dists = c[1]
-                # angles = c[2]
-                # frame = c[3]
             else:
                 # No observation - reset weights to uniform distribution
                 for p in particles:
@@ -232,3 +188,6 @@ def run_brute() -> None:
 if __name__ == '__main__':
     run_brute()
 
+# 1. Compute a strategy for blockades 
+# 2. Compute a strategy for obstacles 
+# 3. Make selflocalize into a function which returns Arlos pose 

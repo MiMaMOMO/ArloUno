@@ -2,6 +2,7 @@ from cv2 import aruco
 
 # TODO: Spread this information out after testing and project end
 # TODO: Consider using other data structures for storing data
+# TODO: Remember that Arlo can only see up to approximatly 62 cm, below that and Arlo cannot see the landmarks which means Arlo cannot detect them.     
 
 ### SETTINGS ###
 SHOW_GUI = True          # Whether or not to open GUI windows
@@ -34,6 +35,15 @@ LANDMARKS = {
     3: (400.0, 0.0),                # Coordinates for landmark 3 (BLUE)
     4: (400.0, 300.0)               # Coordinates for landmark 4 (BLACK)
 }
+OBSTACLES = {
+    5: {0.0, 0.0},
+    6: {0.0, 0.0},
+    7: {0.0, 0.0},
+    8: {0.0, 0.0},
+    9: {0.0, 0.0},
+    10: {0.0, 0.0},
+    11: {0.0, 0.0}
+}
 
 
 ### PARTICLES ###
@@ -46,13 +56,14 @@ THETA_UNCERTAINITY = 0.1            # Uncertainity added to theta for orientatio
 
 
 ### VELOCITY ###
-RIGHT_VELOCITY = 67                 # Arlos right wheel speed
-LEFT_VELOCITY = 61                  # Arlos left wheel speed
+RIGHT_VELOCITY = 65                 # Arlos right wheel speed
+LEFT_VELOCITY = 60                  # Arlos left wheel speed
 RIGHT_ROT_VELOCITY = 64             # Arlos right wheel rotation speed
 LEFT_ROT_VELOCITY = 64              # Arlos left wheel rotation speed
 
 
 ### ROTATIONS ### 
+DEGREES_13 = 0.156892               # 13 degrees in radions
 DEGREES_15 = 0.261799               # 15 degrees in radions
 DEGREES_20 = 0.349065               # 20 degrees in radions
 DEGREES_30 = 0.523598               # 30 degrees in radions 
