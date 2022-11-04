@@ -1,86 +1,86 @@
-# import copy
-# import cv2
-# from settings import *
-# import particle
-# import numpy as np
-# import sys
-# import commands
-# import auxiliary
+import copy
+import cv2
+from settings import *
+import particle
+import numpy as np
+import sys
+import commands
+import auxiliary
 
 
-# def isRunningOnArlo():
-#     """Return True if we are running on Arlo, otherwise False.
-#       You can use this flag to switch the code from running on you laptop to Arlo - you need to do the programming here!
-#     """
-#     return ON_ROBOT
+def isRunningOnArlo():
+    """Return True if we are running on Arlo, otherwise False.
+      You can use this flag to switch the code from running on you laptop to Arlo - you need to do the programming here!
+    """
+    return ON_ROBOT
 
-# if isRunningOnArlo():
-#     sys.path.append("../robot")
+if isRunningOnArlo():
+    sys.path.append("../robot")
 
-# # Try to import robot module 
-# try:
-#     import robot
-#     ON_ROBOT = True
-# except ImportError:
-#     print("selflocalize.py: robot module not present - forcing not running on Arlo!")
-#     ON_ROBOT = False
+# Try to import robot module 
+try:
+    import robot
+    ON_ROBOT = True
+except ImportError:
+    print("selflocalize.py: robot module not present - forcing not running on Arlo!")
+    ON_ROBOT = False
 
 
-# def compute_weight(objectIDs, i, p, dists, angles) -> float:
-#     '''
-#     Compute the weigth of a particle. 
+def compute_weight(objectIDs, i, p, dists, angles) -> float:
+    '''
+    Compute the weigth of a particle. 
     
-#     Parameters: 
-#         objectIDs(list)     : List of found Aruco landmarks. 
-#         i(int)              : The index of the objectIDs. 
-#         p(Particle)         : The current particle. 
-#         dists(list)         : The distances of the Aruco landmarks.
-#         angles(list)        : The angles of the Aruco landmarks.
-#     '''
+    Parameters: 
+        objectIDs(list)     : List of found Aruco landmarks. 
+        i(int)              : The index of the objectIDs. 
+        p(Particle)         : The current particle. 
+        dists(list)         : The distances of the Aruco landmarks.
+        angles(list)        : The angles of the Aruco landmarks.
+    '''
     
-#     # Compute weights for each particle by using their distance 
-#     x = LANDMARKS[objectIDs[i]][0] - p.getX() 
-#     y = LANDMARKS[objectIDs[i]][1] - p.getY() 
+    # Compute weights for each particle by using their distance 
+    x = LANDMARKS[objectIDs[i]][0] - p.getX() 
+    y = LANDMARKS[objectIDs[i]][1] - p.getY() 
     
-#     dist = np.sqrt(np.power(x, 2) + np.power(y, 2))
-#     dist_weight = np.exp(-1 * (np.power(dists[i] - dist, 2) / (2 * np.power(SPREAD_DIST, 2))))
+    dist = np.sqrt(np.power(x, 2) + np.power(y, 2))
+    dist_weight = np.exp(-1 * (np.power(dists[i] - dist, 2) / (2 * np.power(SPREAD_DIST, 2))))
 
-#     # Compute weights for each particle by using their orientation
-#     orientation_vector = np.array([np.cos(p.getTheta()), np.sin(p.getTheta())])
-#     orthogonal_vector = np.array([-orientation_vector[1], orientation_vector[0]])
-#     pointing_vector = np.array([x, y]) / dist
+    # Compute weights for each particle by using their orientation
+    orientation_vector = np.array([np.cos(p.getTheta()), np.sin(p.getTheta())])
+    orthogonal_vector = np.array([-orientation_vector[1], orientation_vector[0]])
+    pointing_vector = np.array([x, y]) / dist
 
-#     orientation_sign = np.sign(np.dot(pointing_vector, orthogonal_vector))
-#     inverse_cos = np.arccos(np.dot(pointing_vector, orientation_vector))
-#     angle_landmark = orientation_sign * inverse_cos
-#     orientation = angles[i] - angle_landmark 
-#     orientation_weight = np.exp(-1 * (np.power(orientation, 2) / (2 * np.power(SPREAD_ANGLE, 2))))
+    orientation_sign = np.sign(np.dot(pointing_vector, orthogonal_vector))
+    inverse_cos = np.arccos(np.dot(pointing_vector, orientation_vector))
+    angle_landmark = orientation_sign * inverse_cos
+    orientation = angles[i] - angle_landmark 
+    orientation_weight = np.exp(-1 * (np.power(orientation, 2) / (2 * np.power(SPREAD_ANGLE, 2))))
     
-#     return (dist_weight * orientation_weight)
-
-
-# def resample(particles, weights) -> np.ndarray:
-#     '''
-#     Resample the particles.
-    
-#     Parameters:
-#         particles(ndarray)      : Array of particles.
-#         weights(ndarray)        : Array of computed weights. 
-#     '''
-    
-#     # Resample the particles using SIR 
-#     return np.random.choice(particles, NUM_OF_PARTICLES, True, weights)
+    return (dist_weight * orientation_weight)
 
 
-# def copy_resampling_references(resample) -> None:
-#     '''
-#     Copy the references for each particle in the resampling.
-#     '''
+def resample(particles, weights) -> np.ndarray:
+    '''
+    Resample the particles.
     
-#     # TODO: Numpy this 
-#     # Make sure we copy the reference and still resample into a new array
-#     for i in range(len(resample)): 
-#         resample[i] = copy.deepcopy(resample[i])
+    Parameters:
+        particles(ndarray)      : Array of particles.
+        weights(ndarray)        : Array of computed weights. 
+    '''
+    
+    # Resample the particles using SIR 
+    return np.random.choice(particles, NUM_OF_PARTICLES, True, weights)
+
+
+def copy_resampling_references(resample) -> None:
+    '''
+    Copy the references for each particle in the resampling.
+    '''
+    
+    # TODO: Numpy this 
+    # Make sure we copy the reference and still resample into a new array
+    for i in range(len(resample)): 
+        resample[i] = copy.deepcopy(resample[i])
 
 
 # # ### MAIN PROGRAM ###
