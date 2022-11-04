@@ -57,7 +57,7 @@ def run() -> None:
         # Get the first frame
         # frame = cam.get_next_frame()
 
-        print(RUTE[rute_idx])
+        print("Looking for ID: {}".format(RUTE[rute_idx]))
 
         while 1:
             
