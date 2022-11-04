@@ -56,7 +56,7 @@ THETA_UNCERTAINITY = 0.1            # Uncertainity added to theta for orientatio
 
 
 ### VELOCITY ###
-RIGHT_VELOCITY = 65                 # Arlos right wheel speed
+RIGHT_VELOCITY = 64                 # Arlos right wheel speed
 LEFT_VELOCITY = 60                  # Arlos left wheel speed
 RIGHT_ROT_VELOCITY = 64             # Arlos right wheel rotation speed
 LEFT_ROT_VELOCITY = 64              # Arlos left wheel rotation speed
@@ -83,7 +83,7 @@ HALF_METER = 50.0                   # 0.5 meter in cm
 ONE_METER = 100.0                   # 1 meter in cm 
 TWO_METER = 200.0                   # 2 meter in cm 
 THREE_METER = 300.0                 # 3 meter in cm
-LANDMARK_RANGE = 0.4                # Arlo should always try to come within 40 cm of a landmark
+LANDMARK_RANGE = 0.35               # Arlo should always try to come within 40 cm of a landmark
 
 
 ### SPREADS ###
