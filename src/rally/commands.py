@@ -201,6 +201,7 @@ def rotate(arlo, angle) -> None:
     scaled_angle = np.abs(np.degrees(angle))
     # Seconds to to rotate Arlo angle amount
     rot_time = scaled_angle * (TIME_ORIENTATION / 90)
+    t = Timer()
 
     # Find the direction we should rotate
     left_dir = 1 if sign == -1 else 0
@@ -212,9 +213,8 @@ def rotate(arlo, angle) -> None:
     # Make Arlo rotate in the right direction
     arlo.go_diff(LEFT_ROT_VELOCITY, RIGHT_ROT_VELOCITY, left_dir, right_dir)
     # Timer to measure a countdown for the rotation
-    t = Timer()
     #t.custom_sleep(0.01)
-    # time.sleep(0.01)
+    time.sleep(0.01)
 
     # Control what happens while Arlo rotates or what should happen after a rotation
     while 1:
@@ -241,15 +241,15 @@ def drive(arlo, dist, landmark_range=0.0) -> None:
     tolerance_time = landmark_range * TIME_METER
     # How long it takes Arlo to drive dist (cm)
     drive_time = scaled_dist * TIME_METER
+    t = Timer()
 
     # TODO: Try to initialize the timer after giving the go command to arlo
 
     # Make Arlo drive forward
     arlo.go_diff(LEFT_VELOCITY, RIGHT_VELOCITY, 1, 1)
     # Timer used to measure a countdown for Arlo
-    t = Timer()
     # t.custom_sleep(0.01)
-    # time.sleep(0.01)
+    time.sleep(0.01)
 
     # Control what happens while Arlo drives and what can happen after
     while 1:
