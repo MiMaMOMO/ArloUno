@@ -8,22 +8,22 @@ import commands
 import auxiliary
 
 
-def isRunningOnArlo():
-    """Return True if we are running on Arlo, otherwise False.
-      You can use this flag to switch the code from running on you laptop to Arlo - you need to do the programming here!
-    """
-    return ON_ROBOT
+# def isRunningOnArlo():
+#     """Return True if we are running on Arlo, otherwise False.
+#       You can use this flag to switch the code from running on you laptop to Arlo - you need to do the programming here!
+#     """
+#     return ON_ROBOT
 
-if isRunningOnArlo():
-    sys.path.append("../robot")
+# if isRunningOnArlo():
+#     sys.path.append("../robot")
 
-# Try to import robot module 
-try:
-    import robot
-    ON_ROBOT = True
-except ImportError:
-    print("selflocalize.py: robot module not present - forcing not running on Arlo!")
-    ON_ROBOT = False
+# # Try to import robot module 
+# try:
+#     import robot
+#     ON_ROBOT = True
+# except ImportError:
+#     print("selflocalize.py: robot module not present - forcing not running on Arlo!")
+#     ON_ROBOT = False
 
 
 def compute_weight(objectIDs, i, p, dists, angles) -> float:
