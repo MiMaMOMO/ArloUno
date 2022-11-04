@@ -17,4 +17,5 @@ except ImportError:
 # Create a robot object and initialize
 arlo = robot.Robot()
 
-commands.drive(arlo, 100.0)
+arlo._power_checker(60)
+arlo._power_checker(64)
