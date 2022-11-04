@@ -256,13 +256,6 @@ def drive(arlo, dist, landmark_range=0.0) -> None:
     # Timer used to measure a countdown for Arlo
     # t.custom_sleep(0.01)
     time.sleep(0.01)
-    
-    
-     # TODO: Test this.
-    # Arlo is close enough to the landmark
-    if arlo.read_front_ping_sensor() <= 1250.0:
-        
-        arlo.stop()
 
     # Control what happens while Arlo drives and what can happen after
     while 1:
