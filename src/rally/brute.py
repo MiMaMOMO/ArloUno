@@ -322,60 +322,60 @@ def run() -> None:
                         # Add to the sum of weights
                         weight_sum += weight
 
-                # Rotating and driving towards the found landmark within a certain range
-                while 1:
+                    # Rotating and driving towards the found landmark within a certain range
+                    while 1:
 
-                    # Try and detect the landmark Arlo are focusing on
-                    objectIDs, dists, angles, frame = commands.detect(cam)
+                        # Try and detect the landmark Arlo are focusing on
+                        objectIDs, dists, angles, frame = commands.detect(cam)
+                        if not isinstance(objectIDs, type(None)):
+                            objectIDs, dists, angles = auxiliary.delete_duplicates(
+                                objectIDs, dists, angles)
+
+                        # Break if we cannot see anything
+                        if isinstance(angles, type(None)):
+                            rute_idx += 1
+                            break
+
+                        # Rotate towards the landmark if the angle is bigger than 13 degrees
+                        if np.abs(angles[i]) > 0.156892:
+                            print("Starting rotation.")
+                            commands.rotate(arlo, angles[i])
+
+                        # Find the minimum betwen the distance and 1m
+                        dist = np.minimum(dists[i], ONE_METER)
+
+                        print(dists[i])
+                        print(dist)
+
+                        # Drive within 30cm of the landmark if the dist < 1m,
+                        # otherwise drive the full length
+                        if dist < ONE_METER:
+                            print("Starting landmark drive.")
+                            commands.drive(arlo, dist, LANDMARK_RANGE)
+                            rute_idx += 1
+                            break
+                        else:
+                            print("Starting normal drive.")
+                            commands.drive(arlo, dist)
+
+                        print(rute_idx)
+
+                    # Scan
+                    c = commands.scan(arlo, cam, RUTE[rute_idx])
+
+                    # objectIDs, dists, angles, frame = commands.scan(arlo, cam, 2)
+                    objectIDs = c[0]
+                    dists = c[1]
+                    angles = c[2]
+                    frame = c[3]
+
                     if not isinstance(objectIDs, type(None)):
                         objectIDs, dists, angles = auxiliary.delete_duplicates(
                             objectIDs, dists, angles)
 
-                    # Break if we cannot see anything
-                    if isinstance(angles, type(None)):
-                        rute_idx += 1
-                        break
-
-                    # Rotate towards the landmark if the angle is bigger than 13 degrees
-                    if np.abs(angles[i]) > 0.156892:
-                        print("Starting rotation.")
-                        commands.rotate(arlo, angles[i])
-
-                    # Find the minimum betwen the distance and 1m
-                    dist = np.minimum(dists[i], ONE_METER)
-
-                    print(dists[i])
-                    print(dist)
-
-                    # Drive within 30cm of the landmark if the dist < 1m,
-                    # otherwise drive the full length
-                    if dist < ONE_METER:
-                        print("Starting landmark drive.")
-                        commands.drive(arlo, dist, LANDMARK_RANGE)
-                        rute_idx += 1
-                        break
-                    else:
-                        print("Starting normal drive.")
-                        commands.drive(arlo, dist)
-
-                    print(rute_idx)
-
-                # Scan
-                c = commands.scan(arlo, cam, RUTE[rute_idx])
-
-                # objectIDs, dists, angles, frame = commands.scan(arlo, cam, 2)
-                objectIDs = c[0]
-                dists = c[1]
-                angles = c[2]
-                frame = c[3]
-
-                if not isinstance(objectIDs, type(None)):
-                    objectIDs, dists, angles = auxiliary.delete_duplicates(
-                        objectIDs, dists, angles)
-
-                print(objectIDs)
-                print(dists)
-                print(angles)
+                    print(objectIDs)
+                    print(dists)
+                    print(angles)
 
                 # TODO: Move all particles here otherwise move them after resampling
                 # Move all particles according to what we actually drove
