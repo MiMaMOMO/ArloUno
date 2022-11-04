@@ -332,30 +332,31 @@ def run() -> None:
                         while 1:
 
                             # Try and detect the landmark Arlo are focusing on
-                            temp_objectIDs, temp_dists, temp_angles, _ = commands.detect(cam)
-                            if not isinstance(temp_objectIDs, type(None)):
-                                temp_objectIDs, temp_dists, temp_angles = auxiliary.delete_duplicates(
-                                    temp_objectIDs, temp_dists, temp_angles)
+                            objectIDs, dists, angles, _ = commands.detect(cam)
+                            if not isinstance(objectIDs, type(None)):
+                                objectIDs, dists, angles = auxiliary.delete_duplicates(
+                                    objectIDs, dists, angles)
 
                             # Break if we cannot see anything
-                            if isinstance(temp_objectIDs, type(None)):
+                            if isinstance(objectIDs, type(None)):
                                 rute_idx += 1
                                 break
 
                             # Rotate towards the landmark if the angle is bigger than 13 degrees
-                            if np.abs(temp_angles[i]) > 0.156892:
+                            if np.abs(angles[i]) > 0.156892:
                                 print("Starting rotation.")
-                                commands.rotate(arlo, temp_angles[i])
-                                temp_objectIDs, temp_dists, temp_angles, _ = commands.detect(
+                                commands.rotate(arlo, angles[i])
+                                objectIDs, dists, angles, _ = commands.detect(
                                     cam)
                                 
-                                if not isinstance(temp_objectIDs, type(None)):
-                                    temp_objectIDs, temp_dists, temp_angles = auxiliary.delete_duplicates(temp_objectIDs, temp_dists, temp_angles)
+                                if not isinstance(objectIDs, type(None)):
+                                    objectIDs, dists, angles = auxiliary.delete_duplicates(
+                                        objectIDs, dists, angles)
 
                             # Find the minimum betwen the distance and 1m
-                            dist = np.minimum(temp_dists[i], ONE_METER + 30)
+                            dist = np.minimum(dists[i], ONE_METER + 30)
 
-                            print(temp_dists[i])
+                            print(dists[i])
                             print(dist)
 
                             # Drive within 30cm of the landmark if the dist < 1m,
