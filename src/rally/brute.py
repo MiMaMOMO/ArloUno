@@ -263,14 +263,6 @@ def run() -> None:
         print(dists)
         print(angles)
 
-        if not isinstance(objectIDs, type(None)):
-            objectIDs, dists, angles = auxiliary.delete_duplicates(
-                objectIDs, dists, angles)
-
-        print(objectIDs)
-        print(dists)
-        print(angles)
-
         while 1:
 
             # We are back at landmark 1 stop the program
@@ -312,10 +304,6 @@ def run() -> None:
                         objectIDs, dists, angles, _ = commands.detect(cam)
                         
                         print(objectIDs)
-                        
-                        if not isinstance(objectIDs, type(None)):
-                            objectIDs, dists, angles = auxiliary.delete_duplicates(
-                                objectIDs, dists, angles)
 
                         # Break if we cannot see anything
                         if isinstance(objectIDs, type(None)):
@@ -355,10 +343,6 @@ def run() -> None:
                     dists = c[1]
                     angles = c[2]
                     frame = c[3]
-
-                    if not isinstance(objectIDs, type(None)):
-                        objectIDs, dists, angles = auxiliary.delete_duplicates(
-                            objectIDs, dists, angles)
 
                     print(objectIDs)
                     print(dists)

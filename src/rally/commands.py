@@ -4,6 +4,7 @@ import numpy as np
 from settings import * 
 from custom_timer import Timer
 from auxiliary import delete_duplicates
+import auxiliary
 
 # TODO: Remove this 
 import time 
@@ -170,6 +171,10 @@ def detect(cam) -> tuple:
     
     # Get information from the image 
     objectIDs, dists, angles = cam.detect_aruco_objects(frame)
+    
+    # ... 
+    if not isinstance(objectIDs, type(None)):
+        objectIDs, dists, angles = auxiliary.delete_duplicates(objectIDs, dists, angles)
     
     # Return the found values. Will be None if no landmarks was detected 
     return objectIDs, dists, angles, frame

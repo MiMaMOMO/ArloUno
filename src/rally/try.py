@@ -67,14 +67,6 @@ def run() -> None:
             print(dists)
             print(angles)
 
-            if not isinstance(objectIDs, type(None)):
-                objectIDs, dists, angles = auxiliary.delete_duplicates(
-                    objectIDs, dists, angles)
-
-            print(objectIDs)
-            print(dists)
-            print(angles)
-
             # We are back at landmark 1 stop the program
             if rute_idx >= 5:
                 break
@@ -103,10 +95,6 @@ def run() -> None:
                     objectIDs, dists, angles, _ = commands.detect(cam)
 
                     print(objectIDs)
-
-                    # if not isinstance(objectIDs, type(None)):
-                    #     objectIDs, dists, angles = auxiliary.delete_duplicates(
-                    #         objectIDs, dists, angles)
 
                     # Break if we cannot see anything
                     if isinstance(objectIDs, type(None)):
@@ -140,11 +128,6 @@ def run() -> None:
 
                 # Scan
                 objectIDs, dists, angles, frame = commands.scan(arlo, cam, RUTE[rute_idx])
-
-                if not isinstance(objectIDs, type(None)):
-                    objectIDs, dists, angles = auxiliary.delete_duplicates(
-                        objectIDs, dists, angles)
-
                 print(objectIDs)
                 print(dists)
                 print(angles)
