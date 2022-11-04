@@ -109,6 +109,7 @@ def scan(arlo, cam, landmark = None):
         
         # If we saw an ID 
         if not isinstance(detected[0], type(None)):
+            cam.draw_aruco_objects(detected[3])
             cv2.imwrite("frame.png", detected[3])
             
             # If the ID we saw was the landmark we were searching for 
