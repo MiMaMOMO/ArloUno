@@ -324,6 +324,9 @@ def run() -> None:
                     #     # Add to the sum of weights
                     #     weight_sum += weight
 
+                    print(RUTE[rute_idx])
+                    print(objectIDs[i])
+
                     if RUTE[rute_idx] == objectIDs[i]: 
                         # Rotating and driving towards the found landmark within a certain range
                         while 1:
