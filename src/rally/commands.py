@@ -32,7 +32,7 @@ def rotate(arlo, angle) -> None:
     arlo.go_diff(LEFT_ROT_VELOCITY, RIGHT_ROT_VELOCITY, left_dir, right_dir) 
     t = Timer()                                     # Timer to measure a countdown for the rotation
     #t.custom_sleep(0.01)   
-    # time.sleep(0.01)
+    time.sleep(0.01)
     
     # Control what happens while Arlo rotates or what should happen after a rotation 
     while 1: 
@@ -69,9 +69,9 @@ def drive(arlo, dist, landmark_range = 0.0) -> None:
         
         # TODO: Test this. 
         # Arlo is close enough to the landmark 
-        # if arlo.read_front_ping_sensor() <= 400.0:
-        #     arlo.stop()
-        #     break
+        if arlo.read_front_ping_sensor() <= 400.0:
+            arlo.stop()
+            break
         
         # TODO: Check for obstacles here 
 
