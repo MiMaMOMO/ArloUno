@@ -73,10 +73,10 @@ def run() -> None:
                 break
 
             # Get the first frame
-            # frame = cam.get_next_frame()
+            frame = cam.get_next_frame()
 
             # Try and detect the first landmark upon starting
-            objectIDs, dists, angles, frame = commands.detect(cam)
+            objectIDs, dists, angles = commands.detect(cam, frame)
             print(objectIDs)
             print(dists)
             print(angles)
@@ -131,7 +131,7 @@ def run() -> None:
                         while 1:
 
                             # Try and detect the landmark Arlo are focusing on
-                            objectIDs, dists, angles, frame = commands.detect(cam)
+                            objectIDs, dists, angles = commands.detect(cam, frame)
                             if not isinstance(objectIDs, type(None)):
                                 objectIDs, dists, angles = auxiliary.delete_duplicates(
                                     objectIDs, dists, angles)
