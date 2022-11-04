@@ -126,6 +126,9 @@ def run_brute() -> None:
 
                         # Find the minimum betwen the distance and 1m
                         dist = np.minimum(dists[i], ONE_METER)
+                        
+                        print(dist)
+                        print(dists[i])
 
                         # Drive within 40cm of the landmark if the dist < 1m,
                         # otherwise drive the full length
