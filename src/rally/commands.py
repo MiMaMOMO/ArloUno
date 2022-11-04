@@ -246,20 +246,23 @@ def drive(arlo, dist, landmark_range=0.0) -> None:
     # TODO: Try to initialize the timer after giving the go command to arlo
 
     # Make Arlo drive forward
-    arlo.go_diff(LEFT_VELOCITY, RIGHT_VELOCITY, 1, 1)
+    if arlo.read_front_ping_sensor() <= 1250.0:
+        drive_time = scaled_dist * 1.8
+    else:
+        arlo.go_diff(LEFT_VELOCITY, RIGHT_VELOCITY, 1, 1)
     # Timer used to measure a countdown for Arlo
     # t.custom_sleep(0.01)
     time.sleep(0.01)
+    
+    
+     # TODO: Test this.
+    # Arlo is close enough to the landmark
+    if arlo.read_front_ping_sensor() <= 1250.0:
+        
+        arlo.stop()
 
     # Control what happens while Arlo drives and what can happen after
     while 1:
-
-        # TODO: Test this.
-        # Arlo is close enough to the landmark
-        if arlo.read_front_ping_sensor() <= 400.0:
-            arlo.stop()
-            break
-
         # TODO: Check for obstacles here
 
         # If Arlo wants to go near a box we account for that by a certain tolerance
