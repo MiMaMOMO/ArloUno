@@ -54,7 +54,7 @@ def drive(arlo, dist, landmark_range = 0.0) -> None:
         landmark_range(float):  How close we want to drive towards a landmark in m 
     '''
 
-    scaled_dist = dist / 100               # Scale the distance down to meters  
+    scaled_dist = (dist - 23.0) / 100               # Scale the distance down to meters  
     drive_time = scaled_dist * TIME_METER           # How long it takes Arlo to drive dist (cm)
     t = Timer()                                     # Timer used to measure a countdown for Arlo
 
@@ -103,6 +103,7 @@ def scan(arlo, cam, landmark = None):
         rotate(arlo, DEGREES_20)
         time.sleep(0.6)
         detected = detect(cam)
+        time.sleep(0.6)
         
         print("ID:      {}".format(detected[0]))
         print("Dists:   {}".format(detected[1]))
