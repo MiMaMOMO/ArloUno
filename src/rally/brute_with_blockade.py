@@ -185,7 +185,7 @@ def run() -> None:
 
                     # TODO: Move all particles here otherwise move them after resampling
                     # Move all particles according to what we actually drove
-                    # particle.move_all_particles(particles, dists[i], angles[i])
+                       # particle.move_all_particles(particles, dists[i], angles[i])
 
                 # TODO: Use numpy to normalize the weights?
                 # Store normalized weights of each particle for probability purposes
