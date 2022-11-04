@@ -1,3 +1,4 @@
+import cv2
 import numpy as np 
 
 from settings import * 
@@ -108,6 +109,7 @@ def scan(arlo, cam, landmark = None):
         
         # If we saw an ID 
         if not isinstance(detected[0], type(None)):
+            cv2.imshow(detected[4])
             
             # If the ID we saw was the landmark we were searching for 
             if landmark in detected[0]:
