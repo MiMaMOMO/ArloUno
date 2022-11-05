@@ -192,7 +192,7 @@ def delete_duplicates(objectIDs, dists, angles) -> tuple:
             idx_to_delete = 0
             
             # Find shortest distance between the two duplicates 
-            if dists[duplicate_indexes[0][0]] < dists[duplicate_indexes[0][1]]: 
+            if angles[duplicate_indexes[0][0]] < angles[duplicate_indexes[0][1]]: 
                 idx_to_delete = duplicate_indexes[0][1]
             else: 
                 idx_to_delete = duplicate_indexes[0][0]
