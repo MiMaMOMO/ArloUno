@@ -196,6 +196,7 @@ def detect_obstacles(cam) -> tuple:
     # Return the found values. Will be None if no landmarks was detected 
     return objectIDs, dists, angles, frame
 
+
 # def scan_enviroment(arlo, cam):
 #     '''
 #     Will scan the entire enviroment to search for all four landmarks, 
