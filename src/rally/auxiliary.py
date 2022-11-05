@@ -205,7 +205,7 @@ def delete_duplicates(objectIDs, dists, angles) -> tuple:
     return objectIDs, dists, angles
 
 
-def remove_unknown(objectIDs, dists, angles, landmarks) -> tuple:
+def remove_unknown(objectIDs, dists, angles) -> tuple:
     '''
     Takes 3 correlated lists of IDs, dists and angles and then removes unknown IDs and
     their correspondning dists and angles based on the list landmarks(known landmarks).
@@ -219,10 +219,10 @@ def remove_unknown(objectIDs, dists, angles, landmarks) -> tuple:
     
     if objectIDs is not None:
         known_dists = [dist for dist, id in zip(
-            dists, objectIDs) if id in landmarks]
+            dists, objectIDs) if id in LANDMARKS]
         known_angles = [angle for angle, id in zip(
-            angles, objectIDs) if id in landmarks]
-        known_objectIDs = [id for id in objectIDs if id in landmarks]
+            angles, objectIDs) if id in LANDMARKS]
+        known_objectIDs = [id for id in objectIDs if id in LANDMARKS]
         if len(objectIDs) == 0:
             objectIDs = None
         return known_objectIDs, known_dists, known_angles

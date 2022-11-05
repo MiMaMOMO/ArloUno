@@ -3,7 +3,7 @@ import numpy as np
 
 from settings import * 
 from custom_timer import Timer
-from auxiliary import delete_duplicates
+from auxiliary import delete_duplicates, remove_unknown
 
 
 def rotate(arlo, angle) -> None:
@@ -48,13 +48,13 @@ def drive(arlo, dist, landmark_range = 0.0) -> None:
     '''
 
     scaled_dist = dist / ONE_METER                  # Scale the distance down to meters  
-    drive_time = (scaled_dist * TIME_METER) - 0.1   # How long it takes Arlo to drive dist (cm)
+    drive_time = (scaled_dist * TIME_METER)         # How long it takes Arlo to drive dist (cm)
     landmark_time = landmark_range * TIME_METER     # How long it takes to drive landmark range 
     t = Timer()                                     # Timer used to measure a countdown for Arlo
     
     # Make Arlo drive forward 
     arlo.go_diff(LEFT_VELOCITY, RIGHT_VELOCITY, 1, 1) 
-    t.custom_sleep(0.01)
+    # t.custom_sleep(0.01)
     
     # Control what happens while Arlo drives and what can happen after 
     while 1:
@@ -125,7 +125,7 @@ def detect(cam) -> tuple:
     
     # We found a landmark. Check and delete duplicates 
     if not isinstance(objectIDs, type(None)):
-        # TODO: Remove unknowns here
+        objectIDs, dists, angles = remove_unknown(objectIDs, dists, angles)
         objectIDs, dists, angles = delete_duplicates(objectIDs, dists, angles)
     
     # Return the found values. Will be None if no landmarks was detected 
