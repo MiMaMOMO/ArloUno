@@ -56,7 +56,7 @@ THETA_MOVE_UNCERTAINITY = 1.0       # Uncertainity added to theta for orientatio
 
 
 ### VELOCITY ###
-RIGHT_VELOCITY = 64                 # Arlos right wheel speed
+RIGHT_VELOCITY = 67                 # Arlos right wheel speed
 LEFT_VELOCITY = 60                  # Arlos left wheel speed
 RIGHT_ROT_VELOCITY = 64             # Arlos right wheel rotation speed
 LEFT_ROT_VELOCITY = 64              # Arlos left wheel rotation speed
