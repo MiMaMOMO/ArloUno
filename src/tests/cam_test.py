@@ -6,33 +6,24 @@ from rally.camera import Camera
 from rally.auxiliary import open_windows, clean_up
 
 
-def isRunningOnArlo():
-    """Return True if we are running on Arlo, otherwise False.
-      You can use this flag to switch the code from running on you laptop to Arlo - you need to do the programming here!
-    """
-    return ON_ROBOT
-
-
-if isRunningOnArlo():
+if ON_ROBOT:
     sys.path.append("../robot")
 
 # Try to import robot module
 try:
     import robot
-    onRobot = True
+    ON_ROBOT = True
 except ImportError:
     print("selflocalize.py: robot module not present - forcing not running on Arlo!")
-    onRobot = False
+    ON_ROBOT = False
 
 
 def get_cam():
     '''
     Initialize the right camera. 
     '''
-    if isRunningOnArlo():
-        return Camera(0, 'arlo', useCaptureThread=True)
-    else:
-        return Camera(0, 'macbookpro', useCaptureThread=True)
+    
+    return Camera(0, 'arlo', useCaptureThread=True)
 
 
 ### MAIN PROGRAM ###
