@@ -231,7 +231,7 @@ def remove_unknown(objectIDs, dists, angles) -> tuple:
         return objectIDs, dists, angles
 
 
-def remove_known(objectIDs, dists, angles, landmarks) -> tuple:
+def remove_known(objectIDs, dists, angles) -> tuple:
     '''
     Takes 3 correlated lists of IDs, dists and angles and then removes known IDs and
     their correspondning dists and angles based on the list landmarks(known landmarks). 
