@@ -50,9 +50,12 @@ def run_brute() -> None:
         if isinstance(objectIDs, type(None)): 
             unknown_objectIDs, unknown_dists, unknown_angles = commands.scan_obstacles(arlo, cam)
             
-            print(unknown_objectIDs)
-            print(unknown_dists)
-            print(unknown_angles)
+            for i in range(len(unknown_objectIDs)):
+                print(
+                    "Unknown object IDs = ", unknown_objectIDs[i],
+                    ", Unknown distances = ", unknown_dists[i],
+                    ", Unknown angles = ", unknown_angles[i]
+                )
         
         # We detected atleast one landmark
         if not isinstance(objectIDs, type(None)):
