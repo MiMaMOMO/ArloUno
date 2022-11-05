@@ -121,6 +121,7 @@ def detect(cam) -> tuple:
     
     # We found a landmark. Check and delete duplicates 
     if not isinstance(objectIDs, type(None)):
+        # TODO: Remove unknowns here
         objectIDs, dists, angles = delete_duplicates(objectIDs, dists, angles)
     
     # Return the found values. Will be None if no landmarks was detected 
