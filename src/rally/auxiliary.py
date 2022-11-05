@@ -217,17 +217,20 @@ def remove_unknown(objectIDs, dists, angles) -> tuple:
         landmarks(array)        : The landmarks we know on the map. 
     '''
     
-    if objectIDs is not None:
-        known_dists = [dist for dist, id in zip(
-            dists, objectIDs) if id in LANDMARKS]
-        known_angles = [angle for angle, id in zip(
-            angles, objectIDs) if id in LANDMARKS]
-        known_objectIDs = [id for id in objectIDs if id in LANDMARKS]
-        if len(objectIDs) == 0:
-            objectIDs = None
+    known_objectIDs = np.array([id for id in objectIDs if id in LANDMARKS])
+    known_dists = np.array([dist for dist, id in zip(dists, objectIDs) if id in LANDMARKS])
+    known_angles = np.array([angle for angle, id in zip(angles, objectIDs) if id in LANDMARKS])
+    
+    if not isinstance(known_objectIDs, type(None)):
         return known_objectIDs, known_dists, known_angles
     else:
         return objectIDs, dists, angles
+    
+    # if len(objectIDs) == 0:
+    #     objectIDs = None
+    #     return known_objectIDs, known_dists, known_angles
+    # else:
+    #     return objectIDs, dists, angles
 
 
 def remove_known(objectIDs, dists, angles, landmarks) -> tuple:
