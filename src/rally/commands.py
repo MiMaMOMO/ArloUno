@@ -87,7 +87,7 @@ def scan(arlo, cam, landmark = None):
     for i in range(FULL_ROTATION):
         print("Iteration: {}".format(i))
         objectIDs, dists, angles, _ = detect(cam)           # Try to detect landmarks
-        # t.custom_sleep(0.5)
+        t.custom_sleep(0.1)
         
         print("ID:      {}".format(objectIDs))
         print("Dists:   {}".format(dists))
@@ -95,8 +95,6 @@ def scan(arlo, cam, landmark = None):
         
         # Arlo detected a landmark ID  
         if not isinstance(objectIDs, type(None)):
-            # cam.draw_aruco_objects(frame)
-            # cv2.imwrite("frame.png", frame)
             
             # The ID we saw was the landmark Arlo was searching for 
             if landmark in objectIDs:

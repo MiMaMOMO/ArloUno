@@ -1,9 +1,11 @@
 import time
 
+from settings import * 
+
 
 class Timer:
     def __init__(self) -> None:
-        self.start_time = time.perf_counter()           # The timers start time 
+        self.start_time = time.perf_counter() - TIME_ERROR           # The timers start time 
         
     def elapsed_time(self) -> float:
         '''
