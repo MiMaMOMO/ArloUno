@@ -83,7 +83,7 @@ def scan_landmarks(arlo, cam, landmark = None):
     t = Timer()
     
     # Rotate a full turn until we find some Aruco landmarks 
-    for i in range(FULL_ROTATION):
+    for i in range(2):
         print("Iteration: {}".format(i))
         objectIDs, dists, angles, _ = detect_landmarks(cam)           # Try to detect landmarks
         
@@ -193,6 +193,10 @@ def detect_obstacles(cam) -> tuple:
     if not isinstance(objectIDs, type(None)):
         print("Starting removal of known objects.")
         objectIDs, dists, angles = remove_known(objectIDs, dists, angles)
+        
+        print(objectIDs)
+        print(dists)
+        print(angles)
     
         # Check for duplicates and remove them 
         if len(objectIDs) > 0:
