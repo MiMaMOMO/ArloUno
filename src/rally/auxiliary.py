@@ -217,9 +217,9 @@ def remove_unknown(objectIDs, dists, angles) -> tuple:
         landmarks(array)        : The landmarks we know on the map. 
     '''
     
-    known_objectIDs = np.array([id for id in objectIDs if id in LANDMARKS])
-    known_dists = np.array([dist for dist, id in zip(dists, objectIDs) if id in LANDMARKS])
-    known_angles = np.array([angle for angle, id in zip(angles, objectIDs) if id in LANDMARKS])
+    known_objectIDs = np.array([id for id in objectIDs if id in LANDMARK_IDS])
+    known_dists = np.array([dist for dist, id in zip(dists, objectIDs) if id in LANDMARK_IDS])
+    known_angles = np.array([angle for angle, id in zip(angles, objectIDs) if id in LANDMARK_IDS])
     
     print("ID:      {}".format(objectIDs))
     print("Dists:   {}".format(dists))
@@ -244,9 +244,9 @@ def remove_known(objectIDs, dists, angles) -> tuple:
         * `landmarks(array)`       : The landmarks we know on the map.
     '''
     
-    unknown_objectIDs = np.array([id for id in objectIDs if id not in LANDMARKS])
-    unknown_dists = np.array([dist for dist, id in zip(dists, objectIDs) if id not in LANDMARKS])
-    unknown_angles = np.array([angle for angle, id in zip(angles, objectIDs) if id not in LANDMARKS])
+    unknown_objectIDs = np.array([id for id in objectIDs if id not in LANDMARK_IDS])
+    unknown_dists = np.array([dist for dist, id in zip(dists, objectIDs) if id not in LANDMARK_IDS])
+    unknown_angles = np.array([angle for angle, id in zip(angles, objectIDs) if id not in LANDMARK_IDS])
 
     print("ID:      {}".format(objectIDs))
     print("Dists:   {}".format(dists))
