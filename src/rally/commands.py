@@ -101,6 +101,8 @@ def scan_landmarks(arlo, cam, landmark = None):
         # Arlo didnt find what it was looking for. Rotate 20 degrees 
         rotate(arlo, DEGREES_20)
         t.custom_sleep(1.0)
+    
+    return None
         
         
 def scan_obstacles(arlo, cam):
