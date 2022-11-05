@@ -93,7 +93,7 @@ def run_brute() -> None:
             rute_idx += 1
 
             # Draw detected objects
-            cam.draw_aruco_objects(frame)
+            # cam.draw_aruco_objects(frame)
 
     # Make sure to clean up even if an exception occurred
     auxiliary.clean_up(cam)
