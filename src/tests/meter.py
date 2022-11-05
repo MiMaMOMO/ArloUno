@@ -1,4 +1,8 @@
 # Testing settings for Arlo for 1 meter 
+import sys
+
+sys.path.append("../rally")
+sys.path.append("../robot")
 
 import robot
 

@@ -109,6 +109,5 @@ LANDMARK_COLORS = [                 # Colors of the known landmarks
 
 
 ### TIME ### 
-TIME_ERROR = 0.5
 TIME_METER = 2.52                   # How long it takes Arlo to drive one meter in seconds
 TIME_ORIENTATION = 0.728            # How long it takes Arlo to rotate 90 degrees

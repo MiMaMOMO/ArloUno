@@ -1,4 +1,8 @@
 ## Testing rotation for Arlo for 90 deegres
+import sys
+
+sys.path.append("../rally")
+sys.path.append("../robot")
 
 import robot
 
