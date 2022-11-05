@@ -187,7 +187,7 @@ def detect_obstacles(cam) -> tuple:
     
     # We found a landmark. Check and delete duplicates
     if not isinstance(objectIDs, type(None)):
-            objectIDs, dists, angles = remove_known(objectIDs, dists, angles)
+        objectIDs, dists, angles = remove_known(objectIDs, dists, angles)
     
     # Check for duplicates and remove them 
     if len(objectIDs) > 0:
