@@ -81,6 +81,7 @@ def scan(arlo, cam, landmark = None):
     # Rotate a full turn until we find some Aruco landmarks 
     for _ in range(FULL_ROTATION):
         objectIDs, dists, angles, _ = detect(cam)           # Try to detect landmarks
+        t.custom_sleep(1.0)
         
         print("ID:      {}".format(objectIDs))
         print("Dists:   {}".format(dists))
@@ -97,7 +98,7 @@ def scan(arlo, cam, landmark = None):
         
         # Arlo didnt find what it was looking for. Rotate 20 degrees 
         rotate(arlo, DEGREES_20)
-        t.custom_sleep(0.75)
+        t.custom_sleep(1.0)
         
         
 
