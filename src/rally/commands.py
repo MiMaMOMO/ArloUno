@@ -87,7 +87,7 @@ def scan(arlo, cam, landmark = None):
     for i in range(FULL_ROTATION):
         print("Iteration: {}".format(i))
         objectIDs, dists, angles, _ = detect(cam)           # Try to detect landmarks
-        t.custom_sleep(0.5)
+        # t.custom_sleep(0.5)
         
         print("ID:      {}".format(objectIDs))
         print("Dists:   {}".format(dists))
@@ -104,7 +104,7 @@ def scan(arlo, cam, landmark = None):
         
         # Arlo didnt find what it was looking for. Rotate 20 degrees 
         rotate(arlo, DEGREES_20)
-        t.custom_sleep(0.5)
+        t.custom_sleep(0.75)
         
         
 def detect(cam) -> tuple: 
