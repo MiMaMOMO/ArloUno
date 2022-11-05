@@ -117,19 +117,15 @@ def detect(cam) -> tuple:
     '''
     
     # Take several frames and get the latest one
-    for _ in range(4):
-        frame = cam.get_next_frame()
+    frame = cam.get_next_frame()
     
     # Get information from the image 
     objectIDs, dists, angles = cam.detect_aruco_objects(frame)
-    
-    cam.draw_aruco_objects(frame)
     
     # We found a landmark. Check and delete duplicates 
     if not isinstance(objectIDs, type(None)):
         # objectIDs, dists, angles = remove_unknown(objectIDs, dists, angles)
         objectIDs, dists, angles = delete_duplicates(objectIDs, dists, angles)
-        pass
     
     # Return the found values. Will be None if no landmarks was detected 
     return objectIDs, dists, angles, frame
