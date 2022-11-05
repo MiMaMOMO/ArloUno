@@ -117,7 +117,8 @@ def detect(cam) -> tuple:
     '''
     
     # Take several frames and get the latest one
-    frame = cam.get_next_frame()
+    for _ in range(4):
+        frame = cam.get_next_frame()
     
     # Get information from the image 
     objectIDs, dists, angles = cam.detect_aruco_objects(frame)
