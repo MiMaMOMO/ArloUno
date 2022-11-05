@@ -3,7 +3,7 @@ from cv2 import aruco
 # TODO: Spread this information out after testing and project end
 
 ### SETTINGS ###
-SHOW_GUI = True          # Whether or not to open GUI windows
+SHOW_GUI = False          # Whether or not to open GUI windows
 ON_ROBOT = True          # Whether or not we are running on the Arlo robot
 
 
