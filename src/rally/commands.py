@@ -54,7 +54,7 @@ def drive(arlo, dist, landmark_range = 0.0) -> None:
     
     # Make Arlo drive forward 
     arlo.go_diff(LEFT_VELOCITY, RIGHT_VELOCITY, 1, 1) 
-    # TODO: Maybe sleeping is important t.custom_sleep(0.01)
+    t.custom_sleep(0.01)
     
     # Control what happens while Arlo drives and what can happen after 
     while 1:
@@ -76,6 +76,7 @@ def scan(arlo, cam, landmark = None):
         cam(obj)        : The camera used. 
         landmark(int)   : The landmark ID we are searching for. 
     '''
+    t = Timer()
     
     # Rotate a full turn until we find some Aruco landmarks 
     for _ in range(FULL_ROTATION):
@@ -96,6 +97,8 @@ def scan(arlo, cam, landmark = None):
         
         # Arlo didnt find what it was looking for. Rotate 20 degrees 
         rotate(arlo, DEGREES_20)
+        t.custom_sleep(0.75)
+        
         
 
 def detect(cam) -> tuple: 
