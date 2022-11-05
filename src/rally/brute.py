@@ -50,6 +50,13 @@ def run_brute() -> None:
         if isinstance(objectIDs, type(None)): 
             unknown_objectIDs, unknown_dists, unknown_angles = commands.scan_obstacles(arlo, cam)
             
+            for i in range(len(unknown_objectIDs)):
+                print(
+                    "Unknown object IDs = ", unknown_objectIDs[i],
+                    ", Unknown distances = ", unknown_dists[i],
+                    ", Unknown angles = ", unknown_angles[i]
+                )
+            
             if not isinstance(unknown_objectIDs, type(None)): 
                 unknown_objectIDs, unknown_dists, unknown_angles = auxiliary.delete_duplicates(
                     unknown_objectIDs, unknown_dists, unknown_angles)
