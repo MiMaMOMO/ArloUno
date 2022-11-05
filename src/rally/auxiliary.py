@@ -221,7 +221,7 @@ def remove_unknown(objectIDs, dists, angles) -> tuple:
     known_dists = np.array([dist for dist, id in zip(dists, objectIDs) if id in LANDMARKS])
     known_angles = np.array([angle for angle, id in zip(angles, objectIDs) if id in LANDMARKS])
     
-    if not isinstance(known_objectIDs, type(None)):
+    if len(known_objectIDs) > 0:
         return known_objectIDs, known_dists, known_angles
     else:
         return objectIDs, dists, angles
