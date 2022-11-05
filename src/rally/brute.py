@@ -95,7 +95,7 @@ def run_brute() -> None:
                     commands.drive(arlo, 50.0)
                     
                 # Try and detect the landmark Arlo are focusing on
-                objectIDs, dists, angles, _ = commands.detect(cam)
+                objectIDs, dists, angles, _ = commands.detect_landmarks(cam)
 
             # Arlo found its way to the landmark so we wanna look for the next landmark 
             rute_idx += 1
