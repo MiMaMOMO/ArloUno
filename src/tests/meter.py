@@ -15,7 +15,7 @@ print("Running ...")
 
 # Robot speed. We use different speed here 
 leftSpeed = 60
-rightSpeed = 64
+rightSpeed = 65
 
 # send a go_diff command to drive forward
 print(arlo.go_diff(leftSpeed, rightSpeed, 1, 1))
