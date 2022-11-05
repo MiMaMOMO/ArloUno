@@ -116,8 +116,8 @@ def detect(cam) -> tuple:
         frame(img)      : The image we are looking at.
     '''
     
+    # Take several frames and get the latest one
     for _ in range(10):
-        # Get an image 
         frame = cam.get_next_frame()
     
     # Get information from the image 
