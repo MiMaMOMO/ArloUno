@@ -58,6 +58,11 @@ def drive(arlo, dist, landmark_range = 0.0) -> None:
     
     # Control what happens while Arlo drives and what can happen after 
     while 1:
+        
+        # If we are to close to a landmark stop Arlo 
+        if arlo.read_front_ping_sensor() < 400.0: 
+            arlo.stop()
+            break
 
         # If Arlo wants to go near a box we account for that by a certain tolerance 
         # otherwise let Arlo drive the full dist
