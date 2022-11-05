@@ -42,32 +42,61 @@ def run_brute() -> None:
         if rute_idx >= 5:
             break
     
-        # Try and detect the first landmark upon starting 
-        # objectIDs, dists, angles, frame = commands.detect(cam)
-        objectIDs, dists, angles = commands.scan_landmarks(arlo, cam, RUTE[rute_idx])
-        
-        # Nothing was found from the scan 
-        if isinstance(objectIDs, type(None)): 
-            unknown_objectIDs, unknown_dists, unknown_angles = commands.scan_obstacles(arlo, cam)
+        # Keep scanning for the landmark until Arlo find it 
+        while 1: 
+            # Try and detect the first landmark upon starting 
+            # objectIDs, dists, angles, frame = commands.detect(cam)
+            objectIDs, dists, angles = commands.scan_landmarks(arlo, cam, RUTE[rute_idx])
             
-            for i in range(len(unknown_objectIDs)):
-                print(
-                    "Unknown object IDs = ", unknown_objectIDs[i],
-                    ", Unknown distances = ", unknown_dists[i],
-                    ", Unknown angles = ", unknown_angles[i]
-                )
+            if not isinstance(objectIDs, type(None)):
+                break
             
-            if not isinstance(unknown_objectIDs, type(None)): 
-                unknown_objectIDs, unknown_dists, unknown_angles = auxiliary.delete_duplicates(
-                    unknown_objectIDs, unknown_dists, unknown_angles)
-            
-            for i in range(len(unknown_objectIDs)):
-                print(
-                    "Unknown object IDs = ", unknown_objectIDs[i],
-                    ", Unknown distances = ", unknown_dists[i],
-                    ", Unknown angles = ", unknown_angles[i]
-                )
-            
+            # Nothing was found from the scan, try looking for obstacles 
+            if isinstance(objectIDs, type(None)): 
+                unknown_objectIDs, unknown_dists, unknown_angles = commands.scan_obstacles(arlo, cam)
+                
+                # Remove duplicate obstacles 
+                if not isinstance(unknown_objectIDs, type(None)): 
+                    unknown_objectIDs, unknown_dists, unknown_angles = auxiliary.delete_duplicates(
+                        unknown_objectIDs, unknown_dists, unknown_angles)
+                    
+                # Choose the obstacle with the shortest distance
+                shortest_idx = np.where(dists == min(dists))
+                
+                # Scan for the obstacle landmark with the shortest distance 
+                unknown_objectIDs, unknown_dists, unknown_angles = commands.scan_obstacles(
+                    arlo, cam, OBSTACLES_IDS[shortest_idx])
+                
+                while 1: 
+                    # We cannot see anything and we assume we are close to the landmark 
+                    if isinstance(objectIDs, type(None)):
+                        break
+                    
+                    # Then drive towards it 
+                    # Rotate towards the obstacle if the angle is bigger than 13 degrees
+                    if np.abs(unknown_angles[0]) > DEGREES_13:
+                        commands.rotate(arlo, unknown_angles[0])
+                        
+                    # Find the minimum betwen the distance and 1m
+                    dist = np.minimum(unknown_dists[0], ONE_METER)
+
+                    print(dist)
+                    print(dists[0])
+                    # if dist < ONE_METER or (dists[0] - ONE_METER) <= 30.0:
+
+                    # Drive within 40cm of the landmark if the dist < 1m,
+                    # otherwise drive the full length
+                    if (unknown_dists[0] - ONE_METER) <= 10.0:
+                        print("Starting landmark drive with dist = {}".format(unknown_dists))
+                        commands.drive(arlo, unknown_dists[0], LANDMARK_RANGE)
+                        break
+                    else:
+                        print("Starting normal drive with dist = {}".format(unknown_dists))
+                        commands.drive(arlo, 50.0)
+
+                    # Try and detect the landmark Arlo are focusing on
+                    objectIDs, dists, angles, _ = commands.detect_obstacles(cam)
+                    
         
         # We detected atleast one landmark
         if not isinstance(objectIDs, type(None)):

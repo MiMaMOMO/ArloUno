@@ -26,7 +26,8 @@ WORLD_WIN_Y = 50                    # Y-coordinate for the world window
 
 ### LANDMARKS ### 
 RUTE = [1, 2, 3, 4, 1]              # The rute we wanna take 
-LANDMARK_IDS = [1, 2, 3, 4]         # The ID of each landmark we know  
+LANDMARK_IDS = [1, 2, 3, 4]         # The ID of each landmark we know 
+OBSTACLES_IDS = [5, 6, 7, 8, 9, 10, 11] 
 LANDMARKS = {
     1: (0.0, 0.0),                  # Coordinates for landmark 1 (RED)
     2: (0.0, 300.0),                # Coordinates for landmark 2 (GREEN)
