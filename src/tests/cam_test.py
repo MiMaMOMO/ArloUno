@@ -3,13 +3,10 @@ import cv2
 
 sys.path.append("../rally/")
 
-from rally.settings import *
-from rally.camera import Camera
-from rally.auxiliary import open_windows, clean_up
+from settings import *
+from camera import Camera
+from auxiliary import open_windows, clean_up
 
-
-if ON_ROBOT:
-    sys.path.append("../robot")
 
 # Try to import robot module
 try:
