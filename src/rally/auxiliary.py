@@ -237,10 +237,11 @@ def remove_known(objectIDs, dists, angles) -> tuple:
     their correspondning dists and angles based on the list landmarks(known landmarks). 
     
     Parameters: 
-        objectIDs(array)        : Found landmarks.
-        dists(array)            : Aruco distances. 
-        angles(array)           : Aruco landmarks angles. 
-        landmarks(array)        : The landmarks we know on the map.
+    ---
+        * objectIDs(array)        : Found landmarks.
+        * dists(array)            : Aruco distances. 
+        * angles(array)           : Aruco landmarks angles. 
+        * `landmarks(array)`       : The landmarks we know on the map.
     '''
     
     unknown_objectIDs = np.array([id for id in objectIDs if id not in LANDMARKS])

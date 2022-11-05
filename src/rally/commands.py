@@ -141,9 +141,9 @@ def scan_obstacles(arlo, cam):
         t.custom_sleep(1.0)
         
     # Cast into numpy array 
-    np.array(ret_objectIDs)
-    np.array(ret_dists)
-    np.array(ret_angles)
+    # np.array(ret_objectIDs)
+    # np.array(ret_dists)
+    # np.array(ret_angles)
         
     return ret_objectIDs, ret_dists, ret_angles
         
