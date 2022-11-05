@@ -198,9 +198,10 @@ def detect_obstacles(cam) -> tuple:
         print(dists)
         print(angles)
     
+        if not isinstance(objectIDs, type(None)):
         # Check for duplicates and remove them 
-        if len(objectIDs) > 0:
-            objectIDs, dists, angles = delete_duplicates(objectIDs, dists, angles)
+            if len(objectIDs) > 0:
+                objectIDs, dists, angles = delete_duplicates(objectIDs, dists, angles)
     
     # Return the found values. Will be None if no landmarks was detected 
     return objectIDs, dists, angles, frame
