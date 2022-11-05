@@ -48,7 +48,7 @@ def drive(arlo, dist, landmark_range = 0.0) -> None:
     '''
 
     scaled_dist = dist / ONE_METER                  # Scale the distance down to meters  
-    drive_time = scaled_dist * TIME_METER           # How long it takes Arlo to drive dist (cm)
+    drive_time = (scaled_dist * TIME_METER) - 0.1   # How long it takes Arlo to drive dist (cm)
     landmark_time = landmark_range * TIME_METER     # How long it takes to drive landmark range 
     t = Timer()                                     # Timer used to measure a countdown for Arlo
     
