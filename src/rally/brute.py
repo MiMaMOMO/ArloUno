@@ -78,7 +78,7 @@ def run_brute() -> None:
 
                 # Drive within 40cm of the landmark if the dist < 1m,
                 # otherwise drive the full length
-                if (dists[0] - ONE_METER) <= 50.0:
+                if (dists[0] - ONE_METER) <= 15.0:
                     print("Starting landmark drive with dist = {}".format(dist))
                     commands.drive(arlo, dists[0], LANDMARK_RANGE)
                     break
@@ -97,6 +97,7 @@ def run_brute() -> None:
 
     # Make sure to clean up even if an exception occurred
     auxiliary.clean_up(cam)
+    arlo.stop()
 
 
 ### STARTING POINT OF THE PROGRAM ### 
