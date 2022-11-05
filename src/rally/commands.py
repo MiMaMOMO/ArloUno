@@ -101,7 +101,6 @@ def scan(arlo, cam, landmark = None):
         t.custom_sleep(0.5)
         
         
-
 def detect(cam) -> tuple: 
     '''
     Take a frame and try to detect if any landmarks exist in the frame. 
