@@ -86,7 +86,6 @@ def scan(arlo, cam, landmark = None):
     for i in range(FULL_ROTATION):
         print("Iteration: {}".format(i))
         objectIDs, dists, angles, _ = detect(cam)           # Try to detect landmarks
-        t.custom_sleep(0.1)
         
         print("ID:      {}".format(objectIDs))
         print("Dists:   {}".format(dists))
