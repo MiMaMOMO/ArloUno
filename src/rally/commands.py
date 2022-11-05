@@ -83,7 +83,7 @@ def scan_landmarks(arlo, cam, landmark = None):
     t = Timer()
     
     # Rotate a full turn until we find some Aruco landmarks 
-    for i in range(2):
+    for i in range(FULL_ROTATION):
         print("Iteration: {}".format(i))
         objectIDs, dists, angles, _ = detect_landmarks(cam)           # Try to detect landmarks
         
