@@ -54,7 +54,7 @@ def drive(arlo, dist, landmark_range = 0.0) -> None:
     
     # Make Arlo drive forward 
     arlo.go_diff(LEFT_VELOCITY, RIGHT_VELOCITY, 1, 1) 
-    # t.custom_sleep(0.01)
+    t.custom_sleep(0.01)
     
     # Control what happens while Arlo drives and what can happen after 
     while 1:
