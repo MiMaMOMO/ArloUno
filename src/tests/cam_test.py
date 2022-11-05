@@ -1,7 +1,8 @@
 import sys
 import cv2
 
-sys.path.append("../rally/")
+sys.path.append("../rally")
+sys.path.append("../robot")
 
 from settings import *
 import camera
@@ -9,20 +10,7 @@ from auxiliary import open_windows, clean_up
 
 
 # Try to import robot module
-try:
-    import robot
-    ON_ROBOT = True
-except ImportError:
-    print("selflocalize.py: robot module not present - forcing not running on Arlo!")
-    ON_ROBOT = False
-
-
-def get_cam():
-    '''
-    Initialize the right camera. 
-    '''
-
-    return camera.Camera(0, 'arlo', useCaptureThread=True)
+import robot
 
 
 ### MAIN PROGRAM ###
@@ -35,7 +23,7 @@ arlo = robot.Robot()
 print("Opening and initializing camera")
 
 # Check which camera we want to use
-cam = get_cam()
+cam = camera.Camera(0, 'arlo', useCaptureThread=True)
 
 # Try to selflocalize and get to the center point using the particle filter
 while 1:
