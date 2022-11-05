@@ -45,7 +45,7 @@ OBSTACLES = {
 
 
 ### PARTICLES ###
-NUM_OF_PARTICLES = 3000             # The number of particles in the world 
+NUM_OF_PARTICLES = 1000             # The number of particles in the world 
 
 
 ### UNCERTAINITY ###
