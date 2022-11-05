@@ -75,7 +75,7 @@ DEGREES_240 = 4.18879               # 240 degrees in radions
 DEGREES_270 = 4.72234               # 270 degrees in radions
 DEGREES_310 = 5.41052               # 310 degrees in radions
 DEGREES_360 = 6.28414               # 360 degrees in radions
-FULL_ROTATION = int(18.0 * 1.6)     # How many times it take Arlo to do a 360 degree rotation
+FULL_ROTATION = int(18.0 * 1.7)     # How many times it take Arlo to do a 360 degree rotation
 
 
 ### DISTANCES ### 
