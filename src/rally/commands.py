@@ -122,6 +122,8 @@ def detect(cam) -> tuple:
     # Get information from the image 
     objectIDs, dists, angles = cam.detect_aruco_objects(frame)
     
+    cam.draw_aruco_objects(frame)
+    
     # We found a landmark. Check and delete duplicates 
     if not isinstance(objectIDs, type(None)):
         # objectIDs, dists, angles = remove_unknown(objectIDs, dists, angles)
