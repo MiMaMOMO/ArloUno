@@ -118,8 +118,8 @@ def detect(cam) -> tuple:
     
     # for _ in range(10):
     # Get an image 
-    frame = cam.get_next_frame()
-    # _, frame = cam.read()
+    # frame = cam.get_next_frame()
+    _, frame = cam.read()
     
     # Get information from the image 
     objectIDs, dists, angles = cam.detect_aruco_objects(frame)
