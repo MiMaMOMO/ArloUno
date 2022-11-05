@@ -26,7 +26,7 @@ def rotate(arlo, angle) -> None:
     
     # Make Arlo rotate in the right direction 
     arlo.go_diff(LEFT_ROT_VELOCITY, RIGHT_ROT_VELOCITY, left_dir, right_dir)   
-    # TODO: Maybe sleeping is important t.custom_sleep(0.01)
+    t.custom_sleep(0.01)
     
     # Control what happens while Arlo rotates or what should happen after a rotation 
     while 1: 
