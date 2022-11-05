@@ -4,7 +4,7 @@ import cv2
 sys.path.append("../rally/")
 
 from settings import *
-from camera import Camera
+import camera
 from auxiliary import open_windows, clean_up
 
 
@@ -22,7 +22,7 @@ def get_cam():
     Initialize the right camera. 
     '''
 
-    return Camera(0, 'arlo', useCaptureThread=True)
+    return camera.Camera(0, 'arlo', useCaptureThread=True)
 
 
 ### MAIN PROGRAM ###
