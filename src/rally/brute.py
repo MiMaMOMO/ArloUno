@@ -84,7 +84,7 @@ def run_brute() -> None:
                     break
                 else:
                     print("Starting normal drive with dist = {}".format(dist))
-                    commands.drive(arlo, 75.0)
+                    commands.drive(arlo, 50.0)
                     
                 # Try and detect the landmark Arlo are focusing on
                 objectIDs, dists, angles, _ = commands.detect(cam)
