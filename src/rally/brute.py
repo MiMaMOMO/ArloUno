@@ -44,7 +44,15 @@ def run_brute() -> None:
     
         # Try and detect the first landmark upon starting 
         # objectIDs, dists, angles, frame = commands.detect(cam)
-        objectIDs, dists, angles = commands.scan(arlo, cam, RUTE[rute_idx])
+        objectIDs, dists, angles = commands.scan_landmarks(arlo, cam, RUTE[rute_idx])
+        
+        # Nothing was found from the scan 
+        if isinstance(objectIDs, type(None)): 
+            unknown_objectIDs, unknown_dists, unknown_angles = commands.scan_obstacles(arlo, cam)
+            
+            print(unknown_objectIDs)
+            print(unknown_dists)
+            print(unknown_angles)
         
         # We detected atleast one landmark
         if not isinstance(objectIDs, type(None)):
