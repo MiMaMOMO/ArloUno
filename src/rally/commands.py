@@ -100,7 +100,7 @@ def scan(arlo, cam, landmark = None):
         
         # Arlo didnt find what it was looking for. Rotate 20 degrees 
         rotate(arlo, DEGREES_20)
-        t.custom_sleep(0.75)
+        t.custom_sleep(1.0)
         
         
 def detect(cam) -> tuple: 
