@@ -225,7 +225,7 @@ def remove_unknown(objectIDs, dists, angles) -> tuple:
     print("Dists:   {}".format(dists))
     print("Agnles:  {}".format(angles))
     
-    if len(objectIDs) == 0:
+    if len(known_objectIDs) == 0:
         print("Empty!")
         known_objectIDs = None
         known_dists = None
@@ -255,7 +255,7 @@ def remove_known(objectIDs, dists, angles) -> tuple:
     print("Dists:   {}".format(dists))
     print("Agnles:  {}".format(angles))
 
-    if len(objectIDs) == 0:
+    if len(unknown_objectIDs) == 0:
         unknown_objectIDs = None
         unknown_dists = None
         unknown_angles = None

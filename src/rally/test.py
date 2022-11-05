@@ -19,4 +19,5 @@ ids, dists, angles = auxiliary.remove_unknown(ids, dists, angles)
 print(ids)
 print(dists)
 print(angles)
+
 print(len(ids))
