@@ -24,7 +24,6 @@ def jet(x) -> tuple:
     return (255.0 * r, 255.0 * g, 255.0 * b)
 
 
-# TODO: Tweak this function for performance 
 def draw_world(est_pose, particles, world) -> None:
     '''
     Visualization.
