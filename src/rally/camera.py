@@ -451,8 +451,7 @@ class Camera(object):
         
     def draw_object(self, img):
         """Draw the object if found into img"""
-        cv2.drawChessboardCorners(img, self.patternSize, self.corners, self.patternFound)
-        
+        cv2.drawChessboardCorners(img, self.patternSize, self.corners, self.patternFound)        
 
 
 if (__name__=='__main__'):
