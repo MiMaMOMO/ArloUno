@@ -146,6 +146,10 @@ def run_brute() -> None:
                     ", Angles = ", angles[i]    
                 )
                 
+            # Filter out the landmarks we arent searching for 
+            if len(objectIDs) > 1:
+                objectIDs, dists, angles = aux.filter_out(objectIDs, dists, angles, [RUTE[rute_idx]])
+                
             # Print that Arlo will try to move towards the landmark 
             print("Starting rotation and movement towards landmark {}.".format(objectIDs[0]))
             

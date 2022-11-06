@@ -270,6 +270,27 @@ def move_to_box(arlo, cam, objectIDs, dists, angles, box_range, ids) -> None:
         objectIDs, dists, angles = detect(cam, ids)
     
 
+def filter_out(objectIDs, dists, angles, focused_id) -> tuple: 
+    '''
+    ...
+    '''
+    
+    # Find the index to delete which are not focused 
+    dists = np.array([dist for dist, id in zip(dists, objectIDs) if id in focused_id])
+    angles = np.array([angle for angle, id in zip(angles, objectIDs) if id in focused_id])
+    objectIDs = np.array([id for id in objectIDs if id in focused_id])
+
+    # If we removed anything and the list is empty, set it to None
+    if not isinstance(objectIDs, type(None)):
+        if len(objectIDs) == 0:
+            objectIDs, dists, angles = None, None, None
+
+    return objectIDs, dists, angles
+    
+    
+    
+
+
 # def remove_landmarks(objectIDs, dists, angles) -> tuple:
 #     '''
 #     Takes 3 correlated lists of IDs, dists and angles and then removes known IDs and
