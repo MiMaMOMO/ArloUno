@@ -116,9 +116,9 @@ def scan_obstacles(arlo, cam, obstacle = None):
         landmark(int)   : The landmark ID we are searching for. 
     '''
     t = Timer()
-    ret_objectIDs = [] 
-    ret_dists = [] 
-    ret_angles = []
+    # ret_objectIDs = [] 
+    # ret_dists = [] 
+    # ret_angles = []
         
     # Rotate a full turn until we find some Aruco landmarks 
     for i in range(FULL_ROTATION):
@@ -133,19 +133,19 @@ def scan_obstacles(arlo, cam, obstacle = None):
         if not isinstance(objectIDs, type(None)):
             
             # Add the found obstacles to the lists 
-            ret_objectIDs.append(objectIDs)
-            ret_dists.append(dists)
-            ret_angles.append(angles)
+            # ret_objectIDs.append(objectIDs)
+            # ret_dists.append(dists)
+            # ret_angles.append(angles)
             
             # The ID we saw was the obstacle Arlo was searching for
-            if obstacle in objectIDs:
-                return ret_objectIDs, ret_dists, ret_angles
+            #if obstacle in objectIDs:
+            return objectIDs, dists, angles
         
         # Arlo didnt find what it was looking for. Rotate 20 degrees 
         rotate(arlo, DEGREES_20)
         t.custom_sleep(1.0)
         
-    return ret_objectIDs, ret_dists, ret_angles
+    return objectIDs, dists, angles
         
         
 def detect(cam, ids) -> tuple: 
