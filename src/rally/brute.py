@@ -191,6 +191,7 @@ def run_brute() -> None:
 
         # Arlo found its way to the landmark so we wanna look for the next landmark 
         rute_idx += 1
+        break
 
     # Stop Arlo just in case he continues after endning the rute 
     arlo.stop()
