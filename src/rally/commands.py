@@ -116,7 +116,9 @@ def scan_obstacles(arlo, cam, obstacle = None):
         landmark(int)   : The landmark ID we are searching for. 
     '''
     t = Timer()
-    ret_objectIDs, ret_dists, ret_angles = []
+    ret_objectIDs = [] 
+    ret_dists = [] 
+    ret_angles = []
         
     # Rotate a full turn until we find some Aruco landmarks 
     for i in range(FULL_ROTATION):
