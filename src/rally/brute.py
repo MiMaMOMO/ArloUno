@@ -125,11 +125,15 @@ def run_brute() -> None:
             if arlo.read_front_ping_sensor() < 350.0:
                 direction = np.sign(angles[0])
                 
+                print("Sensor is lower than 35cm!")
+                
                 if direction > 0: 
+                    print("Direction > 0!")
                     cmds.rotate(arlo, DEGREES_90)
                     cmds.drive(arlo, 20.0)
                     cmds.rotate(arlo, -DEGREES_90)
                 else:
+                    print("Direction < 0!")
                     cmds.rotate(arlo, -DEGREES_90)
                     cmds.drive(arlo, 20.0)
                     cmds.rotate(arlo, DEGREES_90)
