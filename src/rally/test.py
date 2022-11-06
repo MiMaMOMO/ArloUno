@@ -1,21 +1,25 @@
-import sys 
 import numpy as np
 
-sys.path.append("../rally")
+from auxiliary import delete_duplicates
 
-import auxiliary
 from settings import * 
-    
 
-ids = np.array([6, 5, 9])
-dists = np.array([432.1, 431.0, 402.3])
-angles = np.array([0.28, 0.29, 0.30])
 
-print(np.where(dists == min(dists)))
+ids = np.array([9 ,9, 9, 5, 5])
+dists = np.array([3456.2, 2.3, 2.3, 44.2, 35.6])
+angles = np.array([3456.2, 2.3, 4.3, 0.1, 0.7])
 
-# ids, dists, angles = aux.delete_duplicates(ids, dists, angles)
-# ids, dists, angles = auxiliary.delete_duplicates(ids, dists, angles)
+ids, dists, angles = delete_duplicates(ids, dists, angles)
+                    
+shortest_idx = np.where(dists == min(dists))
 
-# print(ids)
-# print(dists)
-# print(angles)
+focused_obstacle_idx = np.where(OBSTACLES_IDS == ids[shortest_idx])[0][0]
+
+real_value = OBSTACLES_IDS[focused_obstacle_idx]
+
+print(ids)
+print(dists)
+print(angles)
+print(shortest_idx)
+print(focused_obstacle_idx)
+print(real_value)

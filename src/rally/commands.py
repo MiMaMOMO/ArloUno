@@ -2,7 +2,7 @@ import numpy as np
 
 from settings import * 
 from custom_timer import Timer
-from auxiliary import delete_duplicates, remove_unknown, remove_known
+import auxiliary as aux
 
 
 def rotate(arlo, angle) -> None:
@@ -53,7 +53,7 @@ def drive(arlo, dist, landmark_range = 0.0) -> None:
     
     # Make Arlo drive forward 
     arlo.go_diff(LEFT_VELOCITY, RIGHT_VELOCITY, 1, 1) 
-    t.custom_sleep(0.05)
+    t.custom_sleep(0.1)
     
     # Control what happens while Arlo drives and what can happen after 
     while 1:
@@ -85,7 +85,7 @@ def scan_landmarks(arlo, cam, landmark = None):
     # Rotate a full turn until we find some Aruco landmarks 
     for i in range(FULL_ROTATION):
         print("Iteration: {}".format(i))
-        objectIDs, dists, angles, _ = detect_landmarks(cam)           # Try to detect landmarks
+        objectIDs, dists, angles = detect(cam, LANDMARK_IDS)           # Try to detect landmarks
         
         print("ID:      {}".format(objectIDs))
         print("Dists:   {}".format(dists))
@@ -116,14 +116,12 @@ def scan_obstacles(arlo, cam, obstacle = None):
         landmark(int)   : The landmark ID we are searching for. 
     '''
     t = Timer()
-    ret_objectIDs = []
-    ret_dists = []
-    ret_angles = []
+    ret_objectIDs, ret_dists, ret_angles = []
         
     # Rotate a full turn until we find some Aruco landmarks 
     for i in range(FULL_ROTATION):
         print("Iteration: {}".format(i))
-        objectIDs, dists, angles, _ = detect_obstacles(cam)           # Try to detect landmarks
+        objectIDs, dists, angles = detect(cam, OBSTACLES_IDS)           # Try to detect landmarks
         
         print("ID:      {}".format(objectIDs))
         print("Dists:   {}".format(dists))
@@ -132,11 +130,12 @@ def scan_obstacles(arlo, cam, obstacle = None):
         # Arlo detected a landmark ID  
         if not isinstance(objectIDs, type(None)):
             
+            # Add the found obstacles to the lists 
             ret_objectIDs.append(objectIDs)
             ret_dists.append(dists)
             ret_angles.append(angles)
             
-            # The ID we saw was the landmark Arlo was searching for
+            # The ID we saw was the obstacle Arlo was searching for
             if obstacle in objectIDs:
                 return ret_objectIDs, ret_dists, ret_angles
         
@@ -144,15 +143,10 @@ def scan_obstacles(arlo, cam, obstacle = None):
         rotate(arlo, DEGREES_20)
         t.custom_sleep(1.0)
         
-    # Cast into numpy array 
-    # np.array(ret_objectIDs)
-    # np.array(ret_dists)
-    # np.array(ret_angles)
-        
     return ret_objectIDs, ret_dists, ret_angles
         
         
-def detect_landmarks(cam) -> tuple: 
+def detect(cam, ids) -> tuple: 
     '''
     Take a frame and try to detect if any landmarks exist in the frame. 
     
@@ -167,49 +161,45 @@ def detect_landmarks(cam) -> tuple:
     # Get information from the image 
     objectIDs, dists, angles = cam.detect_aruco_objects(frame)
     
+    # The camera detected some boxes so try to remove obstacle boxes 
     if not isinstance(objectIDs, type(None)):
-        objectIDs, dists, angles = remove_unknown(objectIDs, dists, angles)
+        objectIDs, dists, angles = aux.remove_ids(objectIDs, dists, angles, ids)
     
+        # Landmarks are still in our detection so try to delte any duplicates 
         if not isinstance(objectIDs, type(None)):
-            # Check for duplicates and remove them 
             if len(objectIDs) > 0:
-                objectIDs, dists, angles = delete_duplicates(objectIDs, dists, angles)
+                objectIDs, dists, angles = aux.delete_duplicates(objectIDs, dists, angles)
     
     # Return the found values. Will be None if no landmarks was detected 
-    return objectIDs, dists, angles, frame
+    return objectIDs, dists, angles
 
 
-def detect_obstacles(cam) -> tuple: 
-    '''
-    Take a frame and try to detect if any landmarks exist in the frame. 
+# def detect(cam) -> tuple: 
+#     '''
+#     Take a frame and try to detect if any landmarks exist in the frame. 
     
-    Parameters:
-        cam(obj)        : The camera object. 
-        frame(img)      : The image we are looking at.
-    '''
+#     Parameters:
+#         cam(obj)        : The camera object. 
+#     '''
     
-    # Take several frames and get the latest one
-    frame = cam.get_next_frame()
+#     # Take several frames and get the latest one
+#     frame = cam.get_next_frame()
     
-    # Get information from the image 
-    objectIDs, dists, angles = cam.detect_aruco_objects(frame)
+#     # Get information from the image 
+#     objectIDs, dists, angles = cam.detect_aruco_objects(frame)
     
-    # We found a landmark. Check and delete duplicates
-    if not isinstance(objectIDs, type(None)):
-        print("Starting removal of known objects.")
-        objectIDs, dists, angles = remove_known(objectIDs, dists, angles)
-        
-        print(objectIDs)
-        print(dists)
-        print(angles)
+#     # We found an obstacle. Check and delete duplicates
+#     if not isinstance(objectIDs, type(None)):
+#         print("Starting removal of known objects.")
+#         objectIDs, dists, angles = remove_ids(objectIDs, dists, angles, OBSTACLES_IDS)
     
-        if not isinstance(objectIDs, type(None)):
-        # Check for duplicates and remove them 
-            if len(objectIDs) > 0:
-                objectIDs, dists, angles = delete_duplicates(objectIDs, dists, angles)
+#         # Obstacles are still in our detection so try to delte any duplicates
+#         if not isinstance(objectIDs, type(None)):
+#             if len(objectIDs) > 0:
+#                 objectIDs, dists, angles = delete_duplicates(objectIDs, dists, angles)
     
-    # Return the found values. Will be None if no landmarks was detected 
-    return objectIDs, dists, angles, frame
+#     # Return the found values. Will be None if no landmarks was detected 
+#     return objectIDs, dists, angles, frame
 
 
 # def scan_enviroment(arlo, cam):

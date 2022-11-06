@@ -4,6 +4,7 @@ import camera
 import numpy as np
 
 from settings import *
+from commands import rotate, drive, detect
 
 
 def jet(x) -> tuple:
@@ -191,13 +192,13 @@ def delete_duplicates(objectIDs, dists, angles) -> tuple:
             duplicate_indexes = np.where(objectIDs == duplicate)
             idx_to_delete = 0
             
-            # Find shortest distance between the two duplicates 
+            # Find shortest distance between the duplicates 
             if dists[duplicate_indexes[0][0]] < dists[duplicate_indexes[0][1]]: 
                 idx_to_delete = duplicate_indexes[0][1]
             else: 
                 idx_to_delete = duplicate_indexes[0][0]
             
-            # Delete the further distance values found 
+            # Delete the distance which didnt make it alongside its ID and angle 
             objectIDs = np.delete(objectIDs, idx_to_delete)
             dists = np.delete(dists, idx_to_delete)
             angles = np.delete(angles, idx_to_delete)
@@ -205,61 +206,91 @@ def delete_duplicates(objectIDs, dists, angles) -> tuple:
     return objectIDs, dists, angles
 
 
-def remove_unknown(objectIDs, dists, angles) -> tuple:
+def remove_ids(objectIDs, dists, angles, ids) -> tuple:
     '''
-    Takes 3 correlated lists of IDs, dists and angles and then removes unknown IDs and
-    their correspondning dists and angles based on the list landmarks(known landmarks).
+    Takes 3 correlated lists of IDs, dists and angles and then removes unknown/known IDs and
+    their correspondning dists and angles based on the landmarks/obstacles known or unknown.
     
     Parameters: 
         objectIDs(array)        : Found landmarks.
         dists(array)            : Aruco distances. 
         angles(array)           : Aruco landmarks angles. 
-        landmarks(array)        : The landmarks we know on the map. 
+        ids(array)              : The landmarks/obstacles. 
     '''
     
-    known_objectIDs = np.array([id for id in objectIDs if id in LANDMARK_IDS])
-    known_dists = np.array([dist for dist, id in zip(dists, objectIDs) if id in LANDMARK_IDS])
-    known_angles = np.array([angle for angle, id in zip(angles, objectIDs) if id in LANDMARK_IDS])
+    # Keep the landmark objects IDs if they are known 
+    objectIDs = np.array([id for id in objectIDs if id in ids])
+    dists = np.array([dist for dist, id in zip(dists, objectIDs) if id in ids])
+    angles = np.array([angle for angle, id in zip(angles, objectIDs) if id in ids])
     
-    print("ID:      {}".format(objectIDs))
-    print("Dists:   {}".format(dists))
-    print("Agnles:  {}".format(angles))
-    
+    # If we removed anything and the list is empty, set it to None 
     if not isinstance(objectIDs, type(None)):
-        if len(known_objectIDs) == 0:
-            print("Empty!")
-            known_objectIDs = None
-            known_dists = None
-            known_angles = None
+        if len(objectIDs) == 0:
+            objectIDs, dists, angles = None, None, None
             
-    return known_objectIDs, known_dists, known_angles
+    return objectIDs, dists, angles
 
 
-def remove_known(objectIDs, dists, angles) -> tuple:
+def move_to_box(arlo, cam, objectIDs, dists, angles, box_range, ids) -> None:
     '''
-    Takes 3 correlated lists of IDs, dists and angles and then removes known IDs and
-    their correspondning dists and angles based on the list landmarks(known landmarks). 
+    After locking into a target box then Arlo will rotate and move towards,
+    the Aruco box until Arlo is close enough. 
     
-    Parameters: 
-    ---
-        * objectIDs(array)        : Found landmarks.
-        * dists(array)            : Aruco distances. 
-        * angles(array)           : Aruco landmarks angles. 
-        * `landmarks(array)`       : The landmarks we know on the map.
+    Parameters:
+        arlo(obj)       : The Arlo robot.
+        cam(obj)        : The camera used for the program. 
     '''
     
-    unknown_objectIDs = np.array([id for id in objectIDs if id not in LANDMARK_IDS])
-    unknown_dists = np.array([dist for dist, id in zip(dists, objectIDs) if id not in LANDMARK_IDS])
-    unknown_angles = np.array([angle for angle, id in zip(angles, objectIDs) if id not in LANDMARK_IDS])
+    # Start the rotations and driving towards the choosen obstacle
+    while 1:
 
-    print("ID:      {}".format(objectIDs))
-    print("Dists:   {}".format(dists))
-    print("Agnles:  {}".format(angles))
+        # Arlo cannot see anything and we assume we are close to the obstacle
+        if isinstance(objectIDs, type(None)):
+            break
 
-    if not isinstance(objectIDs, type(None)):
-        if len(unknown_objectIDs) == 0:
-            unknown_objectIDs = None
-            unknown_dists = None
-            unknown_angles = None
+        # Rotate towards the obstacle if the angle is bigger than 13 degrees
+        if np.abs(angles[0]) > DEGREES_13:
+            rotate(arlo, angles[0])
+
+        # Print the distance 
+        print("Distance: {}".format(dists[0]))
+
+        # Drive within 60cm of the obstacle if the dist < 1.1m,
+        # otherwise drive the full length
+        if (dists[0] - ONE_METER) <= 10.0:
+            print("Starting final drive.")
+            drive(arlo, dists[0], box_range)
+            break
+        else:
+            print("Starting normal drive.")
+            drive(arlo, NORMAL_DRIVE)
+
+        # Try and detect the obstacle Arlo are focusing on
+        # TODO: What if Arlo sees two boxes here? This can happen with landmarks or if Arlo sees two obstacles at the same time. Maybe implement a filter so Arlo only focuses on the focuses obstacle?
+        objectIDs, dists, angles = detect(cam, ids)
+    
+
+# def remove_landmarks(objectIDs, dists, angles) -> tuple:
+#     '''
+#     Takes 3 correlated lists of IDs, dists and angles and then removes known IDs and
+#     their correspondning dists and angles based on the list landmarks(known landmarks). 
+    
+#     Parameters: 
+#     ---
+#         * objectIDs(array)        : Found landmarks.
+#         * dists(array)            : Aruco distances. 
+#         * angles(array)           : Aruco landmarks angles. 
+#         * `landmarks(array)`       : The landmarks we know on the map.
+#     '''
+    
+#     unknown_objectIDs = np.array([id for id in objectIDs if id not in LANDMARK_IDS])
+#     unknown_dists = np.array([dist for dist, id in zip(dists, objectIDs) if id not in LANDMARK_IDS])
+#     unknown_angles = np.array([angle for angle, id in zip(angles, objectIDs) if id not in LANDMARK_IDS])
+
+#     if not isinstance(objectIDs, type(None)):
+#         if len(unknown_objectIDs) == 0:
+#             unknown_objectIDs = None
+#             unknown_dists = None
+#             unknown_angles = None
             
-    return unknown_objectIDs, unknown_dists, unknown_angles
+#     return unknown_objectIDs, unknown_dists, unknown_angles
