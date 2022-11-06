@@ -38,7 +38,7 @@ def run_brute() -> None:
             break
         
         # Print Arlos goal 
-        print("Starting quest towards landmark: {}...".format(LANDMARK_IDS[rute_idx]))
+        print("Starting quest towards landmark: {}...".format(RUTE[rute_idx]))
     
         # Scan for the landmark Arlo is currently focusing on,
         # otherwise use the obstacle strategy and scan for those 
