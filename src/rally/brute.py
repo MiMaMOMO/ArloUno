@@ -99,6 +99,8 @@ def run_brute() -> None:
                     
                     # Move towards the choosen obstacle  
                     aux.move_to_box(arlo, cam, obstacle_ids, obstacle_dists, obstacle_angles, OBSTACLE_RANGE, OBSTACLES_IDS)
+                    
+                    # 
         
         # We detected the landmark Arlo was searching for 
         if not isinstance(objectIDs, type(None)):

@@ -105,7 +105,7 @@ def scan_landmarks(arlo, cam, landmark = None):
     return None, None, None
         
         
-def scan_obstacles(arlo, cam, obstacle = None):
+def scan_obstacles(arlo, cam):
     '''
     Scan for Aruco landmarks by rotating x amount of degrees. 
     Scan will search for the landmark given if any. 
@@ -116,9 +116,6 @@ def scan_obstacles(arlo, cam, obstacle = None):
         landmark(int)   : The landmark ID we are searching for. 
     '''
     t = Timer()
-    # ret_objectIDs = [] 
-    # ret_dists = [] 
-    # ret_angles = []
         
     # Rotate a full turn until we find some Aruco landmarks 
     for i in range(FULL_ROTATION):
