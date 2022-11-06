@@ -62,7 +62,7 @@ def run_brute() -> None:
                 
                 # The camera detected some boxes so try to remove obstacle boxes 
                 temp_objectIDs, temp_dists, temp_angles = aux.remove_ids(
-                    temp_objectIDs, temp_dists, temp_angles, LANDMARK_IDS)
+                    temp_objectIDs, temp_dists, temp_angles, OBSTACLES_IDS)
                 
                 # Landmarks are still in our detection so try to delte any duplicates 
                 if not isinstance(temp_objectIDs, type(None)):
@@ -74,8 +74,9 @@ def run_brute() -> None:
                         if np.abs(angles[0]) - np.abs(x) < 0.08:
                             objectIDs, dists, angles = None, None, None
                             break
-                        
-                # break
+                       
+                if not isinstance(objectIDs, type(None)):    
+                    break
             
             # Nothing was found from the landmark scan. Scan for obstacles and store data 
             if isinstance(objectIDs, type(None)): 
