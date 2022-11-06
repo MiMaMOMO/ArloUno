@@ -83,7 +83,7 @@ def copy_resampling_references(resample) -> None:
 
 
 # ### MAIN PROGRAM ###
-# def run_selflocalization() -> None:
+# def run_selflocalization(arlo, cam) -> particle.Particle:
 #     '''
 #     Selflocalize Arlo.    
 #     '''
@@ -111,13 +111,13 @@ def copy_resampling_references(resample) -> None:
 #     print("Opening and initializing camera")
     
 #     # Check which camera we want to use 
-#     cam = auxiliary.get_cam()
+#     # cam = auxiliary.get_cam()
     
 #     # Index for the rute 
-#     rute_idx = 0
+#     # rute_idx = 0
     
 #     # Initiate start localization by scanning the enviroment for landmarks 
-#     #temp_objectIDs, temp_dists, temp_angles = auxiliary.scan_enviroment(arlo, cam) 
+#     temp_objectIDs, temp_dists, temp_angles = auxiliary.scan_enviroment(arlo, cam) 
     
 #     # Try to selflocalize and get to the center point using the particle filter 
 #     while 1:

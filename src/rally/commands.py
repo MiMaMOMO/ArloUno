@@ -219,17 +219,17 @@ def detect(cam, ids) -> tuple:
     
 #     # Begin the scan for all landmakrs starting at 1 
 #     for i in range(len(LANDMARK_IDS)):
-#             found_landmark = scan(arlo, cam, RUTE[i])
+#         found_landmark = scan_landmarks(arlo, cam, RUTE[i])
 
-#             # Arlo found the landmark it was scanning for 
-#             if not isinstance(found_landmark[0], type(None)):
-#                 objectIDs.append(found_landmark[0])
-#                 dists.append(found_landmark[1])
-#                 angles.append(found_landmark[2])
+#         # Arlo found the landmark it was scanning for 
+#         if not isinstance(found_landmark[0], type(None)):
+#             objectIDs.append(found_landmark[0])
+#             dists.append(found_landmark[1])
+#             angles.append(found_landmark[2])
                 
 #     # Check for duplicates and remove them if any was found 
 #     if not isinstance(objectIDs, type(None)):        
-#         objectIDs, dists, angles = delete_duplicates(objectIDs, dists, angles)
+#         objectIDs, dists, angles = aux.delete_duplicates(objectIDs, dists, angles)
 
 #     # Cast the temporary lists into numpy arrays
 #     objectIDs = np.array(objectIDs)
