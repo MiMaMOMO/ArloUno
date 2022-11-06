@@ -98,40 +98,7 @@ def run_brute() -> None:
                     print("Starting rotation and movement towards obstacle {}.".format(obstacle_ids[0]))
                     
                     # Move towards the choosen obstacle  
-                    aux.move_to_box(arlo, cam, obstacle_ids, obstacle_dists,
-                                    obstacle_angles, OBSTACLE_RANGE, OBSTACLES_IDS)
-                else:
-                    # What should happen if Arlo cannot find any obstacles? (highly unlikely)
-                    pass
-                
-                # while 1: 
-                    
-                #     # Arlo cannot see anything and we assume we are close to the obstacle 
-                #     if isinstance(short_id, type(None)):
-                #         break
-                    
-                #     # Rotate towards the obstacle if the angle is bigger than 13 degrees
-                #     if np.abs(short_angle[0]) > DEGREES_13:
-                #         cmds.rotate(arlo, short_angle[0])
-                        
-                #     # Find the minimum betwen the distance found and 1m
-                #     dist = np.minimum(short_dist[0], ONE_METER)
-
-                #     # Drive within 60cm of the obstacle if the dist < 1.1m,
-                #     # otherwise drive the full length
-                #     if (short_dist[0] - ONE_METER) <= 10.0:
-                #         print("Starting landmark drive with dist = {}".format(short_dist))
-                #         cmds.drive(arlo, short_dist[0], OBSTACLE_RANGE)
-                #         break
-                #     else:
-                #         print(
-                #             "Starting normal drive with dist = {}".format(short_dist))
-                #         cmds.drive(arlo, NORMAL_DRIVE)
-
-                #     # Try and detect the obstacle Arlo are focusing on
-                #     # TODO: What if Arlo sees two boxes here? This can happen with landmarks or if Arlo sees two obstacles at the same time. Maybe implement a filter so Arlo only focuses on the focuses obstacle?
-                #     short_id, short_dist, short_angle = cmds.detect(cam, OBSTACLES_IDS)
-                    
+                    aux.move_to_box(arlo, cam, obstacle_ids, obstacle_dists, obstacle_angles, OBSTACLE_RANGE, OBSTACLES_IDS)
         
         # We detected the landmark Arlo was searching for 
         if not isinstance(objectIDs, type(None)):
@@ -151,41 +118,11 @@ def run_brute() -> None:
                     ", Angles = ", angles[i]    
                 )
                 
-                
             # Print that Arlo will try to move towards the landmark 
             print("Starting rotation and movement towards landmark {}.".format(objectIDs[0]))
             
             # Move towards the choosen landmark 
             aux.move_to_box(arlo, cam, objectIDs, dists, angles, LANDMARK_RANGE, LANDMARK_IDS)
-            
-            # # Rotating and driving towards the found landmark within a certain range
-            # while 1:
-
-            #     # Arlo cannot see anything and we assume we are close to the landmark 
-            #     if isinstance(objectIDs, type(None)):
-            #         break
-
-            #     # Rotate towards the landmark if the angle is bigger than 13 degrees
-            #     if np.abs(angles[0]) > DEGREES_13:
-            #         print("Starting rotation with angle = {}".format(angles[0]))
-            #         cmds.rotate(arlo, angles[0])
-
-            #     # Find the minimum betwen the distance and 1m
-            #     # dist = np.minimum(dists[0], ONE_METER)
-
-            #     # Drive within 40cm of the landmark if the dist <= 1.1m,
-            #     # otherwise drive the full length
-            #     if (dists[0] - ONE_METER) <= 10.0:
-            #         print("Starting landmark drive with dist = {}".format(dists[0]))
-            #         cmds.drive(arlo, dists[0], LANDMARK_RANGE)
-            #         break
-            #     else:
-            #         print("Starting normal drive with dist = {}".format(dists[0]))
-            #         cmds.drive(arlo, NORMAL_DRIVE)
-                    
-            #     # Try and detect the landmark Arlo are focusing on
-            #     # TODO: What if Arlo sees two boxes here? This will happen with obstacles or if   Arlo sees two landmarks at the same time. Maybe implement a filter so Arlo only focuses on the focuses landmark? 
-            #     objectIDs, dists, angles = cmds.detect(cam, LANDMARK_IDS)
 
         # Print Arlos goal 
         print("Succesfully completed the quest for landmark: {}!".format(LANDMARK_IDS[rute_idx]))
