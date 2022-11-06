@@ -241,6 +241,11 @@ def move_to_box(arlo, cam, objectIDs, dists, angles, box_range, ids) -> None:
         cam(obj)        : The camera used for the program. 
     '''
     
+    # Store the box we are focusing on right now 
+    focused_id = [objectIDs[0]]
+    
+    print("Focused ID: {}".format(focused_id))
+    
     # Start the rotations and driving towards the choosen obstacle
     while 1:
 
@@ -268,7 +273,7 @@ def move_to_box(arlo, cam, objectIDs, dists, angles, box_range, ids) -> None:
 
         # Try and detect the obstacle Arlo are focusing on
         # TODO: What if Arlo sees two boxes here? This can happen with landmarks or if Arlo sees two obstacles at the same time. Maybe implement a filter so Arlo only focuses on the focuses obstacle?
-        objectIDs, dists, angles = detect(cam, ids)
+        objectIDs, dists, angles = detect(cam, focused_id)
     
 
 def filter_out(objectIDs, dists, angles, focused_id) -> tuple: 
