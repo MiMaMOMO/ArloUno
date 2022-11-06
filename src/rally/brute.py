@@ -125,7 +125,7 @@ def run_brute() -> None:
             
             
             # Before Arlo moves towards the landmark check if anything is in its way 
-            if arlo.read_front_ping_sensor() < 250.0:
+            if arlo.read_front_ping_sensor() < 300.0:
                 direction = np.sign(angles[0])
                 
                 if direction > 0: 
