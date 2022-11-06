@@ -246,7 +246,7 @@ def move_to_box(arlo, cam, objectIDs, dists, angles, box_range, ids) -> None:
 
         # Arlo cannot see anything and we assume we are close to the obstacle
         if isinstance(objectIDs, type(None)):
-            print("Breaking moving to: ".format(objectIDs[0]))
+            print("Breaking!!!")
             break
 
         # Rotate towards the obstacle if the angle is bigger than 13 degrees
