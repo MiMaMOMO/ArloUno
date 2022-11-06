@@ -219,9 +219,9 @@ def remove_ids(objectIDs, dists, angles, ids) -> tuple:
     '''
     
     # Keep the landmark objects IDs if they are known 
-    objectIDs = np.array([id for id in objectIDs if id in ids])
     dists = np.array([dist for dist, id in zip(dists, objectIDs) if id in ids])
     angles = np.array([angle for angle, id in zip(angles, objectIDs) if id in ids])
+    objectIDs = np.array([id for id in objectIDs if id in ids])
     
     # If we removed anything and the list is empty, set it to None 
     if not isinstance(objectIDs, type(None)):
