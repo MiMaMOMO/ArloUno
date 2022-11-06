@@ -1,4 +1,4 @@
-from brute import run_brute
+from solution import run_brute
 
 ### STARTING POINT OF THE PROGRAM ### 
 if __name__ == '__main__':
