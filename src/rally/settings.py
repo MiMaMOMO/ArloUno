@@ -60,7 +60,7 @@ DEGREES_20 = 0.349065                   # 20 degrees in radions
 DEGREES_30 = 0.523598                   # 30 degrees in radions 
 DEGREES_45 = 0.785398                   # 45 degrees in radions
 DEGREES_90 = 1.57175                    # 90 degrees in radions 
-FULL_ROTATION = 18 * 2                  # How many times it take Arlo to do a 360 degree rotation
+FULL_ROTATION = int(18 * 1.6)           # How many times it take Arlo to do a 360 degree rotation
 
 
 ### DISTANCES ### 
