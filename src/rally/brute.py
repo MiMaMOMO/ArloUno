@@ -82,26 +82,27 @@ def run_brute() -> None:
                         )
                     
                     # Choose the obstacle with the shortest distance
-                    shortest_idx = np.where(dists == min(dists))
+                    # shortest_idx = np.where(obstacle_dists == min(obstacle_dists))
                     
                     # Find the index in the list of obstacles ids Arlo is focusing on 
-                    obstacle_idx = np.where(OBSTACLES_IDS == obstacle_ids[shortest_idx])[0][0]
+                    # obstacle_idx = np.where(OBSTACLES_IDS == obstacle_ids[shortest_idx])[0][0]
                     
                     # Print the chosen obstacle 
-                    print("I've chosen to look for obstacle {}.".format(OBSTACLES_IDS[obstacle_idx]))
+                    print("I've chosen to look for obstacle {}.".format(obstacle_ids[0]))
                 
                     # Scan for the specific obstacle with the shortest distance 
-                    short_id, short_dist, short_angle = cmds.scan_obstacles(
-                        arlo, cam, OBSTACLES_IDS[obstacle_idx])
+                    # short_id, short_dist, short_angle = cmds.scan_obstacles(
+                    #     arlo, cam, OBSTACLES_IDS[obstacle_idx])
                     
                     # Print that Arlo will try to move towards the obstacle
-                    print("Starting rotation and movement towards obstacle {}.".format(short_id[0]))
+                    print("Starting rotation and movement towards obstacle {}.".format(obstacle_ids[0]))
+                    
+                    # Move towards the choosen obstacle  
+                    aux.move_to_box(arlo, cam, obstacle_ids, obstacle_dists,
+                                    obstacle_angles, OBSTACLE_RANGE, OBSTACLES_IDS)
                 else:
                     # What should happen if Arlo cannot find any obstacles? (highly unlikely)
                     pass
-                
-                # Move towards the choosen obstacle  
-                aux.move_to_box(arlo, cam, short_id, short_dist, short_angle, OBSTACLE_RANGE, OBSTACLES_IDS)
                 
                 # while 1: 
                     
