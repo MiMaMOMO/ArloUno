@@ -67,7 +67,7 @@ FULL_ROTATION = 18 * 2                  # How many times it take Arlo to do a 36
 NORMAL_DRIVE = 50.0                     # The normal drive is 75 cm 
 ONE_METER = 100.0                       # 1 meter in cm 
 LANDMARK_RANGE = 0.4                    # Arlo should always try to come within 40 cm of a landmark
-OBSTACLE_RANGE = 0.6                    # Arlo should always try to come within 80 cm of an obstacle
+OBSTACLE_RANGE = 0.3                    # Arlo should always try to come within 80 cm of an obstacle
 
 ### SPREADS ###
 SPREAD_DIST = 15.0                      # The spread used when computing distance weights 
