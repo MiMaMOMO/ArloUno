@@ -53,7 +53,29 @@ def run_brute() -> None:
             # Arlo found the landmark so break the loop 
             if not isinstance(objectIDs, type(None)):
                 print("I found the landmark.")
-                break
+                
+                # Take several frames and get the latest one
+                frame = cam.get_next_frame()
+                
+                # Get information from the image 
+                temp_objectIDs, temp_dists, temp_angles = cam.detect_aruco_objects(frame)
+                
+                # The camera detected some boxes so try to remove obstacle boxes 
+                temp_objectIDs, temp_dists, temp_angles = aux.remove_ids(
+                    temp_objectIDs, temp_dists, temp_angles, LANDMARK_IDS)
+                
+                # Landmarks are still in our detection so try to delte any duplicates 
+                if not isinstance(temp_objectIDs, type(None)):
+                    temp_objectIDs, temp_dists, temp_angles = aux.delete_duplicates(
+                        temp_objectIDs, temp_dists, temp_angles)
+                    
+                    # Go through the angles of the obstacles in front of the searched landmark 
+                    for x in temp_angles:
+                        if np.abs(angles[0]) - np.abs(x) < 0.08:
+                            objectIDs, dists, angles = None, None, None
+                            break
+                        
+                # break
             
             # Nothing was found from the landmark scan. Scan for obstacles and store data 
             if isinstance(objectIDs, type(None)): 
