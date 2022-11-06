@@ -138,6 +138,10 @@ def run_brute() -> None:
             # Print that Arlo found the landmark 
             print("I found the landmark I was scanning for.")
             
+            # Filter out the landmarks we arent searching for 
+            if len(objectIDs) > 1:
+                objectIDs, dists, angles = aux.filter_out(objectIDs, dists, angles, [RUTE[rute_idx]])
+                
             # List detected objects
             for i in range(len(objectIDs)):
                 print(
@@ -146,16 +150,12 @@ def run_brute() -> None:
                     ", Angles = ", angles[i]    
                 )
                 
-            # Filter out the landmarks we arent searching for 
-            if len(objectIDs) > 1:
-                objectIDs, dists, angles = aux.filter_out(objectIDs, dists, angles, [RUTE[rute_idx]])
                 
             # Print that Arlo will try to move towards the landmark 
             print("Starting rotation and movement towards landmark {}.".format(objectIDs[0]))
             
             # Move towards the choosen landmark 
             aux.move_to_box(arlo, cam, objectIDs, dists, angles, LANDMARK_RANGE, LANDMARK_IDS)
-            break
             
             # # Rotating and driving towards the found landmark within a certain range
             # while 1:
