@@ -122,24 +122,24 @@ def run_brute() -> None:
             print("Starting rotation and movement towards landmark {}.".format(objectIDs[0]))
             
             # Before Arlo moves towards the landmark check if anything is in its way 
-            if arlo.read_front_ping_sensor() < 350.0:
-                direction = np.sign(angles[0])
+            # if arlo.read_front_ping_sensor() < 350.0:
+            #     direction = np.sign(angles[0])
                 
-                print("Sensor is lower than 35cm!")
+            #     print("Sensor is lower than 35cm!")
                 
-                if direction > 0: 
-                    print("Direction > 0!")
-                    cmds.rotate(arlo, DEGREES_90)
-                    cmds.drive(arlo, 20.0)
-                    cmds.rotate(arlo, -DEGREES_90)
-                else:
-                    print("Direction < 0!")
-                    cmds.rotate(arlo, -DEGREES_90)
-                    cmds.drive(arlo, 20.0)
-                    cmds.rotate(arlo, DEGREES_90)
+            #     if direction > 0: 
+            #         print("Direction > 0!")
+            #         cmds.rotate(arlo, DEGREES_90)
+            #         cmds.drive(arlo, 20.0)
+            #         cmds.rotate(arlo, -DEGREES_90)
+            #     else:
+            #         print("Direction < 0!")
+            #         cmds.rotate(arlo, -DEGREES_90)
+            #         cmds.drive(arlo, 20.0)
+            #         cmds.rotate(arlo, DEGREES_90)
                 
-                # Detect the found landmark again 
-                objectIDs, dists, angles = aux.detect(cam, LANDMARK_IDS)
+            #     # Detect the found landmark again 
+            #     objectIDs, dists, angles = aux.detect(cam, LANDMARK_IDS)
                 
             # Move towards the choosen landmark 
             aux.move_to_box(arlo, cam, objectIDs, dists, angles, LANDMARK_RANGE, LANDMARK_IDS)
