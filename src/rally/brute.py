@@ -99,8 +99,6 @@ def run_brute() -> None:
                     
                     # Move towards the choosen obstacle  
                     aux.move_to_box(arlo, cam, obstacle_ids, obstacle_dists, obstacle_angles, OBSTACLE_RANGE, OBSTACLES_IDS)
-                    
-                    # 
         
         # We detected the landmark Arlo was searching for 
         if not isinstance(objectIDs, type(None)):
@@ -123,9 +121,8 @@ def run_brute() -> None:
             # Print that Arlo will try to move towards the landmark 
             print("Starting rotation and movement towards landmark {}.".format(objectIDs[0]))
             
-            
             # Before Arlo moves towards the landmark check if anything is in its way 
-            if arlo.read_front_ping_sensor() < 300.0:
+            if arlo.read_front_ping_sensor() < 350.0:
                 direction = np.sign(angles[0])
                 
                 if direction > 0: 
