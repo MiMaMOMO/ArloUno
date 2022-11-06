@@ -145,7 +145,7 @@ def run_brute() -> None:
             aux.move_to_box(arlo, cam, objectIDs, dists, angles, LANDMARK_RANGE, LANDMARK_IDS)
 
         # Print Arlos goal 
-        print("Succesfully completed the quest for landmark: {}!".format(LANDMARK_IDS[rute_idx]))
+        print("Succesfully completed the quest for landmark: {}!".format(RUTE[rute_idx]))
 
         # Arlo found its way to the landmark so we wanna look for the next landmark 
         rute_idx += 1
